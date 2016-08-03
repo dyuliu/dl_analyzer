@@ -1,0 +1,25 @@
+
+package analyzer;
+
+message Layer {
+  optional int32 count = 1;
+  // layer type
+  optional string type = 2; 
+  optional int32 num = 3;
+  optional int32 channels = 4;
+  optional int32 height = 5;
+  optional int32 width = 6;
+  optional string name = 7;
+  repeated float weight = 8;
+  repeated float grad = 9;
+  repeated float stat = 10;
+  repeated float distance = 11;
+}
+
+message Info {
+  optional string filename = 1;
+  optional int32 iteration = 2;
+  optional int32 worker_id = 3;
+  optional int32 sim_id = 4;
+  repeated Layer layers = 5;
+}
