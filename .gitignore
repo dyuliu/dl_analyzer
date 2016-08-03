@@ -56,5 +56,6 @@ Temporary Items
 *.opendb
 
 analyzer/protobuf/
-analyzer/x64/
 analyzer/dependency/
+*/Debug/
+*/Release/
