@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math", "math\math.vcxproj", "{1E380A9F-B7EA-47BC-B867-B791D88E834A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "analyzer", "analyzer\analyzer.vcxproj", "{DAF19819-6C9F-4F00-AB18-91737AA02756}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1E380A9F-B7EA-47BC-B867-B791D88E834A} = {1E380A9F-B7EA-47BC-B867-B791D88E834A}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E380A9F-B7EA-47BC-B867-B791D88E834A}.Debug|Win32.ActiveCfg = Debug|x64
+		{1E380A9F-B7EA-47BC-B867-B791D88E834A}.Debug|Win32.Build.0 = Debug|x64
+		{1E380A9F-B7EA-47BC-B867-B791D88E834A}.Release|Win32.ActiveCfg = Release|x64
+		{1E380A9F-B7EA-47BC-B867-B791D88E834A}.Release|Win32.Build.0 = Release|x64
+		{DAF19819-6C9F-4F00-AB18-91737AA02756}.Debug|Win32.ActiveCfg = Debug|x64
+		{DAF19819-6C9F-4F00-AB18-91737AA02756}.Debug|Win32.Build.0 = Debug|x64
+		{DAF19819-6C9F-4F00-AB18-91737AA02756}.Release|Win32.ActiveCfg = Release|x64
+		{DAF19819-6C9F-4F00-AB18-91737AA02756}.Release|Win32.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
