@@ -80,10 +80,10 @@ namespace emath {
 			if (norm == 0 && x_v == 0)
 				res += 0;
 			else
-				res += std::pow(x_v, norm);
+				res += abs(std::pow(x_v, norm));
 		}
 
-		res = std::pow(res, 1 / norm);
+		res = std::pow(res, 1.0 / norm);
 		return res;
 	}
 

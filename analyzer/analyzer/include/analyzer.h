@@ -3,12 +3,11 @@
 
 #include <proto/analyzer.pb.h>
 #include <config.h>
+#include <map>
 
 namespace analyzer {
 
 	class Infos {
-
-		Info info;
 
 	public:
 
@@ -53,6 +52,7 @@ namespace analyzer {
 	public:
 
 		void compute_stat(STAT_TYPE stat_type, DATA_CONTENT data_content);
+		void compute_all_stat(DATA_CONTENT data_content);
 
 		void compute_distance(DISTANCE_TYPE distrance_type);
 
@@ -70,7 +70,14 @@ namespace analyzer {
 	public:
 
 		Info& get() { return info; }
+		
+		Infos();
+
+	
+	private:
+		Info info;
+		std::map<DISTANCE_TYPE, std::string> name_distance_type;
+		std::map<STAT_TYPE, std::string> name_stat_type;
 
 	};
-
 }

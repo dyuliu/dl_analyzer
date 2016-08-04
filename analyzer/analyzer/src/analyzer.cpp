@@ -10,6 +10,29 @@
 
 namespace analyzer {
 
+	Infos::Infos() {
+
+		name_distance_type = std::map<DISTANCE_TYPE, std::string> {
+			{ LAYER_DIS_EUCLIDEAN, "Euclidean Distance of Layer" },
+			{ LAYER_DIS_COSINE, "Cosine Distance of Layer" },
+			{ LAYER_DIS_MANHATTAN, "Manhattan Distance of Layer" },
+			{ LAYER_DIS_CORRELATION, "Correlation Distrance of Layer" }
+		};
+
+		name_stat_type = std::map<STAT_TYPE, std::string> {
+			{ LAYER_STAT_MAX, "Max of Layer" },
+			{ LAYER_STAT_MIN, "Min of Layer" },
+			{ LAYER_STAT_MEAN, "Mean of Layer" },
+			{ LAYER_STAT_SUM, "Sum of Layer" },
+			{ LAYER_STAT_VAR, "Var of Layer" },
+			{ LAYER_STAT_STD, "Std of Layer" },
+			{ LAYER_STAT_NORM_0, "Norm-0 of Layer" },
+			{ LAYER_STAT_NORM_1, "Norm-1 of Layer" },
+			{ LAYER_STAT_NORM_2, "Norm-2 of Layer" }
+		};
+
+	}
+
 	void Infos::init(std::string path) {
 
 		if (!filesystem::exist(path.c_str())) return;
@@ -107,10 +130,13 @@ namespace analyzer {
 
 			if (info.layers(i).type() == "batch_norm") continue;
 
-			COUT_READ << std::setw(3) << i << ", " << info.layers(i).name() << ", " << info.layers(i).type() << std::endl;
-			std::cout << std::endl;
-//			COUT_CHEK << std::setw(10) << "MIN: " << std::setw(10) << info.layers(i).stat[STAT_TYPE::LAYER_STAT_MAX] << std::endl;
-				
+			COUT_CHEK << std::setw(3) << i << ", " << std::setw(30) << info.layers(i).name()
+				<< std::setw(10) << "min: " << std::setw(10) << info.layers(i).stat(STAT_TYPE::LAYER_STAT_MIN)
+				<< std::setw(10) << "max: " << std::setw(10) << info.layers(i).stat(STAT_TYPE::LAYER_STAT_MAX)
+				<< std::setw(10) << "sum: " << std::setw(10) << info.layers(i).stat(STAT_TYPE::LAYER_STAT_SUM)
+				<< std::setw(10) << "mean: " << std::setw(10) << info.layers(i).stat(STAT_TYPE::LAYER_STAT_MEAN)
+				<< std::setw(10) << "norm-1: " << std::setw(10) << info.layers(i).stat(STAT_TYPE::LAYER_STAT_NORM_1)
+				<< std::setw(10) << "norm-2: " << std::setw(10) << info.layers(i).stat(STAT_TYPE::LAYER_STAT_NORM_2) << std::endl;
 		}
 	}
 
@@ -144,7 +170,7 @@ namespace analyzer {
 				if (data_content == CONTENT_GRAD)
 					info.mutable_layers(i)->mutable_stat()->mutable_data()[LAYER_STAT_MIN] = emath::min(ArrayToVector(info.layers(i).grad()));
 				if (data_content == CONTENT_WEIGHT)
-					info.mutable_layers(i)->mutable_stat()->mutable_data()[LAYER_STAT_MAX] = emath::min(ArrayToVector(info.layers(i).weight()));
+					info.mutable_layers(i)->mutable_stat()->mutable_data()[LAYER_STAT_MIN] = emath::min(ArrayToVector(info.layers(i).weight()));
 			}
 
 			if (stat_type == LAYER_STAT_MEAN) {
@@ -194,6 +220,25 @@ namespace analyzer {
 					info.mutable_layers(i)->mutable_stat()->mutable_data()[LAYER_STAT_NORM_2] = emath::norm(ArrayToVector(info.layers(i).grad()), 2);
 				if (data_content == CONTENT_WEIGHT)
 					info.mutable_layers(i)->mutable_stat()->mutable_data()[LAYER_STAT_NORM_2] = emath::norm(ArrayToVector(info.layers(i).weight()), 2);
+			}
+		}
+	}
+
+	void Infos::compute_all_stat(DATA_CONTENT data_content) {
+		for (int i = 0; i < info.layers_size(); i++) {
+
+			if (info.layers(i).type() == "batch_norm") continue;
+
+#ifdef __DEBUG_INFO_OUTPUT
+			COUT_WARN << "Compute stat of layer: " << info.layers(i).name() << std::endl;
+#endif
+			
+			for (unsigned int j = LAYER_STAT_MAX; j < STAT_NUM_MAX; j++) {
+#ifdef __DEBUG_INFO_OUTPUT
+				__FUNC_TIME_CALL(compute_stat((STAT_TYPE)j, data_content), name_stat_type[(STAT_TYPE)j]);
+#else
+				compute_stat((STAT_TYPE)j, data_content);
+#endif
 			}
 		}
 	}

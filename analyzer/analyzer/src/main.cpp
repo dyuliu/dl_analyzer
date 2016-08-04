@@ -9,7 +9,6 @@
 DEFINE_string(action, "test", "");
 DEFINE_string(src, "records/00000000_000_000.info", "");
 
-
 void test() {
 	if (FLAGS_src == "") {
 		COUT_ERRO << "Missing file path, please set --src" << std::endl;
@@ -17,6 +16,7 @@ void test() {
 	}
 	analyzer::Infos info;
 	info.init(FLAGS_src);
+	info.compute_all_stat(analyzer::Infos::DATA_CONTENT::CONTENT_GRAD);
 	info.print();
 }
 
@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-	std::cout << FLAGS_action << std::endl;
 	if (FLAGS_action == "test") {
 		test();
 	}
