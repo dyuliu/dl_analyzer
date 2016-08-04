@@ -16,6 +16,9 @@
     <Filter Include="include\proto">
       <UniqueIdentifier>{833e52f5-a708-45b6-a945-a0e8834d4524}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\framework">
+      <UniqueIdentifier>{17f29334-c171-4f9e-bef7-419c128a525c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

@@ -57,5 +57,6 @@ Temporary Items
 
 analyzer/protobuf/
 analyzer/dependency/
-*/Debug/
-*/Release/
+analyzer/emath/x64/
+analyzer/analyzer/x64/
+analyzer/x64/

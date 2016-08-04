@@ -34,14 +34,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)\include;$(SolutionDir)\math\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\gflags;$(SolutionDir)\dependency\include\opencv_2_49;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\math\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\gflags;$(SolutionDir)\dependency\include\opencv_2_49;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Debug;$(SolutionDir)\dependency\lib\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\math\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(ProjectDir)\include;$(SolutionDir)\dependency\include\gflags;$(SolutionDir)\dependency\include\opencv_2_49;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);$(SolutionDir)\math\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(ProjectDir)\include;$(SolutionDir)\dependency\include\gflags;$(SolutionDir)\dependency\include\opencv_2_49;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Release;$(SolutionDir)\dependency\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>libprotobuf.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>emath.lib;libprotobuf.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ClCompile>
@@ -53,7 +55,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalDependencies>libprotobuf.lib;opencv_core249.lib;opencv_highgui249.lib;opencv_imgproc249.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>emath.lib;libprotobuf.lib;opencv_core249.lib;opencv_highgui249.lib;opencv_imgproc249.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

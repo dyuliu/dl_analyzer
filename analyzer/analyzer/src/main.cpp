@@ -6,7 +6,7 @@
 #include <config.h>
 #include <analyzer.h>
 
-DEFINE_string(action, "test", "");
+DEFINE_string(action, "test1", "");
 DEFINE_string(src, "records//00000000_000_000.info", "");
 
 
@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
+	std::cout << FLAGS_action << std::endl;
 	if (FLAGS_action == "test") {
 		test();
 	}

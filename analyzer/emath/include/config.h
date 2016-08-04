@@ -1,9 +1,11 @@
 
 #pragma once
 
-using DType = float;
-
 #include <cassert>
+
+namespace emath {
+
+#define DType float
 
 #define NOT_REALIZE throw("Error: This function has not been realized")
 #define DIVIDE_ZERO throw("Error: Divide Zero")
@@ -14,3 +16,4 @@ using DType = float;
 #define CHECK_GE(x, y) {assert( x >= y );}
 #define CHECK_GT(x, y) {assert( x > y);}
 
+}

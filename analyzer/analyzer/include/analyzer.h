@@ -12,32 +12,37 @@ namespace analyzer {
 
 	public:
 
+		using data_type = float;
+
 		enum STAT_TYPE : unsigned int {
-			LAYER_MAX = 0U,
-			LAYER_MIN = 1U,
-			LAYER_MEAN = 2U,
-			LAYER_SUM = 3U,
-			LAYER_VAR = 4U,
-			LAYER_STD = 5U,
-			LAYER_NORM_0 = 6U,
-			LAYER_NORM_1 = 7U,
-			LAYER_NORM_2 = 8U,
+			LAYER_STAT_MAX		= 0U,
+			LAYER_STAT_MIN		= 1U,
+			LAYER_STAT_MEAN		= 2U,
+			LAYER_STAT_SUM		= 3U,
+			LAYER_STAT_VAR		= 4U,
+			LAYER_STAT_STD		= 5U,
+			LAYER_STAT_NORM_0	= 6U,
+			LAYER_STAT_NORM_1	= 7U,
+			LAYER_STAT_NORM_2	= 8U,
 			STAT_NUM_MAX
 		};
 
 		enum DISTANCE_TYPE : unsigned int {
-			LAYER_EUCLIDEAN = 0U,
-			LAYER_COSINE = 1U,
-			LAYER_MANHATTAN = 2U,
-			LAYER_CORRELATION = 3U,
+			LAYER_DIS_EUCLIDEAN		= 0U,
+			LAYER_DIS_COSINE		= 1U,
+			LAYER_DIS_MANHATTAN		= 2U,
+			LAYER_DIS_CORRELATION	= 3U,
 			DISTANCE_NUM_MAX
+		};
+
+		enum DATA_CONTENT : unsigned int {
+			CONTENT_GRAD	= 0U,
+			CONTENT_WEIGHT = 1U
 		};
 
 	public:
 		
 		void init(std::string path);
-
-		void print();
 
 		// dump to file
 		void save_to_file(std::string foldname);
@@ -45,8 +50,25 @@ namespace analyzer {
 		// load from file
 		void Infos::load_from_file(std::string filename);
 
+	public:
+
+		void compute_stat(STAT_TYPE stat_type, DATA_CONTENT data_content);
+
+		void compute_distance(DISTANCE_TYPE distrance_type);
+
+		void RepeatedToVector(const ::google::protobuf::RepeatedField<float>& x, std::vector<data_type> &y);
+
+
+	// Print
+	public:
+		void print();
+		void print_file_info();
+		void print_conv_layer_info();
+		void print_stat_info(DATA_CONTENT data_content);
+
 	// Interface
 	public:
+
 		Info& get() { return info; }
 
 	};
