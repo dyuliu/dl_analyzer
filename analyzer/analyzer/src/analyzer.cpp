@@ -108,6 +108,7 @@ namespace analyzer {
 			if (info.layers(i).type() == "batch_norm") continue;
 
 			COUT_READ << std::setw(3) << i << ", " << info.layers(i).name() << ", " << info.layers(i).type() << std::endl;
+			std::cout << std::endl;
 //			COUT_CHEK << std::setw(10) << "MIN: " << std::setw(10) << info.layers(i).stat[STAT_TYPE::LAYER_STAT_MAX] << std::endl;
 				
 		}
