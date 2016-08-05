@@ -45,12 +45,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>db.lib;emath.lib;libprotobuf.lib;libmongoclient.lib;mongoclient.lib;boost_thread-vc120-mt-1_61.lib;boost_system-vc120-mt-1_61.lib;boost_regex-vc120-mt-1_61.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>db.lib;emath.lib;libprotobuf.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
