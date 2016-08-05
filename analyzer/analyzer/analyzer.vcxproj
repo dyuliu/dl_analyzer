@@ -34,12 +34,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\db\include;$(SolutionDir)\emath\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Debug;$(SolutionDir)\dependency\lib\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir);$(SolutionDir)\math\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(ProjectDir)\include;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Release;$(SolutionDir)\dependency\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <ExecutablePath>C:\Users\v-dongyl\Desktop\cnnVIs\app\analyzer\dependency\lib\Release;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
