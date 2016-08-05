@@ -7,6 +7,7 @@
 
 #include <analyzer/analyzer.h>
 #include <recorder/recorder.h>
+#include <db/include/entry.h>
 
 DEFINE_string(action, "test_record", "");
 // DEFINE_string(src, "records/00000000_000_000.info", "");
@@ -86,16 +87,18 @@ static void failureFunction() { exit(0); }
 
 int main(int argc, char *argv[]) {
 
-	gflags::SetVersionString(version_info);
-	gflags::ParseCommandLineFlags(&argc, &argv, true);
-	gflags::SetUsageMessage(help_info);
+	db::run();
+	//std::cout << db::FuncPlus(1, 3) << std::endl;
+	//gflags::SetVersionString(version_info);
+	//gflags::ParseCommandLineFlags(&argc, &argv, true);
+	//gflags::SetUsageMessage(help_info);
 
-	if (FLAGS_action == "test") test();
-	if (FLAGS_action == "test_record") test_record();
-	if (FLAGS_action == "read_from_file") read_from_file();
-	if (FLAGS_action == "read_from_folder") read_from_folder();
+	//if (FLAGS_action == "test") test();
+	//if (FLAGS_action == "test_record") test_record();
+	//if (FLAGS_action == "read_from_file") read_from_file();
+	//if (FLAGS_action == "read_from_folder") read_from_folder();
 
-	gflags::ShutDownCommandLineFlags();
+	//gflags::ShutDownCommandLineFlags();
 	system("pause");
 	return 0;
 }

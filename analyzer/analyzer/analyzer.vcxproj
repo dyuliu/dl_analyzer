@@ -40,12 +40,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Release;$(SolutionDir)\dependency\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <ExecutablePath>C:\Users\v-dongyl\Desktop\cnnVIs\app\analyzer\dependency\lib\Release;$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Release;$(SolutionDir)\dependency\lib\boost;$(SolutionDir)\dependency\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <ExecutablePath>$(SolutionDir)\dependency\lib\boost;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>db.lib;emath.lib;libprotobuf.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>db.lib;emath.lib;libprotobuf.lib;libmongoclient.lib;mongoclient.lib;boost_thread-vc120-mt-1_61.lib;boost_system-vc120-mt-1_61.lib;boost_regex-vc120-mt-1_61.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ClCompile>
@@ -57,7 +57,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalDependencies>db.lib;emath.lib;libprotobuf.lib;opencv_core249.lib;opencv_highgui249.lib;opencv_imgproc249.lib;cublas.lib;curand.lib;cudnn.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>db.lib;emath.lib;libprotobuf.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

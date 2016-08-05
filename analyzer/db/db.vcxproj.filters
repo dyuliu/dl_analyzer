@@ -4,13 +4,11 @@
     <Filter Include="src">
       <UniqueIdentifier>{92cac9b0-c6a4-48f2-a31a-2665c1064570}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include">
-      <UniqueIdentifier>{24f0801c-8b4a-4c31-b955-3e24a9255a11}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="connect.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
+    <ClCompile Include="src\entry.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\entry.h" />
   </ItemGroup>
 </Project>
