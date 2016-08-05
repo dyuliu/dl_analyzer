@@ -35,13 +35,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Debug;$(SolutionDir)\dependency\lib\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\dependency\lib\boost;$(SolutionDir)\$(PlatformTarget)\Debug;$(SolutionDir)\dependency\lib\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Release;$(SolutionDir)\dependency\lib\boost;$(SolutionDir)\dependency\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)\dependency\lib\boost;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>

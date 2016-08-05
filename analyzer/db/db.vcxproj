@@ -36,7 +36,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)\dependency\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\dependency\lib\Release;$(SolutionDir)\dependency\lib\boost;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)\dependency\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
@@ -44,7 +44,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Lib>
-      <AdditionalDependencies>libmongoclient.lib;mongoclient.lib;boost_thread-vc120-mt-1_61.lib;boost_system-vc120-mt-1_61.lib;boost_regex-vc120-mt-1_61.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <ClCompile>
       <BufferSecurityCheck>false</BufferSecurityCheck>
