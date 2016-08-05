@@ -3,6 +3,9 @@
 
 #include <utils/color_print.h>
 #include <utils/filesystem.h>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <time.h>
 
 namespace analyzer {

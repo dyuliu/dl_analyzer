@@ -8,8 +8,9 @@
 #include <analyzer/analyzer.h>
 #include <recorder/recorder.h>
 
-DEFINE_string(action, "test", "");
-DEFINE_string(src, "records/00000000_000_000.info", "");
+DEFINE_string(action, "test_record", "");
+// DEFINE_string(src, "records/00000000_000_000.info", "");
+DEFINE_string(src, "running_info.log", "");
 
 void test() {
 	if (FLAGS_src == "") {
@@ -28,10 +29,9 @@ void test_record() {
 		COUT_ERRO << "Missing file path, please set --src" << std::endl;
 		return;
 	}
-
 	analyzer::Recorders recorder;
 	recorder.load_from_file(FLAGS_src);
-	recorder.print_total_info();
+	recorder.print_specify_type(analyzer::Recorders::TRAIN_LOSS, 30);
 }
 
 static void failureFunction() { exit(0); }
@@ -40,9 +40,8 @@ int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-	if (FLAGS_action == "test") {
-		test();
-	}
+	if (FLAGS_action == "test") test();
+	if (FLAGS_action == "test_record") test_record();
 
 	gflags::ShutDownCommandLineFlags();
 	system("pause");

@@ -1,8 +1,5 @@
 
 #include <analyzer/analyzer.h>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
 #include <emath/include/config.h>

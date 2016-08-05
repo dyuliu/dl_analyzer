@@ -7,7 +7,16 @@
 namespace analyzer {
 
 	Recorders::Recorders() {
-
+		name_of_type = std::map < RECORD_TYPE, std::string > {
+			{ TRAIN_ERROR, "train_error" },
+			{ TRAIN_LOSS, "train_loss" },
+			{ TEST_ERROR, "test_error" },
+			{ TEST_LOSS, "test_loss" },
+			{ FORWARD_TIME, "forward_time" },
+			{ BACKWARD_TIME, "backward_time" },
+			{ UPDATE_TIME, "update_time" },
+			{ LEARNING_RATE, "learning_rate" }
+		};
 	}
 
 	Recorders::~Recorders() {
@@ -26,6 +35,21 @@ namespace analyzer {
 		}	
 
 		COUT_SUCC << "Has outputed all infos." << std::endl;
+	}
+
+	void Recorders::print_specify_type(RECORD_TYPE record_type, int iterval) {
+
+		COUT_READ << "Processing file: " << recorder.name() << std::endl;
+
+		for (int i = 0; i < recorder.tuple_size(); i++) {
+			if ( recorder.tuple(i).iteration()%iterval == 0 && recorder.tuple(i).type() == name_of_type[record_type]) {
+				COUT_CHEK << "Iteration: " << recorder.tuple(i).iteration()
+					<< ", " << recorder.tuple(i).type() << " = " << recorder.tuple(i).value() << std::endl;
+			}
+		}
+
+		COUT_SUCC << "Has outputed all infos." << std::endl;
+
 	}
 
 	void Recorders::save_to_file(std::string filename) {

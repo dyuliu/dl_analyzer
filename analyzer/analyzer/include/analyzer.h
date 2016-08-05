@@ -69,11 +69,9 @@ namespace analyzer {
 	// Interface
 	public:
 
-		Info& get() { return info; }
-		
 		Infos();
+		~Infos();
 
-	
 	private:
 		
 		// dump info
