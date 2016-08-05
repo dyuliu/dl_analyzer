@@ -30,6 +30,7 @@ namespace analyzer {
 		// print related
 		void print_total_info();
 		void print_specify_type(RECORD_TYPE record_type, int iterval = 1);
+		void print_specify_type(std::string record_type, int iterval = 1);
 
 		// dump to file
 		void save_to_file(std::string filename);

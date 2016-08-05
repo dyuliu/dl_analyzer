@@ -52,6 +52,21 @@ namespace analyzer {
 
 	}
 
+	void Recorders::print_specify_type(std::string record_type, int iterval) {
+
+		COUT_READ << "Processing file: " << recorder.name() << std::endl;
+
+		for (int i = 0; i < recorder.tuple_size(); i++) {
+			if (recorder.tuple(i).iteration() % iterval == 0 && recorder.tuple(i).type() == record_type) {
+				COUT_CHEK << "Iteration: " << recorder.tuple(i).iteration()
+					<< ", " << recorder.tuple(i).type() << " = " << recorder.tuple(i).value() << std::endl;
+			}
+		}
+
+		COUT_SUCC << "Has outputed all infos." << std::endl;
+
+	}
+
 	void Recorders::save_to_file(std::string filename) {
 
 		std::ofstream fp(filename.c_str(), std::ios::binary);
