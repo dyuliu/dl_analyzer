@@ -23,6 +23,7 @@ namespace db {
 
 	int run() {
 		mongo::client::initialize();
+		
 		try {
 			connect();
 			std::cout << "connected ok" << std::endl;
@@ -30,6 +31,8 @@ namespace db {
 		catch (const mongo::DBException &e) {
 			std::cout << "caught " << e.what() << std::endl;
 		}
+
+		mongo::client::shutdown();
 		return EXIT_SUCCESS;
 	}
 }
