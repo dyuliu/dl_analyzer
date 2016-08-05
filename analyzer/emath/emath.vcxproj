@@ -12,10 +12,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\distance.h" />
     <ClInclude Include="include\matrix.h" />
     <ClInclude Include="include\statistic.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\distance.cpp" />
     <ClCompile Include="src\matrix.cpp" />
     <ClCompile Include="src\statistic.cpp" />
   </ItemGroup>

@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='analyzer.proto',
   package='analyzer',
-  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"\xae\x01\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12\x0c\n\x04stat\x18\n \x03(\x02\x12\x10\n\x08\x64istance\x18\x0b \x03(\x02\"o\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06layers\x18\x05 \x03(\x0b\x32\x0f.analyzer.Layer')
+  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"\xae\x01\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12\x0c\n\x04stat\x18\n \x03(\x02\x12\x10\n\x08\x64istance\x18\x0b \x03(\x02\"o\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06layers\x18\x05 \x03(\x0b\x32\x0f.analyzer.Layer\"K\n\x0bRecordTuple\x12\x11\n\titeration\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\">\n\x08Recorder\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x05tuple\x18\x02 \x03(\x0b\x32\x15.analyzer.RecordTuple')
 
 
 
@@ -169,9 +169,96 @@ _INFO = descriptor.Descriptor(
   serialized_end=316,
 )
 
+
+_RECORDTUPLE = descriptor.Descriptor(
+  name='RecordTuple',
+  full_name='analyzer.RecordTuple',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='iteration', full_name='analyzer.RecordTuple.iteration', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='value', full_name='analyzer.RecordTuple.value', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='type', full_name='analyzer.RecordTuple.type', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='data', full_name='analyzer.RecordTuple.data', index=3,
+      number=4, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=318,
+  serialized_end=393,
+)
+
+
+_RECORDER = descriptor.Descriptor(
+  name='Recorder',
+  full_name='analyzer.Recorder',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='name', full_name='analyzer.Recorder.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='tuple', full_name='analyzer.Recorder.tuple', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=395,
+  serialized_end=457,
+)
+
 _INFO.fields_by_name['layers'].message_type = _LAYER
+_RECORDER.fields_by_name['tuple'].message_type = _RECORDTUPLE
 DESCRIPTOR.message_types_by_name['Layer'] = _LAYER
 DESCRIPTOR.message_types_by_name['Info'] = _INFO
+DESCRIPTOR.message_types_by_name['RecordTuple'] = _RECORDTUPLE
+DESCRIPTOR.message_types_by_name['Recorder'] = _RECORDER
 
 class Layer(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
@@ -184,5 +271,17 @@ class Info(message.Message):
   DESCRIPTOR = _INFO
   
   # @@protoc_insertion_point(class_scope:analyzer.Info)
+
+class RecordTuple(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _RECORDTUPLE
+  
+  # @@protoc_insertion_point(class_scope:analyzer.RecordTuple)
+
+class Recorder(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _RECORDER
+  
+  # @@protoc_insertion_point(class_scope:analyzer.Recorder)
 
 # @@protoc_insertion_point(module_scope)

@@ -23,3 +23,16 @@ message Info {
   optional int32 sim_id = 4;
   repeated Layer layers = 5;
 }
+
+message RecordTuple {
+  optional int32 iteration = 1;
+  optional float value = 2;
+  optional string type = 3;
+  // maybe used in multi-value
+  repeated float data = 4;
+}
+
+message Recorder {
+  optional string name = 1;
+  repeated RecordTuple tuple = 2;
+}

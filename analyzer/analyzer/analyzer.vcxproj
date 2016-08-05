@@ -64,6 +64,7 @@
     <ClCompile Include="include\proto\analyzer.pb.cc" />
     <ClCompile Include="src\analyzer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\recorder\recorder.cpp" />
     <ClCompile Include="src\utils\filesystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +72,7 @@
     <ClInclude Include="include\color_print.h" />
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\proto\analyzer.pb.h" />
+    <ClInclude Include="include\recorder\recorder.h" />
     <ClInclude Include="include\utils\filesystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

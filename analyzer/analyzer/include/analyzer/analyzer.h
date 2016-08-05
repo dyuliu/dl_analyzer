@@ -47,7 +47,7 @@ namespace analyzer {
 		void save_to_file(std::string foldname);
 
 		// load from file
-		void load_from_file(std::string filename);
+		void Infos::load_from_file(std::string filename);
 
 	public:
 

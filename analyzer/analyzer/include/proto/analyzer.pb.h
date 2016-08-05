@@ -39,6 +39,8 @@ void protobuf_ShutdownFile_analyzer_2eproto();
 
 class Layer;
 class Info;
+class RecordTuple;
+class Recorder;
 
 // ===================================================================
 
@@ -370,6 +372,224 @@ class Info : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static Info* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RecordTuple : public ::google::protobuf::Message {
+ public:
+  RecordTuple();
+  virtual ~RecordTuple();
+  
+  RecordTuple(const RecordTuple& from);
+  
+  inline RecordTuple& operator=(const RecordTuple& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RecordTuple& default_instance();
+  
+  void Swap(RecordTuple* other);
+  
+  // implements Message ----------------------------------------------
+  
+  RecordTuple* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RecordTuple& from);
+  void MergeFrom(const RecordTuple& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 iteration = 1;
+  inline bool has_iteration() const;
+  inline void clear_iteration();
+  static const int kIterationFieldNumber = 1;
+  inline ::google::protobuf::int32 iteration() const;
+  inline void set_iteration(::google::protobuf::int32 value);
+  
+  // optional float value = 2;
+  inline bool has_value() const;
+  inline void clear_value();
+  static const int kValueFieldNumber = 2;
+  inline float value() const;
+  inline void set_value(float value);
+  
+  // optional string type = 3;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 3;
+  inline const ::std::string& type() const;
+  inline void set_type(const ::std::string& value);
+  inline void set_type(const char* value);
+  inline void set_type(const char* value, size_t size);
+  inline ::std::string* mutable_type();
+  inline ::std::string* release_type();
+  
+  // repeated float data = 4;
+  inline int data_size() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 4;
+  inline float data(int index) const;
+  inline void set_data(int index, float value);
+  inline void add_data(float value);
+  inline const ::google::protobuf::RepeatedField< float >&
+      data() const;
+  inline ::google::protobuf::RepeatedField< float >*
+      mutable_data();
+  
+  // @@protoc_insertion_point(class_scope:analyzer.RecordTuple)
+ private:
+  inline void set_has_iteration();
+  inline void clear_has_iteration();
+  inline void set_has_value();
+  inline void clear_has_value();
+  inline void set_has_type();
+  inline void clear_has_type();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 iteration_;
+  float value_;
+  ::std::string* type_;
+  ::google::protobuf::RepeatedField< float > data_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_analyzer_2eproto();
+  friend void protobuf_AssignDesc_analyzer_2eproto();
+  friend void protobuf_ShutdownFile_analyzer_2eproto();
+  
+  void InitAsDefaultInstance();
+  static RecordTuple* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Recorder : public ::google::protobuf::Message {
+ public:
+  Recorder();
+  virtual ~Recorder();
+  
+  Recorder(const Recorder& from);
+  
+  inline Recorder& operator=(const Recorder& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Recorder& default_instance();
+  
+  void Swap(Recorder* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Recorder* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Recorder& from);
+  void MergeFrom(const Recorder& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional string name = 1;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 1;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const char* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  
+  // repeated .analyzer.RecordTuple tuple = 2;
+  inline int tuple_size() const;
+  inline void clear_tuple();
+  static const int kTupleFieldNumber = 2;
+  inline const ::analyzer::RecordTuple& tuple(int index) const;
+  inline ::analyzer::RecordTuple* mutable_tuple(int index);
+  inline ::analyzer::RecordTuple* add_tuple();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::RecordTuple >&
+      tuple() const;
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::RecordTuple >*
+      mutable_tuple();
+  
+  // @@protoc_insertion_point(class_scope:analyzer.Recorder)
+ private:
+  inline void set_has_name();
+  inline void clear_has_name();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* name_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::RecordTuple > tuple_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_analyzer_2eproto();
+  friend void protobuf_AssignDesc_analyzer_2eproto();
+  friend void protobuf_ShutdownFile_analyzer_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Recorder* default_instance_;
 };
 // ===================================================================
 
@@ -855,6 +1075,224 @@ Info::layers() const {
 inline ::google::protobuf::RepeatedPtrField< ::analyzer::Layer >*
 Info::mutable_layers() {
   return &layers_;
+}
+
+// -------------------------------------------------------------------
+
+// RecordTuple
+
+// optional int32 iteration = 1;
+inline bool RecordTuple::has_iteration() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void RecordTuple::set_has_iteration() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void RecordTuple::clear_has_iteration() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void RecordTuple::clear_iteration() {
+  iteration_ = 0;
+  clear_has_iteration();
+}
+inline ::google::protobuf::int32 RecordTuple::iteration() const {
+  return iteration_;
+}
+inline void RecordTuple::set_iteration(::google::protobuf::int32 value) {
+  set_has_iteration();
+  iteration_ = value;
+}
+
+// optional float value = 2;
+inline bool RecordTuple::has_value() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void RecordTuple::set_has_value() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void RecordTuple::clear_has_value() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void RecordTuple::clear_value() {
+  value_ = 0;
+  clear_has_value();
+}
+inline float RecordTuple::value() const {
+  return value_;
+}
+inline void RecordTuple::set_value(float value) {
+  set_has_value();
+  value_ = value;
+}
+
+// optional string type = 3;
+inline bool RecordTuple::has_type() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void RecordTuple::set_has_type() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void RecordTuple::clear_has_type() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void RecordTuple::clear_type() {
+  if (type_ != &::google::protobuf::internal::kEmptyString) {
+    type_->clear();
+  }
+  clear_has_type();
+}
+inline const ::std::string& RecordTuple::type() const {
+  return *type_;
+}
+inline void RecordTuple::set_type(const ::std::string& value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void RecordTuple::set_type(const char* value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void RecordTuple::set_type(const char* value, size_t size) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* RecordTuple::mutable_type() {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  return type_;
+}
+inline ::std::string* RecordTuple::release_type() {
+  clear_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = type_;
+    type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// repeated float data = 4;
+inline int RecordTuple::data_size() const {
+  return data_.size();
+}
+inline void RecordTuple::clear_data() {
+  data_.Clear();
+}
+inline float RecordTuple::data(int index) const {
+  return data_.Get(index);
+}
+inline void RecordTuple::set_data(int index, float value) {
+  data_.Set(index, value);
+}
+inline void RecordTuple::add_data(float value) {
+  data_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< float >&
+RecordTuple::data() const {
+  return data_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+RecordTuple::mutable_data() {
+  return &data_;
+}
+
+// -------------------------------------------------------------------
+
+// Recorder
+
+// optional string name = 1;
+inline bool Recorder::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Recorder::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Recorder::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Recorder::clear_name() {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    name_->clear();
+  }
+  clear_has_name();
+}
+inline const ::std::string& Recorder::name() const {
+  return *name_;
+}
+inline void Recorder::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void Recorder::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void Recorder::set_name(const char* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Recorder::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  return name_;
+}
+inline ::std::string* Recorder::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// repeated .analyzer.RecordTuple tuple = 2;
+inline int Recorder::tuple_size() const {
+  return tuple_.size();
+}
+inline void Recorder::clear_tuple() {
+  tuple_.Clear();
+}
+inline const ::analyzer::RecordTuple& Recorder::tuple(int index) const {
+  return tuple_.Get(index);
+}
+inline ::analyzer::RecordTuple* Recorder::mutable_tuple(int index) {
+  return tuple_.Mutable(index);
+}
+inline ::analyzer::RecordTuple* Recorder::add_tuple() {
+  return tuple_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::RecordTuple >&
+Recorder::tuple() const {
+  return tuple_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::RecordTuple >*
+Recorder::mutable_tuple() {
+  return &tuple_;
 }
 
 

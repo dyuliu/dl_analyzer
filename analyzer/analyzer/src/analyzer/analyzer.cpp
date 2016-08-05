@@ -1,5 +1,5 @@
 
-#include <analyzer/analyzer.h>
+#include <analyzer.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -56,7 +56,7 @@ namespace analyzer {
 
 		google::protobuf::io::IstreamInputStream fstr(&fp);
 		google::protobuf::io::CodedInputStream code_input(&fstr);
-		code_input.SetTotalBytesLimit((int)MAX_PROTOFILE_SIZE, (int)MAX_PROTOFILE_SIZE);
+		code_input.SetTotalBytesLimit((int)5368709120, (int)5368709120);
 
 		info.ParseFromCodedStream(&code_input);
 

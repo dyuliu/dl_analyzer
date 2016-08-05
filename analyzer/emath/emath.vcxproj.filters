@@ -18,12 +18,18 @@
     <ClInclude Include="include\config.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\distance.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\matrix.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\statistic.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\distance.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
