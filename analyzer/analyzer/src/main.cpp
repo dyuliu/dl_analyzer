@@ -7,7 +7,7 @@
 
 #include <analyzer/analyzer.h>
 #include <recorder/recorder.h>
-#include <db/include/entry.h>
+
 
 DEFINE_string(action, "test_record", "");
 // DEFINE_string(src, "records/00000000_000_000.info", "");
@@ -87,8 +87,7 @@ static void failureFunction() { exit(0); }
 
 int main(int argc, char *argv[]) {
 
-	db::run();
-	//std::cout << db::FuncPlus(1, 3) << std::endl;
+	//db::DB *db = new db::DB();
 	//gflags::SetVersionString(version_info);
 	//gflags::ParseCommandLineFlags(&argc, &argv, true);
 	//gflags::SetUsageMessage(help_info);

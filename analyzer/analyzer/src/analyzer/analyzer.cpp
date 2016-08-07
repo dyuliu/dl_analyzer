@@ -1,5 +1,5 @@
 
-#include <analyzer.h>
+#include <analyzer/analyzer.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>

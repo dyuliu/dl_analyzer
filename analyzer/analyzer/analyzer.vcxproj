@@ -34,14 +34,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\dependency\lib\boost;$(SolutionDir)\$(PlatformTarget)\Debug;$(SolutionDir)\dependency\lib\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(SolutionDir)dependency\include;$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)running_dir;$(SolutionDir)\dependency\lib\boost;$(SolutionDir)\$(PlatformTarget)\Debug;$(SolutionDir)\dependency\lib\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <OutDir>$(SolutionDir)running_dir</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Release;$(SolutionDir)\dependency\lib\boost;$(SolutionDir)\dependency\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(SolutionDir)dependency\include;$(SolutionDir);$(ProjectDir)\include;$(SolutionDir)\protobuf\src;$(SolutionDir)\dependency\include\boost_1_55_0;$(SolutionDir)\dependency\include\gflags;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)running_dir;$(SolutionDir)\$(PlatformTarget)\Release;$(SolutionDir)\dependency\lib\boost;$(SolutionDir)\dependency\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <OutDir>$(SolutionDir)running_dir</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
@@ -62,13 +64,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="include\proto\analyzer.pb.cc" />
-    <ClCompile Include="src\analyzer.cpp" />
+    <ClCompile Include="src\analyzer\analyzer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\recorder\recorder.cpp" />
     <ClCompile Include="src\utils\filesystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\analyzer.h" />
+    <ClInclude Include="include\analyzer\analyzer.h" />
     <ClInclude Include="include\color_print.h" />
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\proto\analyzer.pb.h" />

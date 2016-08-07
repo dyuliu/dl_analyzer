@@ -35,12 +35,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\dependency\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)analyzer\include;$(SolutionDir)protobuf\src;$(SolutionDir)dependency\include;$(ProjectDir)include;$(SolutionDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)running_dir</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\dependency\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)analyzer\include;$(SolutionDir)protobuf\src;$(SolutionDir)dependency\include;$(ProjectDir)include;$(SolutionDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)running_dir</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Lib>

@@ -1,9 +1,10 @@
 
 #pragma once
-
 #include <proto/analyzer.pb.h>
 #include <config.h>
 #include <map>
+#include <db/include/entry.h>
+
 
 namespace analyzer {
 
@@ -66,13 +67,17 @@ namespace analyzer {
 		void print_conv_layer_info();
 		void print_stat_info(DATA_CONTENT data_content);
 
+	// MongoDB
+	public:
+		void import();
+
+
 	// Interface
 	public:
 
 		Info& get() { return info; }
-		
-		Infos();
 
+		Infos();
 	
 	private:
 		
