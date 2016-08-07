@@ -61,5 +61,6 @@
       <Filter>include\recorder</Filter>
     </ClInclude>
     <ClInclude Include="include\analyzer\analyzer.h" />
+    <ClInclude Include="include\utils\color_print.h" />
   </ItemGroup>
 </Project>

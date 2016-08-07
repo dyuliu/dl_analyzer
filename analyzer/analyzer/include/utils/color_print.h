@@ -4,6 +4,7 @@
 #include <iostream>
 
 #define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 #define COUT_R(x) ( std::cout << analyzer::_red  	<< (x) << analyzer::_white )

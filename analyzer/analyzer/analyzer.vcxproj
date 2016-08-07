@@ -75,6 +75,7 @@
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\proto\analyzer.pb.h" />
     <ClInclude Include="include\recorder\recorder.h" />
+    <ClInclude Include="include\utils\color_print.h" />
     <ClInclude Include="include\utils\filesystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

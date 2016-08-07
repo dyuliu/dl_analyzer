@@ -7,7 +7,8 @@
 
 #include <analyzer/analyzer.h>
 #include <recorder/recorder.h>
-
+#include <db/include/entry.h>
+db::DB *dbInstance;
 
 DEFINE_string(action, "test_record", "");
 // DEFINE_string(src, "records/00000000_000_000.info", "");
@@ -53,6 +54,8 @@ void read_from_file() {
 	info.init(FLAGS_src);
 	info.compute_stat(analyzer::Infos::LAYER_STAT_MAX, analyzer::Infos::DATA_CONTENT::CONTENT_GRAD);
 	info.print_total_info();
+	dbInstance = new db::DB();
+	dbInstance->importAllStats();
 }
 
 void read_from_folder() {
@@ -87,17 +90,16 @@ static void failureFunction() { exit(0); }
 
 int main(int argc, char *argv[]) {
 
-	//db::DB *db = new db::DB();
-	//gflags::SetVersionString(version_info);
-	//gflags::ParseCommandLineFlags(&argc, &argv, true);
-	//gflags::SetUsageMessage(help_info);
+	gflags::SetVersionString(version_info);
+	gflags::ParseCommandLineFlags(&argc, &argv, true);
+	gflags::SetUsageMessage(help_info);
 
-	//if (FLAGS_action == "test") test();
-	//if (FLAGS_action == "test_record") test_record();
-	//if (FLAGS_action == "read_from_file") read_from_file();
-	//if (FLAGS_action == "read_from_folder") read_from_folder();
+	if (FLAGS_action == "test") test();
+	if (FLAGS_action == "test_record") test_record();
+	if (FLAGS_action == "read_from_file") read_from_file();
+	if (FLAGS_action == "read_from_folder") read_from_folder();
 
-	//gflags::ShutDownCommandLineFlags();
+	gflags::ShutDownCommandLineFlags();
 	system("pause");
 	return 0;
 }

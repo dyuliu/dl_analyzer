@@ -4,9 +4,6 @@
 #undef _WINSOCKAPI_
 #define _WINSOCKAPI_
 
-#define WIN32_LEAN_AND_MEAN
-
-#include <windows.h>
 #include <winsock2.h>
 
 #include <vector>
@@ -16,7 +13,7 @@
 
 namespace db {
 
-	using STAT_TYPE = analyzer::Infos::STAT_TYPE;
+	using STAT_TYPE = analyzer::Infos::STAT_TYPE_CLASS;
 	using Info = analyzer::Info;
 
 	class DB {
@@ -29,7 +26,7 @@ namespace db {
 		@param serverAddress e.g., "192.168.1.10", 
 		the default value is "localhost".
 		*/
-		DB(std::string serverAddress);
+		DB(std::string serverAddress = "localhost");
 
 		/**
 		Deconstruction Function 
@@ -41,16 +38,25 @@ namespace db {
 		@param statName, the name of the stattistic,
 		type: STAT_TYPE.
 		*/
-		void importStat(analyzer::Infos::STAT_TYPE statName) {}
+		void importStat(unsigned int statName);
 
 		/**
 		Import all stat information to DB
 		*/
-		void importAllStat() {}
+		void importAllStats();
+
+		void importLayerNameTable();
+
+		/**
+		Bind info to data
+		This should be executed before inserting docs,
+		*/
+		void bindData(Info *d);
 
 	// private data
 	private:
 		mongo::DBClientConnection connection;
+		Info *data;
 
 	};
 
