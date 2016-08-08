@@ -26,7 +26,7 @@ namespace db {
 		@param serverAddress e.g., "192.168.1.10", 
 		the default value is "localhost".
 		*/
-		DB(std::string serverAddress = "localhost");
+		DB(std::string dbName = "DeepLearning", std::string serverAddress = "localhost");
 
 		/**
 		Deconstruction Function 
@@ -35,30 +35,24 @@ namespace db {
 
 		/**
 		Import a selected stat into DB
-		@param statName, the name of the stattistic,
-		type: STAT_TYPE.
 		*/
-		void importStat(unsigned int statName);
+		void importStat(unsigned int statName, std::string colName = "");
 
 		/**
 		Import all stat information to DB
 		*/
 		void importAllStats();
 
-		void importLayerNameTable();
+		void importAll();
+
+		void importLayerAttrs(std::string colName = "LayerTable");
 		
-
-		/**
-		Bind info to data
-		This should be executed before inserting docs,
-		*/
 		void bindData(Info *d);
-
 	// private data
 	private:
 		mongo::DBClientConnection connection;
+		std::string dbName;
 		Info *data;
-
 	};
 
 }

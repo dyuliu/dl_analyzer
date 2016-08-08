@@ -1,19 +1,20 @@
+#include "statname_map.h"
 #include "entry.h"
 
+using mongo::BSONArrayBuilder;
+using mongo::BSONArray;
 using mongo::BSONElement;
 using mongo::BSONObj;
 using mongo::BSONObjBuilder;
 
 namespace db {
 	
-	
-	
-	DB::DB(std::string serverAddress) {
+	DB::DB(std::string dbName, std::string serverAddress) {
 		mongo::client::initialize();
 		try {
 			connection.connect(serverAddress);
 			std::cout << "mongoDB connect successfully" << std::endl;
-
+			this->dbName = dbName;
 		}
 		catch (const mongo::DBException &e) {
 			std::cout << "caught " << e.what() << std::endl;
@@ -24,95 +25,72 @@ namespace db {
 		mongo::client::shutdown();
 	}
 
-	void DB::bindData(Info *d) {
-		this->data = d;
+	void DB::bindData(Info *data) {
+		this->data = data;
+	}
+
+	void DB::importStat(unsigned int statName, std::string colName) {
+		MAP_TYPE::iterator iter;
+		iter = nameMap.find(statName);
+		if (iter == nameMap.end()) {
+			std::cout << "No such stat" << std::endl;
+			return;
+		}
+		if (colName == "") {
+			colName = iter->second;
+		}
+		std::cout << "I am importing " << iter->second << 
+			" into the collection with name \"" << colName << "\"." << std::endl;
+		std::string col = this->dbName + '.' + colName;
+		Info *data = this->data;
+		BSONObjBuilder bObj;
+		BSONArrayBuilder floatArrValue, floatArrLayerId;
+
+		bObj.append("it", data->iteration())
+			.append("wid", data->sim_id());
+
+		for (int i = 0; i < data->layers_size(); i++) {
+
+			if (data->layers(i).type() == "batch_norm") continue;
+
+			floatArrValue.append(data->layers(i).stat(statName));
+			floatArrLayerId.append(i);
+		}
+		bObj.append("v", floatArrValue.arr());
+		bObj.append("l", floatArrLayerId.arr());
+		BSONObj o = bObj.obj();
+		this->connection.insert(col, o);
 	}
 
 	void DB::importAllStats() {
 		std::cout << "I am importing all stats" << std::endl;
-		Info *data = this->data;
 
-		size_t weight_size = 0, grad_size = 0;
-		for (int i = 0; i < data->layers_size(); i++) {
-
-			weight_size += data->layers(i).weight_size();
-			grad_size += data->layers(i).grad_size();
-
-			if (data->layers(i).type() == "batch_norm") continue;
-
-			COUT_CHEK << std::setw(3) << i << ", " << std::setw(30) << data->layers(i).name()
-				<< std::setw(10) << "min: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_MIN_C)
-				<< std::setw(10) << "max: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_MAX_C)
-				<< std::setw(10) << "sum: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_SUM_C)
-				<< std::setw(10) << "mean: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_MEAN_C)
-				<< std::setw(10) << "norm-1: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_NORM_1_C)
-				<< std::setw(10) << "norm-2: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_NORM_2_C) << std::endl;
+		for (auto it = nameMap.begin(); it != nameMap.end(); ++it) {
+			this->importStat(it->first);
 		}
 	}
 
-	void DB::importLayerNameTable() {
-		std::cout << "I am importing layer name table" << std::endl;
+	void DB::importLayerAttrs(std::string colName) {
+		std::cout << "I am importing layer attrs into the collection with name \"" << colName << "\"." << std::endl;
+		std::string col = this->dbName + '.' + colName;
+		Info *data = this->data;
+		for (int i = 0; i < data->layers_size(); i++) {
+			BSONObjBuilder bObj;
+			bObj.append("lid", i)
+				.append("name", data->layers(i).name())
+				.append("type", data->layers(i).type())
+				.append("channels", data->layers(i).channels())
+				.append("kernelNum", data->layers(i).num())
+				.append("kernelWidth", data->layers(i).width())
+				.append("kernelHeight", data->layers(i).height());
+			this->connection.insert(col, bObj.obj());
+		}
 	}
 
-}
-
-
-void iter(BSONObj o) {
-	/* iterator example */
-	std::cout << "\niter()\n";
-	for (BSONObj::iterator i(o); i.more();) {
-		std::cout << ' ' << i.next().toString() << '\n';
+	void DB::importAll() {
+		std::cout << "I am importing all data into db" << std::endl;
+		this->importLayerAttrs();
+		this->importAllStats();
 	}
-}
-
-void bsonOperationExample() {
-
-	/* a simple way of making a bson */
-	{
-		const mongo::OID generated = mongo::OID::gen();
-		std::cout << generated << std::endl;
-
-		BSONObjBuilder b;
-		b.append("_id", generated);
-		b.append("when", mongo::jsTime());
-		b.append("name", "joe");
-		b.append("age", 32.5);
-		BSONObj result = b.obj();
-
-		std::cout << "json for object with _id: " << result << std::endl;
-	}
-
-	/* a more compact manner */
-	BSONObj x = BSONObjBuilder().append("name", "jack").append("age", 38).obj();
-	std::string json_str = x.toString();
-	std::cout << "json for x: " << json_str << std::endl;
-	std::cout << "Attr in x: " << x["name"] << ' ' << x["age"].Number() << ' ' << x.isEmpty() << std::endl;
-
-	///* nest */
-	BSONObj y = BSON("x" << "asdf" <<
-		"y" << true <<
-		"subobj" << BSON("z" << 3 << "q" << 4));
-	std::cout << "y: " << y << std::endl;
-	std::cout << "subobj.z : " << y.getFieldDotted("subobj.z").Number() << std::endl;
-	std::cout << "subobj.z : " << y["subobj"]["z"].Number() << std::endl;
-
-	std::cout << "\nstd::vector iter()\n";
-	std::vector<BSONElement> t_v;
-	y.elems(t_v);
-	for (BSONElement &v_it : t_v) {
-		std::cout << v_it.toString() << std::endl;
-	}
-
-	std::cout << "\nstd::list iter()\n";
-	std::list<BSONElement> t_l;
-	y.elems(t_l);
-	for (BSONElement &l_it : t_l) {
-		std::cout << l_it.toString() << std::endl;
-	}
-
-
-	BSONObj sub = y["subobj"].Obj();
-
-	iter(y);
 
 }

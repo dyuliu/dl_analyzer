@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entry.h" />
+    <ClInclude Include="include\statname_map.h" />
   </ItemGroup>
 </Project>
