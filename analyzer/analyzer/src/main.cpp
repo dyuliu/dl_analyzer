@@ -10,9 +10,9 @@
 #include <db/include/entry.h>
 db::DB *dbInstance;
 
-DEFINE_string(action, "test_record", "");
+DEFINE_string(action, "test", "");
 // DEFINE_string(src, "records/00000000_000_000.info", "");
-DEFINE_string(src, "running_info.log", "");
+DEFINE_string(src, "caffepro_log", "");
 
 const std::string version_info =
 R"(
@@ -44,6 +44,10 @@ void test() {
 		COUT_ERRO << "Missing file path, please set -src" << std::endl;
 		return;
 	}
+
+	analyzer::Recorders recorder;
+	recorder.load_from_log_file(FLAGS_src, recorder.CAFFEPRO);
+
 }
 
 void read_from_file() {

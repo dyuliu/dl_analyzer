@@ -26,6 +26,7 @@
     </ClCompile>
     <ClCompile Include="src\analyzer\analyzer.cpp" />
     <ClCompile Include="include\proto\analyzer.pb.cc" />
+    <ClCompile Include="src\utils\string_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\analyzer\analyzer.h" />
@@ -34,5 +35,6 @@
     <ClInclude Include="include\recorder\recorder.h" />
     <ClInclude Include="include\utils\filesystem.h" />
     <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\utils\string_utils.h" />
   </ItemGroup>
 </Project>
