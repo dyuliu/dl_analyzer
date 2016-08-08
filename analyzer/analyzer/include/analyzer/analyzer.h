@@ -84,6 +84,8 @@ namespace analyzer {
 
 		Info& get() { return info; }
 		
+		Info* getInfo() { return &info; }
+
 		Infos();
 
 	

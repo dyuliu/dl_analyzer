@@ -52,9 +52,14 @@ void read_from_file() {
 
 	analyzer::Infos info;
 	info.init(FLAGS_src);
-	info.compute_stat(analyzer::Infos::LAYER_STAT_MAX, analyzer::Infos::DATA_CONTENT::CONTENT_GRAD);
-	info.print_total_info();
 	dbInstance = new db::DB();
+	info.compute_stat(analyzer::Infos::LAYER_STAT_MAX, analyzer::Infos::DATA_CONTENT::CONTENT_GRAD);
+	//info.compute_all_stat(analyzer::Infos::DATA_CONTENT::CONTENT_GRAD);
+	dbInstance->bindData(info.getInfo());
+	dbInstance->importAllStats();
+	//info.compute_stat(analyzer::Infos::LAYER_STAT_MIN, analyzer::Infos::DATA_CONTENT::CONTENT_WEIGHT);
+	//info.compute_all_stat(analyzer::Infos::DATA_CONTENT::CONTENT_WEIGHT);
+	dbInstance->bindData(info.getInfo());
 	dbInstance->importAllStats();
 }
 

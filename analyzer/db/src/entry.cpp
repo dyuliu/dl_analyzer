@@ -30,7 +30,7 @@ namespace db {
 
 	void DB::importAllStats() {
 		std::cout << "I am importing all stats" << std::endl;
-		/*Info *data = this->data;
+		Info *data = this->data;
 
 		size_t weight_size = 0, grad_size = 0;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -47,7 +47,7 @@ namespace db {
 				<< std::setw(10) << "mean: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_MEAN_C)
 				<< std::setw(10) << "norm-1: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_NORM_1_C)
 				<< std::setw(10) << "norm-2: " << std::setw(10) << data->layers(i).stat(STAT_TYPE::LAYER_STAT_NORM_2_C) << std::endl;
-		}*/
+		}
 	}
 
 	void DB::importLayerNameTable() {

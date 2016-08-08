@@ -61,6 +61,9 @@
     <Link>
       <AdditionalDependencies>db.lib;emath.lib;libprotobuf.lib;libglog.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="include\proto\analyzer.pb.cc" />
