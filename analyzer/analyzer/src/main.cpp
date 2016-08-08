@@ -9,6 +9,7 @@
 #include <recorder/recorder.h>
 #include <db/include/entry.h>
 
+#include <omp.h>
 
 db::DB *dbInstance;
 
@@ -114,12 +115,13 @@ void compute_all_batch(std::string foldername, int batch_size) {
 	if (!analyzer::filesystem::exist(foldername.c_str()))
 		throw("Error: Missing folder path!");
 	auto files = analyzer::filesystem::get_files(foldername.c_str(), "*.info", false);
-	
+
+#pragma omp parallel for schedule(dynamic)
 	for (int i = 0; i < files.size(); i += batch_size) {
 		std::vector<Infos> batch_infos;
 
 		// depleted
-		if (i + batch_size > files.size()) break;
+		if (i + batch_size > files.size()) continue;
 
 		// process
 		for (int j = i; j < i + batch_size; j++) {
@@ -127,7 +129,7 @@ void compute_all_batch(std::string foldername, int batch_size) {
 			auto clock_t = clock();
 			COUT_READ << "Process file with grad: " << info.get().filename() << std::endl;
 			info.compute_all(Infos::TYPE_CONTENT::GRAD);
-			COUT_CHEK << "All grad statistic has been computed, spend: " << clock()-clock_t << std::endl;
+			COUT_READ << "All grad statistic has been computed, spend: " << clock() - clock_t << std::endl;
 
 			// process last one
 			if (j == i + batch_size - 1) {
@@ -138,16 +140,20 @@ void compute_all_batch(std::string foldername, int batch_size) {
 				for (int m = 0; m < batch_size - 1; m++) {
 					// copy weight hyper statistic
 					clock_t = clock();
-					COUT_CHEK << "File: " << info.get().filename() << " prepare to compute distance from aggregate!" << std::endl;
+					COUT_CHEK << "File: " << batch_infos[m].get().filename() << " prepare to compute distance from aggregate!" << std::endl;
 					batch_infos[m].copy_hyperparam(info, Infos::TYPE_CONTENT::WEIGHT, Infos::HyperParam::STAT);
 					// calcute distance to aggregate
 					batch_infos[m].compute(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, info);
 					COUT_CHEK << "Finish compute distance from aggregate, spend: " << clock() - clock_t << std::endl;
 				}
-				// PUT IN API
 			}
 			batch_infos.push_back(info);
 		}
+
+		for (int x = 0; x < batch_size - 1; x++) {
+			batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
+		}
+		batch_infos[batch_size - 1].get().set_worker_id(0);
 
 		COUT_SUCC << "FINISH A GROUP OF FILES" << std::endl;
 	}
