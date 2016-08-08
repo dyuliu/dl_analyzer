@@ -38,6 +38,11 @@ namespace analyzer {
 			END
 		};
 
+		enum class HyperParam : unsigned int {
+			STAT = 0U,
+			DISTANCE = 1U
+		};
+
 	public:
 
 		// dump to file
@@ -58,9 +63,9 @@ namespace analyzer {
 		void compute_all(TYPE_CONTENT data_content);
 
 		// distance
-		void compute(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, const std::vector<DType> &data);
-		void compute_list(std::vector<TYPE_DISTANCE> const distance_list, TYPE_CONTENT data_content, const std::vector<DType> &data);
-		void compute_all(TYPE_CONTENT data_content, const std::vector<DType> &data);
+		void compute(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, Infos &other);
+		void compute_list(std::vector<TYPE_DISTANCE> const distance_list, TYPE_CONTENT data_content, Infos &other);
+		void compute_all(TYPE_CONTENT data_content, Infos &other);
 
 		// data transfer
 		void RepeatedToVector(const ::google::protobuf::RepeatedField<float>& x, std::vector<DType> &y);
@@ -71,6 +76,7 @@ namespace analyzer {
 		void print_file_info();
 		void print_conv_layer_info();
 		void print_stat_info(TYPE_CONTENT data_content);
+		void print_distance_info(TYPE_CONTENT data_content);
 
 	// Interface
 	public:
@@ -79,11 +85,16 @@ namespace analyzer {
 		
 		Info* getInfo() { return &info; }
 
+		// constructor
 		Infos();
 		Infos(std::string filename);
 		// for rank, it will be depleted in future
 		Infos(std::string path, int rank_size);
 
+		// copy
+		void Infos::copy_hyperparam(Infos &other, TYPE_CONTENT content_type, HyperParam hp);
+
+		// init
 		void init_stat();
 		void init_type_name();
 	

@@ -8,15 +8,24 @@ namespace analyzer {
 		return ((int)data_content * (int)TYPE_DISTANCE::END + (int)distance_type);
 	}
 
-	void Infos::compute(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, const std::vector<DType> &data) {
+	void Infos::compute(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, Infos &other) {
 
 		if (distrance_type == TYPE_DISTANCE::END) return;
 
 		for (int i = 0; i < info.layers_size(); i++) {
 
+#ifdef __DEBUG_INFO_OUTPUT
+			COUT_WARN << "Compute distance of layer: " << info.layers(i).name() << std::endl;
+#endif
+			if (info.layers(i).type() == "batch_norm") continue;
+
 			// index of stat
 			const int idx = index(distrance_type, data_content);
-			auto ptr = info.mutable_layers(i)->mutable_stat(idx);
+			auto ptr = info.mutable_layers(i)->mutable_distance(idx);
+			
+			std::vector<DType> data;
+			if (data_content == TYPE_CONTENT::GRAD) data = ArrayToVector(other.get().layers(i).grad());
+			if (data_content == TYPE_CONTENT::WEIGHT) data = ArrayToVector(other.get().layers(i).weight());
 
 			if (distrance_type == TYPE_DISTANCE::COSINE) {
 				if (data_content == TYPE_CONTENT::GRAD)
@@ -42,53 +51,34 @@ namespace analyzer {
 		}
 	}
 
-	void Infos::compute_list(std::vector<TYPE_DISTANCE> distance_list, TYPE_CONTENT data_content, const std::vector<DType> &data) {
+	void Infos::compute_list(std::vector<TYPE_DISTANCE> distance_list, TYPE_CONTENT data_content, Infos &other) {
 
 #ifdef __DEBUG_INFO_OUTPUT
 		COUT_METD << "func: compute_list_distance" << std::endl;
 #endif
 
-		for (int i = 0; i < info.layers_size(); i++) {
-
-			if (info.layers(i).type() == "batch_norm") continue;
-
+		for (unsigned int j = 0; j < distance_list.size(); j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			COUT_WARN << "Compute distance of layer: " << info.layers(i).name() << std::endl;
-#endif
-
-			for (unsigned int j = 0; j < distance_list.size(); j++) {
-#ifdef __DEBUG_INFO_OUTPUT
-				__FUNC_TIME_CALL(compute(distance_list[j], data_content, data), name_distance_type[distance_list[j]]);
+			__FUNC_TIME_CALL(compute(distance_list[j], data_content, other), name_distance_type[distance_list[j]]);
 #else
-				compute((TYPE_DISTANCE)distance_list[j], data_content, data);
+			compute((TYPE_DISTANCE)distance_list[j], data_content, other);
 #endif
-			}
 		}
-	};
-	
-	void Infos::compute_all(TYPE_CONTENT data_content, const std::vector<DType> &data) {
+	}
+
+	// compute all distance
+	void Infos::compute_all(TYPE_CONTENT data_content, Infos &other) {
 
 #ifdef __DEBUG_INFO_OUTPUT
 		COUT_METD << "func: compute_all_distance" << std::endl;
 #endif
 
-		for (int i = 0; i < info.layers_size(); i++) {
-
-			if (info.layers(i).type() == "batch_norm") continue;
-
+		for (unsigned int j = (int)TYPE_DISTANCE::EUCLIDEAN; j < (int)TYPE_DISTANCE::END; j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			COUT_WARN << "Compute distance of layer: " << info.layers(i).name() << std::endl;
-#endif
-
-			for (unsigned int j = (int)TYPE_DISTANCE::EUCLIDEAN; j < (int)TYPE_DISTANCE::END; j++) {
-#ifdef __DEBUG_INFO_OUTPUT
-				__FUNC_TIME_CALL(compute((TYPE_DISTANCE)j, data_content, data), name_distance_type[(TYPE_DISTANCE)j]);
+			__FUNC_TIME_CALL(compute((TYPE_DISTANCE)j, data_content, other), name_distance_type[(TYPE_DISTANCE)j]);
 #else
-				compute((TYPE_DISTANCE)j, data_content, data);
+			compute((TYPE_DISTANCE)j, data_content, other);
 #endif
-			}
 		}
-	};
-
-
+	}
 }

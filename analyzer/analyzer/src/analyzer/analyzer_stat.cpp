@@ -8,12 +8,17 @@ namespace analyzer {
 		return ((int)data_content * (int)TYPE_STAT::END + (int)stat_type);
 	}
 
-
 	void Infos::compute(TYPE_STAT stat_type, TYPE_CONTENT data_content) {
 
 		if (stat_type == TYPE_STAT::END) return;
 
 		for (int i = 0; i < info.layers_size(); i++) {
+
+#ifdef __DEBUG_INFO_OUTPUT
+			COUT_WARN << "Compute stat of layer: " << info.layers(i).name() << std::endl;
+#endif
+
+			if (info.layers(i).type() == "batch_norm") continue;
 
 			// index of stat
 			const int idx = index(stat_type, data_content);
@@ -92,21 +97,12 @@ namespace analyzer {
 		COUT_METD << "func: compute_all_stat" << std::endl;
 #endif
 
-		for (int i = 0; i < info.layers_size(); i++) {
-
-			if (info.layers(i).type() == "batch_norm") continue;
-
+		for (unsigned int j = (int)TYPE_STAT::MAX; j < (int)TYPE_STAT::END; j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			COUT_WARN << "Compute stat of layer: " << info.layers(i).name() << std::endl;
-#endif
-
-			for (unsigned int j = (int)TYPE_STAT::MAX; j < (int)TYPE_STAT::END; j++) {
-#ifdef __DEBUG_INFO_OUTPUT
-				__FUNC_TIME_CALL(compute((TYPE_STAT)j, data_content), name_stat_type[(TYPE_STAT)j]);
+			__FUNC_TIME_CALL(compute((TYPE_STAT)j, data_content), name_stat_type[(TYPE_STAT)j]);
 #else
-				compute((TYPE_STAT)j, data_content);
+			compute((TYPE_STAT)j, data_content);
 #endif
-			}
 		}
 	}
 
@@ -116,22 +112,12 @@ namespace analyzer {
 		COUT_METD << "func: compute_list_stat" << std::endl;
 #endif
 
-		for (int i = 0; i < info.layers_size(); i++) {
-
-			if (info.layers(i).type() == "batch_norm") continue;
-
+		for (unsigned int j = 0; j < stat_list.size(); j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			COUT_WARN << "Compute stat of layer: " << info.layers(i).name() << std::endl;
-#endif
-
-			for (unsigned int j = 0; j < stat_list.size(); j++) {
-#ifdef __DEBUG_INFO_OUTPUT
-				__FUNC_TIME_CALL(compute(stat_list[j], data_content), name_stat_type[stat_list[j]]);
+			__FUNC_TIME_CALL(compute(stat_list[j], data_content), name_stat_type[stat_list[j]]);
 #else
-				compute((TYPE_STAT)stat_list[j], data_content);
+			compute((TYPE_STAT)stat_list[j], data_content);
 #endif
-			}
 		}
 	}
-
 }

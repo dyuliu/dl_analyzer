@@ -74,7 +74,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\recorder\recorder.cpp" />
     <ClCompile Include="src\recorder\recorder_caffepro.cpp" />
-    <ClCompile Include="src\terminal.cpp" />
     <ClCompile Include="src\utils\filesystem.cpp" />
     <ClCompile Include="src\utils\ini.c" />
     <ClCompile Include="src\utils\inireader.cpp" />

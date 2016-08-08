@@ -9,11 +9,11 @@ namespace analyzer{
 		print_file_info();
 		print_conv_layer_info();
 
-		if (info.layers(0).grad_size() != 0)
-			print_stat_info(TYPE_CONTENT::GRAD);
-		
-		if (info.layers(0).weight_size() != 0)
-			print_stat_info(TYPE_CONTENT::WEIGHT);
+		print_stat_info(TYPE_CONTENT::GRAD);
+		print_stat_info(TYPE_CONTENT::WEIGHT);
+
+		print_distance_info(TYPE_CONTENT::GRAD);
+		print_distance_info(TYPE_CONTENT::WEIGHT);
 
 	}
 
@@ -78,6 +78,34 @@ namespace analyzer{
 			for (int j = (int)data_content*(int)TYPE_STAT::END; j < ((int)data_content + 1)*(int)TYPE_STAT::END; j++) {
 				if (info.layers(i).stat(j).content() == name_content_type[data_content]) {
 					std::cout << ", " << info.layers(i).stat(j).type() << ": " << info.layers(i).stat(j).value();
+				}
+			}
+			std::cout << std::endl;
+		}
+	}
+
+	void Infos::print_distance_info(TYPE_CONTENT data_content) {
+
+		std::cout << std::endl;
+		if (data_content == TYPE_CONTENT::GRAD)
+			COUT_METD << "----- PRINT GRAD DISTANCE INFO -----" << std::endl;
+
+		if (data_content == TYPE_CONTENT::WEIGHT)
+			COUT_METD << "----- PRINT WEIGHT DISTANCE INFO -----" << std::endl;
+
+		// print stat infomation
+		size_t weight_size = 0, grad_size = 0;
+		for (int i = 0; i < info.layers_size(); i++) {
+
+			weight_size += info.layers(i).weight_size();
+			grad_size += info.layers(i).grad_size();
+
+			if (info.layers(i).type() == "batch_norm") continue;
+
+			COUT_CHEK << std::setw(3) << i << ", " << std::setw(30) << info.layers(i).name();
+			for (int j = (int)data_content*(int)TYPE_DISTANCE::END; j < ((int)data_content + 1)*(int)TYPE_DISTANCE::END; j++) {
+				if (info.layers(i).distance(j).content() == name_content_type[data_content]) {
+					std::cout << ", " << info.layers(i).distance(j).type() << ": " << info.layers(i).distance(j).value();
 				}
 			}
 			std::cout << std::endl;

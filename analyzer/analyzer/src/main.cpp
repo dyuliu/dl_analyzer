@@ -12,9 +12,11 @@
 
 db::DB *dbInstance;
 
-DEFINE_string(action, "read_from_file", "");
-DEFINE_string(src, "records/00000000_000_008.info", "");
-//DEFINE_string(src, "caffepro_log", "");
+DEFINE_string(action, "all", "");
+// DEFINE_string(src, "records/00000000_000_008.info", "");
+// DEFINE_string(src, "caffepro_log", "");
+DEFINE_string(src, "records", "");
+DEFINE_uint64(batchsize, 9, "batch size of records");
 
 using analyzer::Infos;
 using analyzer::Recorders;
@@ -108,25 +110,51 @@ void test_record() {
 	recorder.print_specify_type(Recorders::TYPE_RECORD::FORWARD_TIME);
 }
 
-static void failureFunction() { exit(0); }
+void compute_all_batch(std::string foldername, int batch_size) {
+	if (!analyzer::filesystem::exist(foldername.c_str()))
+		throw("Error: Missing folder path!");
+	auto files = analyzer::filesystem::get_files(foldername.c_str(), "*.info", false);
+	
+	for (int i = 0; i < files.size(); i += batch_size) {
+		std::vector<Infos> batch_infos;
 
-#include <analyzer/include/utils/inireader.h>
+		// depleted
+		if (i + batch_size > files.size()) break;
 
-int parse() {
-	INIReader reader("test.ini");
+		// process
+		for (int j = i; j < i + batch_size; j++) {
+			Infos info(files[j]);
+			auto clock_t = clock();
+			COUT_READ << "Process file with grad: " << info.get().filename() << std::endl;
+			info.compute_all(Infos::TYPE_CONTENT::GRAD);
+			COUT_CHEK << "All grad statistic has been computed, spend: " << clock()-clock_t << std::endl;
 
-	if (reader.ParseError() < 0) {
-		std::cout << "Can't load 'test.ini'\n";
-		return 1;
+			// process last one
+			if (j == i + batch_size - 1) {
+				clock_t = clock();
+				COUT_CHEK << "Process file with weight: " << info.get().filename() << std::endl;
+				info.compute_all(Infos::TYPE_CONTENT::WEIGHT);
+				COUT_CHEK << "All weight statistic has been computed, spend: " << clock() - clock_t << std::endl;
+				for (int m = 0; m < batch_size - 1; m++) {
+					// copy weight hyper statistic
+					clock_t = clock();
+					COUT_CHEK << "File: " << info.get().filename() << " prepare to compute distance from aggregate!" << std::endl;
+					batch_infos[m].copy_hyperparam(info, Infos::TYPE_CONTENT::WEIGHT, Infos::HyperParam::STAT);
+					// calcute distance to aggregate
+					batch_infos[m].compute(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, info);
+					COUT_CHEK << "Finish compute distance from aggregate, spend: " << clock() - clock_t << std::endl;
+				}
+				// PUT IN API
+			}
+			batch_infos.push_back(info);
+		}
+
+		COUT_SUCC << "FINISH A GROUP OF FILES" << std::endl;
 	}
-	std::cout << "Config loaded from 'test.ini': version="
-		<< reader.GetInteger("protocol", "version", -1) << ", name="
-		<< reader.Get("user", "name", "UNKNOWN") << ", email="
-		<< reader.Get("user", "email", "UNKNOWN") << ", pi="
-		<< reader.GetReal("user", "pi", -1) << ", active="
-		<< reader.GetBoolean("user", "active", true) << "\n";
-	return 0;
+	COUT_SUCC << "FINISH ALL JOBS" << std::endl;
 }
+
+static void failureFunction() { exit(0); }
 
 int main(int argc, char *argv[]) {
 
@@ -134,12 +162,11 @@ int main(int argc, char *argv[]) {
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 	gflags::SetUsageMessage(help_info);
 
-	parse();
-
 	if (FLAGS_action == "test") test();
 	if (FLAGS_action == "test_record") test_record();
 	if (FLAGS_action == "read_from_file") read_from_file();
 	if (FLAGS_action == "read_from_folder") read_from_folder();
+	if (FLAGS_action == "all") compute_all_batch(FLAGS_src, FLAGS_batchsize);
 
 	gflags::ShutDownCommandLineFlags();
 	system("pause");

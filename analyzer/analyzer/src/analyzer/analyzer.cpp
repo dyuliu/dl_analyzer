@@ -104,4 +104,26 @@ namespace analyzer {
 		info.SerializeToOstream(&fp);
 		fp.close();
 	}
+
+	void Infos::copy_hyperparam(Infos &other, TYPE_CONTENT content_type, HyperParam hp) {
+
+		CHECK_EQ(info.layers_size(), other.get().layers_size());
+
+		for (int i = 0; i < info.layers_size(); i++) {
+			CHECK_EQ(info.layers(i).stat_size(), other.get().layers(i).stat_size());
+			if (hp == HyperParam::STAT) {
+				for (int j = (int)TYPE_STAT::MAX; j < (int)TYPE_STAT::END; j++) {
+					auto idx = index((TYPE_STAT)j, content_type);
+					info.mutable_layers(i)->mutable_stat(idx)->CopyFrom(other.get().layers(i).stat(idx));
+				}
+			}
+			else if (hp == HyperParam::DISTANCE) {
+				for (int j = (int)TYPE_DISTANCE::EUCLIDEAN; j < (int)TYPE_DISTANCE::END; j++) {
+					auto idx = index((TYPE_STAT)j, content_type);
+					info.mutable_layers(i)->mutable_stat(idx)->CopyFrom(other.get().layers(i).stat(idx));
+				}
+			}
+		}
+
+	}
 }
