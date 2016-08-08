@@ -71,7 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\analyzer\analyzer.h" />
-    <ClInclude Include="include\color_print.h" />
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\proto\analyzer.pb.h" />
     <ClInclude Include="include\recorder\recorder.h" />

@@ -49,7 +49,6 @@ namespace analyzer {
 		}
 
 		COUT_SUCC << "Has outputed all infos." << std::endl;
-
 	}
 
 	void Recorders::print_specify_type(std::string record_type, int iterval) {
@@ -87,6 +86,26 @@ namespace analyzer {
 		recorder.ParseFromCodedStream(&code_input);
 
 		fp.close();
+
+	}
+
+	void Recorders::load_from_log_file(std::string filename, FRAMEWORK_TYPE framework_type) {
+
+		if (!filesystem::exist(filename.c_str()))
+			throw("Error: the file has not been found!");
+
+		if (framework_type == FRAMEWORK_TYPE::CAFFEPRO) {
+			parse_from_log_file_caffepro(filename);
+		}
+		else {
+			throw("Error: not specify framework type!");
+		}
+
+	}
+
+	void Recorders::parse_from_log_file_caffepro(std::string filename) {
+
+
 
 	}
 
