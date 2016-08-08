@@ -31,7 +31,7 @@ namespace db {
 	}
 
 	void DB::importGradient(std::string colName) {
-		std::cout << "Importing gradient data to \"" << colName << "\"." << std::endl;
+		std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->data;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -39,19 +39,29 @@ namespace db {
 			BSONObjBuilder bObj;
 			BSONArrayBuilder floatArrValue;
 			bObj.append("iter", data->iteration())
-				.append("w_id", data->sim_id())
+				.append("wid", data->worker_id())
 				.append("lid", i)
 				.appendArray("v", BSON_ARRAY(1.0 << 2.0 << 3.0 << 4.0 << 5.0));
-			//data->layers(i).grad
 			BSONObj o = bObj.obj();
 			this->connection.insert(col, o);
 		}
 	}
 
 	void DB::importWeight(std::string colName) {
-		std::cout << "Importing weight data to \"" << colName << "\"." << std::endl;
+		std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->data;
+		for (int i = 0; i < data->layers_size(); i++) {
+			if (data->layers(i).type() == "batch_norm") continue;
+			BSONObjBuilder bObj;
+			BSONArrayBuilder floatArrValue;
+			bObj.append("iter", data->iteration())
+				.append("wid", data->worker_id())
+				.append("lid", i)
+				.appendArray("v", BSON_ARRAY(1.0 << 2.0 << 3.0 << 4.0 << 5.0));
+			BSONObj o = bObj.obj();
+			this->connection.insert(col, o);
+		}
 	}
 
 	void DB::importStat(TYPE_STAT statName, TYPE_CONTENT contentName, std::string colName) {
@@ -77,7 +87,7 @@ namespace db {
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
 
 		bObj.append("iter", data->iteration())
-			.append("w_id", data->sim_id());
+			.append("wid", data->worker_id());
 
 		BSONObjBuilder valueObj;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -99,12 +109,18 @@ namespace db {
 
 		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
 			this->importStat(it->first, TYPE_CONTENT::GRAD);
-			this->importStat(it->first, TYPE_CONTENT::WEIGHT);
+		}
+
+		Info *data = this->data;
+		if (data->worker_id() == 0) {
+			for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
+				this->importStat(it->first, TYPE_CONTENT::WEIGHT);
+			}
 		}
 	}
 
 	void DB::importLayerAttrs(std::string colName) {
-		std::cout << "Importing layer attrs into \"" << colName << "\"." << std::endl;
+		std::cout << "Importing layer attrs to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->data;
 		for (int i = 0; i < data->layers_size(); i++) {
