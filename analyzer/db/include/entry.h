@@ -13,7 +13,6 @@
 
 namespace db {
 
-	using STAT_TYPE = analyzer::Infos::STAT_TYPE_CLASS;
 	using Info = analyzer::Info;
 
 	class DB {
@@ -34,20 +33,40 @@ namespace db {
 		~DB();
 
 		/**
+		Bind data to private variable data for further operation
+		*/
+		void bindData(Info *d);
+
+		/**
 		Import a selected stat into DB
 		*/
-		void importStat(unsigned int statName, std::string colName = "");
+		void importStat(analyzer::Infos::TYPE_STAT statName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
 
 		/**
 		Import all stat information to DB
 		*/
 		void importAllStats();
 
+		/**
+		Import layer attrs
+		*/
+		void importLayerAttrs(std::string colName = "LayerTable");
+
+		/**
+		Import all stats and layer attrs
+		*/
 		void importAll();
 
-		void importLayerAttrs(std::string colName = "LayerTable");
+		/**
+		Import fine-grained gradient data, optional
+		*/
+		void importGradient(std::string colName = "Gradient");
+
+		/**
+		Import fine-grained weight data, optional
+		*/
+		void importWeight(std::string colName = "Weight");
 		
-		void bindData(Info *d);
 	// private data
 	private:
 		mongo::DBClientConnection connection;

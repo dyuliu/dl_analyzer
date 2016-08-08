@@ -1,29 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="include">
-      <UniqueIdentifier>{0129cd48-3316-4a77-a961-d57125c14808}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{3bc20f03-ccf9-4b2f-a28c-e5338dc80457}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\utils">
-      <UniqueIdentifier>{202a47de-1bf7-42d8-a447-124ea45ab6a5}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\utils">
       <UniqueIdentifier>{5767bae4-239f-4ff0-bdec-232e0ba3551f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\proto">
-      <UniqueIdentifier>{833e52f5-a708-45b6-a945-a0e8834d4524}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\analyzer">
-      <UniqueIdentifier>{5e8f8db0-5a31-404d-8186-29bbe58e9f8e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\analyzer">
       <UniqueIdentifier>{898daa60-424a-42b4-94fb-2e71637c2d14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\recorder">
-      <UniqueIdentifier>{bdb14c94-48d3-4fda-b000-35215b2e6693}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\recorder">
       <UniqueIdentifier>{6ede6190-1002-47c6-a3bc-65d31169045f}</UniqueIdentifier>
@@ -36,31 +21,30 @@
     <ClCompile Include="src\utils\filesystem.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="include\proto\analyzer.pb.cc">
-      <Filter>include\proto</Filter>
-    </ClCompile>
     <ClCompile Include="src\recorder\recorder.cpp">
       <Filter>src\recorder</Filter>
     </ClCompile>
     <ClCompile Include="src\analyzer\analyzer.cpp" />
+    <ClCompile Include="src\utils\string_utils.cpp" />
+    <ClCompile Include="include\proto\analyzer.pb.cc" />
+    <ClCompile Include="src\analyzer\analyzer_distance.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_stat.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_print.cpp" />
+    <ClCompile Include="src\recorder\recorder_caffepro.cpp" />
+    <ClCompile Include="src\terminal.cpp" />
+    <ClCompile Include="src\utils\inireader.cpp" />
+    <ClCompile Include="src\utils\ini.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\config.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\color_print.h">
-      <Filter>include\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="include\proto\analyzer.pb.h">
-      <Filter>include\proto</Filter>
-    </ClInclude>
-    <ClInclude Include="include\utils\filesystem.h">
-      <Filter>include\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="include\recorder\recorder.h">
-      <Filter>include\recorder</Filter>
-    </ClInclude>
     <ClInclude Include="include\analyzer\analyzer.h" />
     <ClInclude Include="include\utils\color_print.h" />
+    <ClInclude Include="include\recorder\recorder.h" />
+    <ClInclude Include="include\utils\filesystem.h" />
+    <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\utils\string_utils.h" />
+    <ClInclude Include="include\proto\analyzer.pb.h" />
+    <ClInclude Include="include\terminal.h" />
+    <ClInclude Include="include\utils\inireader.h" />
+    <ClInclude Include="include\utils\ini.h" />
   </ItemGroup>
 </Project>

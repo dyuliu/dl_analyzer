@@ -11,50 +11,34 @@ namespace analyzer {
 
 	public:
 
-		using data_type = float;
-
-		enum STAT_TYPE_CLASS : unsigned int {
-			LAYER_STAT_MAX_C = 0U,
-			LAYER_STAT_MIN_C = 1U,
-			LAYER_STAT_MEAN_C = 2U,
-			LAYER_STAT_SUM_C = 3U,
-			LAYER_STAT_VAR_C = 4U,
-			LAYER_STAT_STD_C = 5U,
-			LAYER_STAT_NORM_0_C = 6U,
-			LAYER_STAT_NORM_1_C = 7U,
-			LAYER_STAT_NORM_2_C = 8U,
-			STAT_NUM_MAX_C
+		enum class TYPE_STAT : unsigned int {
+			MAX		= 0U,
+			MIN		= 1U,
+			MEAN	= 2U,
+			SUM		= 3U,
+			VAR		= 4U,
+			STD		= 5U,
+			NORM_0	= 6U,
+			NORM_1	= 7U,
+			NORM_2	= 8U,
+			END
 		};
 
-		enum STAT_TYPE : unsigned int {
-			LAYER_STAT_MAX		= 0U,
-			LAYER_STAT_MIN		= 1U,
-			LAYER_STAT_MEAN		= 2U,
-			LAYER_STAT_SUM		= 3U,
-			LAYER_STAT_VAR		= 4U,
-			LAYER_STAT_STD		= 5U,
-			LAYER_STAT_NORM_0	= 6U,
-			LAYER_STAT_NORM_1	= 7U,
-			LAYER_STAT_NORM_2	= 8U,
-			STAT_NUM_MAX
+		enum class TYPE_DISTANCE : unsigned int {
+			EUCLIDEAN	= 0U,
+			COSINE		= 1U,
+			MANHATTAN	= 2U,
+			CORRELATION	= 3U,
+			END
 		};
 
-		enum DISTANCE_TYPE : unsigned int {
-			LAYER_DIS_EUCLIDEAN		= 0U,
-			LAYER_DIS_COSINE		= 1U,
-			LAYER_DIS_MANHATTAN		= 2U,
-			LAYER_DIS_CORRELATION	= 3U,
-			DISTANCE_NUM_MAX
-		};
-
-		enum DATA_CONTENT : unsigned int {
-			CONTENT_GRAD	= 0U,
-			CONTENT_WEIGHT = 1U
+		enum class TYPE_CONTENT : unsigned int {
+			GRAD	= 0U,
+			WEIGHT	= 1U,
+			END
 		};
 
 	public:
-		
-		void init(std::string path);
 
 		// dump to file
 		void save_to_file(std::string foldname);
@@ -64,20 +48,29 @@ namespace analyzer {
 
 	public:
 
-		void compute_stat(STAT_TYPE stat_type, DATA_CONTENT data_content);
-		void compute_all_stat(DATA_CONTENT data_content);
+		// get
+		unsigned int index(TYPE_STAT stat_type, TYPE_CONTENT data_content);
+		unsigned int index(TYPE_DISTANCE distance_type, TYPE_CONTENT data_content);
 
-		void compute_distance(DISTANCE_TYPE distrance_type);
+		// stat
+		void compute(TYPE_STAT stat_type, TYPE_CONTENT data_content);
+		void compute_list(std::vector<TYPE_STAT> stat_list, TYPE_CONTENT data_content);
+		void compute_all(TYPE_CONTENT data_content);
 
-		void RepeatedToVector(const ::google::protobuf::RepeatedField<float>& x, std::vector<data_type> &y);
+		// distance
+		void compute(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, const std::vector<DType> &data);
+		void compute_list(std::vector<TYPE_DISTANCE> const distance_list, TYPE_CONTENT data_content, const std::vector<DType> &data);
+		void compute_all(TYPE_CONTENT data_content, const std::vector<DType> &data);
 
+		// data transfer
+		void RepeatedToVector(const ::google::protobuf::RepeatedField<float>& x, std::vector<DType> &y);
 
 	// Print
 	public:
 		void print_total_info();
 		void print_file_info();
 		void print_conv_layer_info();
-		void print_stat_info(DATA_CONTENT data_content);
+		void print_stat_info(TYPE_CONTENT data_content);
 
 	// Interface
 	public:
@@ -87,7 +80,12 @@ namespace analyzer {
 		Info* getInfo() { return &info; }
 
 		Infos();
+		Infos(std::string filename);
+		// for rank, it will be depleted in future
+		Infos(std::string path, int rank_size);
 
+		void init_stat();
+		void init_type_name();
 	
 	private:
 		
@@ -97,8 +95,9 @@ namespace analyzer {
 		// running recorder info
 		Recorder recorder;
 
-		std::map<DISTANCE_TYPE, std::string> name_distance_type;
-		std::map<STAT_TYPE, std::string> name_stat_type;
+		std::map<TYPE_DISTANCE, std::string> name_distance_type;
+		std::map<TYPE_STAT, std::string> name_stat_type;
+		std::map<TYPE_CONTENT, std::string> name_content_type;
 
 	};
 }

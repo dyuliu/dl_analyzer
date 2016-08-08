@@ -1,6 +1,13 @@
 
 package analyzer;
 
+message HyperParameter {
+  optional string type = 1;
+  optional string content = 2;
+  optional float value = 3;
+  repeated float data = 4;
+}
+
 message Layer {
   optional int32 count = 1;
   // layer type
@@ -12,8 +19,8 @@ message Layer {
   optional string name = 7;
   repeated float weight = 8;
   repeated float grad = 9;
-  repeated float stat = 10;
-  repeated float distance = 11;
+  repeated HyperParameter stat = 10;
+  repeated HyperParameter distance = 11;
 }
 
 message Info {

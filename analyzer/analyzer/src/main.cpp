@@ -8,11 +8,16 @@
 #include <analyzer/analyzer.h>
 #include <recorder/recorder.h>
 #include <db/include/entry.h>
+
+
 db::DB *dbInstance;
 
-DEFINE_string(action, "test_record", "");
-// DEFINE_string(src, "records/00000000_000_000.info", "");
-DEFINE_string(src, "running_info.log", "");
+DEFINE_string(action, "read_from_file", "");
+DEFINE_string(src, "records/00000000_000_008.info", "");
+//DEFINE_string(src, "caffepro_log", "");
+
+using analyzer::Infos;
+using analyzer::Recorders;
 
 const std::string version_info =
 R"(
@@ -26,15 +31,15 @@ Versions view:
 const std::string help_info =
 R"(
 Analyzer Commands:
-	
+
 Syntax:
     analyzer -action=key1 -src=key2
-	
+
 nParameters:
     -help         - Display this help message
     -action       - Running function: test_record, test
     -src          - Source of folder or file
-	
+
 For more information about Analyzer Tools,
 See http://msra-dl:5000/
 )";
@@ -44,19 +49,30 @@ void test() {
 		COUT_ERRO << "Missing file path, please set -src" << std::endl;
 		return;
 	}
+
+	Recorders recorder;
+	recorder.load_from_log_file(FLAGS_src, Recorders::TYPE_FRAMEWORK::CAFFEPRO);
+
 }
 
 void read_from_file() {
 
 	COUT_METD << "Running Function -> Read From File" << std::endl;
+	if (FLAGS_src == "") {
+		COUT_ERRO << "Missing file path, please set -src" << std::endl;
+		return;
+	}
 
-	analyzer::Infos info;
-	info.init(FLAGS_src);
+	Infos info(FLAGS_src, 8);
+	info.compute_list({ Infos::TYPE_STAT::MEAN, Infos::TYPE_STAT::VAR}, Infos::TYPE_CONTENT::GRAD);
+	//info.compute_all(analyzer::Infos::TYPE_CONTENT::GRAD);
+	//info.compute_all(analyzer::Infos::TYPE_CONTENT::WEIGHT);
+	//info.print_total_info();
 	dbInstance = new db::DB();
-	//info.compute_stat(analyzer::Infos::LAYER_STAT_MEAN, analyzer::Infos::DATA_CONTENT::CONTENT_GRAD);
-	info.compute_all_stat(analyzer::Infos::DATA_CONTENT::CONTENT_GRAD);
 	dbInstance->bindData(info.getInfo());
-	dbInstance->importAll();
+	dbInstance->importGradient("grad");
+	//dbInstance->importStat(Infos::TYPE_STAT::MEAN, Infos::TYPE_CONTENT::GRAD);
+	//dbInstance->importAll();
 	//dbInstance->importLayerAttrs(info.getInfo());
 	//dbInstance->importAllStats(info.getInfo());
 	//info.compute_stat(analyzer::Infos::LAYER_STAT_MIN, analyzer::Infos::DATA_CONTENT::CONTENT_WEIGHT);
@@ -73,7 +89,7 @@ void read_from_folder() {
 		COUT_ERRO << "Missing file path, please set -src" << std::endl;
 		return;
 	}
-	
+
 	auto file_list = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.*", false);
 	for (auto file : file_list) {
 		FLAGS_src = file;
@@ -87,19 +103,38 @@ void test_record() {
 		COUT_ERRO << "Missing file path, please set -src" << std::endl;
 		return;
 	}
-	analyzer::Recorders recorder;
-	recorder.load_from_file(FLAGS_src);
+	Recorders recorder(FLAGS_src);
 	// recorder.print_specify_type("test_error", 10);
-	recorder.print_specify_type(analyzer::Recorders::FORWARD_TIME);
+	recorder.print_specify_type(Recorders::TYPE_RECORD::FORWARD_TIME);
 }
 
 static void failureFunction() { exit(0); }
+
+#include <analyzer/include/utils/inireader.h>
+
+int parse() {
+	INIReader reader("test.ini");
+
+	if (reader.ParseError() < 0) {
+		std::cout << "Can't load 'test.ini'\n";
+		return 1;
+	}
+	std::cout << "Config loaded from 'test.ini': version="
+		<< reader.GetInteger("protocol", "version", -1) << ", name="
+		<< reader.Get("user", "name", "UNKNOWN") << ", email="
+		<< reader.Get("user", "email", "UNKNOWN") << ", pi="
+		<< reader.GetReal("user", "pi", -1) << ", active="
+		<< reader.GetBoolean("user", "active", true) << "\n";
+	return 0;
+}
 
 int main(int argc, char *argv[]) {
 
 	gflags::SetVersionString(version_info);
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 	gflags::SetUsageMessage(help_info);
+
+	parse();
 
 	if (FLAGS_action == "test") test();
 	if (FLAGS_action == "test_record") test_record();

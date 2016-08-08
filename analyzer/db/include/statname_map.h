@@ -1,19 +1,28 @@
 #include <analyzer/include/analyzer/analyzer.h>
-#define MAP_TYPE std::map<unsigned int, std::string>
+#define MAP_TYPE_STAT std::map<analyzer::Infos::TYPE_STAT, std::string>
+#define MAP_TYPE_CONTENT std::map<analyzer::Infos::TYPE_CONTENT, std::string>
+#define INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_STAT::END + (int)x
 
 namespace db {
 
-	using STAT_TYPE = analyzer::Infos::STAT_TYPE_CLASS;
+	using TYPE_STAT = analyzer::Infos::TYPE_STAT;
+	using TYPE_CONTENT = analyzer::Infos::TYPE_CONTENT;
 
-	MAP_TYPE nameMap = { 
-		{ STAT_TYPE::LAYER_STAT_MEAN_C, "Mean" },
-		{ STAT_TYPE::LAYER_STAT_MIN_C, "Min" },
-		{ STAT_TYPE::STAT_NUM_MAX_C, "Max" },
-		{ STAT_TYPE::LAYER_STAT_NORM_0_C, "Norm0" },
-		{ STAT_TYPE::LAYER_STAT_NORM_1_C, "Norm1" },
-		{ STAT_TYPE::LAYER_STAT_NORM_2_C, "Norm2" },
-		{ STAT_TYPE::LAYER_STAT_STD_C, "Std" },
-		{ STAT_TYPE::LAYER_STAT_SUM_C, "Sum" },
-		{ STAT_TYPE::LAYER_STAT_VAR_C, "Var" }
+	MAP_TYPE_STAT mapTypeStat = {
+		{ TYPE_STAT::MAX, "Max" },
+		{ TYPE_STAT::MIN, "Min" },
+		{ TYPE_STAT::MEAN, "Mean" },
+		{ TYPE_STAT::SUM, "Sum" },
+		{ TYPE_STAT::VAR, "Var" },
+		{ TYPE_STAT::STD, "Std" },
+		{ TYPE_STAT::NORM_0, "Norm0" },
+		{ TYPE_STAT::NORM_1, "Norm1" },
+		{ TYPE_STAT::NORM_2, "Norm2" }
 	};
+
+	MAP_TYPE_CONTENT mapTypeContent = {
+		{ TYPE_CONTENT::GRAD, "g" },
+		{ TYPE_CONTENT::WEIGHT, "w"}
+	};
+
 }

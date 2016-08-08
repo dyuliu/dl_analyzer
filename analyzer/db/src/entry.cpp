@@ -6,6 +6,7 @@ using mongo::BSONArray;
 using mongo::BSONElement;
 using mongo::BSONObj;
 using mongo::BSONObjBuilder;
+using mongo::BulkOperationBuilder;
 
 namespace db {
 	
@@ -29,35 +30,66 @@ namespace db {
 		this->data = data;
 	}
 
-	void DB::importStat(unsigned int statName, std::string colName) {
-		MAP_TYPE::iterator iter;
-		iter = nameMap.find(statName);
-		if (iter == nameMap.end()) {
-			std::cout << "No such stat" << std::endl;
+	void DB::importGradient(std::string colName) {
+		std::cout << "Importing gradient data to \"" << colName << "\"." << std::endl;
+		std::string col = this->dbName + '.' + colName;
+		Info *data = this->data;
+		for (int i = 0; i < data->layers_size(); i++) {
+			if (data->layers(i).type() == "batch_norm") continue;
+			BSONObjBuilder bObj;
+			BSONArrayBuilder floatArrValue;
+			bObj.append("iter", data->iteration())
+				.append("w_id", data->sim_id())
+				.append("lid", i)
+				.appendArray("v", BSON_ARRAY(1.0 << 2.0 << 3.0 << 4.0 << 5.0));
+			//data->layers(i).grad
+			BSONObj o = bObj.obj();
+			this->connection.insert(col, o);
+		}
+	}
+
+	void DB::importWeight(std::string colName) {
+		std::cout << "Importing weight data to \"" << colName << "\"." << std::endl;
+		std::string col = this->dbName + '.' + colName;
+		Info *data = this->data;
+	}
+
+	void DB::importStat(TYPE_STAT statName, TYPE_CONTENT contentName, std::string colName) {
+		MAP_TYPE_STAT::iterator iterStat;
+		iterStat = mapTypeStat.find(statName);
+		if (iterStat == mapTypeStat.end()) {
+			std::cout << "Wrong TYPE_STAT" << std::endl;
+			return;
+		}
+		MAP_TYPE_CONTENT::iterator iterContent;
+		iterContent = mapTypeContent.find(contentName);
+		if (iterContent == mapTypeContent.end()) {
+			std::cout << "Wrong TYPE_STAT" << std::endl;
 			return;
 		}
 		if (colName == "") {
-			colName = iter->second;
+			colName = iterContent->second + iterStat->second;
 		}
-		std::cout << "I am importing " << iter->second << 
-			" into the collection with name \"" << colName << "\"." << std::endl;
+		std::cout << "Importing data to \""<< colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->data;
 		BSONObjBuilder bObj;
-		BSONArrayBuilder floatArrValue, floatArrLayerId;
+		//BSONArrayBuilder floatArrValue, floatArrLayerId;
 
-		bObj.append("it", data->iteration())
-			.append("wid", data->sim_id());
+		bObj.append("iter", data->iteration())
+			.append("w_id", data->sim_id());
 
+		BSONObjBuilder valueObj;
 		for (int i = 0; i < data->layers_size(); i++) {
 
 			if (data->layers(i).type() == "batch_norm") continue;
-
-			floatArrValue.append(data->layers(i).stat(statName));
-			floatArrLayerId.append(i);
+			//floatArrValue.append(data->layers(i).stat(INDEX(statName, contentName)).value());
+			//floatArrLayerId.append(i);
+			valueObj.append(std::to_string(i), data->layers(i).stat(INDEX(statName, contentName)).value());
 		}
-		bObj.append("v", floatArrValue.arr());
-		bObj.append("l", floatArrLayerId.arr());
+		//bObj.append("value", floatArrValue.arr());
+		//bObj.append("l_ids", floatArrLayerId.arr());
+		bObj.append("o_value", valueObj.obj());
 		BSONObj o = bObj.obj();
 		this->connection.insert(col, o);
 	}
@@ -65,13 +97,14 @@ namespace db {
 	void DB::importAllStats() {
 		std::cout << "I am importing all stats" << std::endl;
 
-		for (auto it = nameMap.begin(); it != nameMap.end(); ++it) {
-			this->importStat(it->first);
+		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
+			this->importStat(it->first, TYPE_CONTENT::GRAD);
+			this->importStat(it->first, TYPE_CONTENT::WEIGHT);
 		}
 	}
 
 	void DB::importLayerAttrs(std::string colName) {
-		std::cout << "I am importing layer attrs into the collection with name \"" << colName << "\"." << std::endl;
+		std::cout << "Importing layer attrs into \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->data;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -88,7 +121,7 @@ namespace db {
 	}
 
 	void DB::importAll() {
-		std::cout << "I am importing all data into db" << std::endl;
+		std::cout << "Begin to import all data into " << this->dbName << std::endl;
 		this->importLayerAttrs();
 		this->importAllStats();
 	}
