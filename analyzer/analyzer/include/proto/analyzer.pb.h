@@ -37,12 +37,136 @@ void  protobuf_AddDesc_analyzer_2eproto();
 void protobuf_AssignDesc_analyzer_2eproto();
 void protobuf_ShutdownFile_analyzer_2eproto();
 
+class HyperParameter;
 class Layer;
 class Info;
 class RecordTuple;
 class Recorder;
 
 // ===================================================================
+
+class HyperParameter : public ::google::protobuf::Message {
+ public:
+  HyperParameter();
+  virtual ~HyperParameter();
+  
+  HyperParameter(const HyperParameter& from);
+  
+  inline HyperParameter& operator=(const HyperParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const HyperParameter& default_instance();
+  
+  void Swap(HyperParameter* other);
+  
+  // implements Message ----------------------------------------------
+  
+  HyperParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const HyperParameter& from);
+  void MergeFrom(const HyperParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional string type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline const ::std::string& type() const;
+  inline void set_type(const ::std::string& value);
+  inline void set_type(const char* value);
+  inline void set_type(const char* value, size_t size);
+  inline ::std::string* mutable_type();
+  inline ::std::string* release_type();
+  
+  // optional string content = 2;
+  inline bool has_content() const;
+  inline void clear_content();
+  static const int kContentFieldNumber = 2;
+  inline const ::std::string& content() const;
+  inline void set_content(const ::std::string& value);
+  inline void set_content(const char* value);
+  inline void set_content(const char* value, size_t size);
+  inline ::std::string* mutable_content();
+  inline ::std::string* release_content();
+  
+  // optional float value = 3;
+  inline bool has_value() const;
+  inline void clear_value();
+  static const int kValueFieldNumber = 3;
+  inline float value() const;
+  inline void set_value(float value);
+  
+  // repeated float data = 4;
+  inline int data_size() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 4;
+  inline float data(int index) const;
+  inline void set_data(int index, float value);
+  inline void add_data(float value);
+  inline const ::google::protobuf::RepeatedField< float >&
+      data() const;
+  inline ::google::protobuf::RepeatedField< float >*
+      mutable_data();
+  
+  // @@protoc_insertion_point(class_scope:analyzer.HyperParameter)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_content();
+  inline void clear_has_content();
+  inline void set_has_value();
+  inline void clear_has_value();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* type_;
+  ::std::string* content_;
+  ::google::protobuf::RepeatedField< float > data_;
+  float value_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_analyzer_2eproto();
+  friend void protobuf_AssignDesc_analyzer_2eproto();
+  friend void protobuf_ShutdownFile_analyzer_2eproto();
+  
+  void InitAsDefaultInstance();
+  static HyperParameter* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class Layer : public ::google::protobuf::Message {
  public:
@@ -179,28 +303,28 @@ class Layer : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedField< float >*
       mutable_grad();
   
-  // repeated float stat = 10;
+  // repeated .analyzer.HyperParameter stat = 10;
   inline int stat_size() const;
   inline void clear_stat();
   static const int kStatFieldNumber = 10;
-  inline float stat(int index) const;
-  inline void set_stat(int index, float value);
-  inline void add_stat(float value);
-  inline const ::google::protobuf::RepeatedField< float >&
+  inline const ::analyzer::HyperParameter& stat(int index) const;
+  inline ::analyzer::HyperParameter* mutable_stat(int index);
+  inline ::analyzer::HyperParameter* add_stat();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
       stat() const;
-  inline ::google::protobuf::RepeatedField< float >*
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
       mutable_stat();
   
-  // repeated float distance = 11;
+  // repeated .analyzer.HyperParameter distance = 11;
   inline int distance_size() const;
   inline void clear_distance();
   static const int kDistanceFieldNumber = 11;
-  inline float distance(int index) const;
-  inline void set_distance(int index, float value);
-  inline void add_distance(float value);
-  inline const ::google::protobuf::RepeatedField< float >&
+  inline const ::analyzer::HyperParameter& distance(int index) const;
+  inline ::analyzer::HyperParameter* mutable_distance(int index);
+  inline ::analyzer::HyperParameter* add_distance();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
       distance() const;
-  inline ::google::protobuf::RepeatedField< float >*
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
       mutable_distance();
   
   // @@protoc_insertion_point(class_scope:analyzer.Layer)
@@ -230,8 +354,8 @@ class Layer : public ::google::protobuf::Message {
   ::std::string* name_;
   ::google::protobuf::RepeatedField< float > weight_;
   ::google::protobuf::RepeatedField< float > grad_;
-  ::google::protobuf::RepeatedField< float > stat_;
-  ::google::protobuf::RepeatedField< float > distance_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > stat_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > distance_;
   ::google::protobuf::int32 width_;
   
   mutable int _cached_size_;
@@ -596,6 +720,173 @@ class Recorder : public ::google::protobuf::Message {
 
 // ===================================================================
 
+// HyperParameter
+
+// optional string type = 1;
+inline bool HyperParameter::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void HyperParameter::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void HyperParameter::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void HyperParameter::clear_type() {
+  if (type_ != &::google::protobuf::internal::kEmptyString) {
+    type_->clear();
+  }
+  clear_has_type();
+}
+inline const ::std::string& HyperParameter::type() const {
+  return *type_;
+}
+inline void HyperParameter::set_type(const ::std::string& value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void HyperParameter::set_type(const char* value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void HyperParameter::set_type(const char* value, size_t size) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* HyperParameter::mutable_type() {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  return type_;
+}
+inline ::std::string* HyperParameter::release_type() {
+  clear_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = type_;
+    type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string content = 2;
+inline bool HyperParameter::has_content() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void HyperParameter::set_has_content() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void HyperParameter::clear_has_content() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void HyperParameter::clear_content() {
+  if (content_ != &::google::protobuf::internal::kEmptyString) {
+    content_->clear();
+  }
+  clear_has_content();
+}
+inline const ::std::string& HyperParameter::content() const {
+  return *content_;
+}
+inline void HyperParameter::set_content(const ::std::string& value) {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  content_->assign(value);
+}
+inline void HyperParameter::set_content(const char* value) {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  content_->assign(value);
+}
+inline void HyperParameter::set_content(const char* value, size_t size) {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  content_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* HyperParameter::mutable_content() {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  return content_;
+}
+inline ::std::string* HyperParameter::release_content() {
+  clear_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = content_;
+    content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional float value = 3;
+inline bool HyperParameter::has_value() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void HyperParameter::set_has_value() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void HyperParameter::clear_has_value() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void HyperParameter::clear_value() {
+  value_ = 0;
+  clear_has_value();
+}
+inline float HyperParameter::value() const {
+  return value_;
+}
+inline void HyperParameter::set_value(float value) {
+  set_has_value();
+  value_ = value;
+}
+
+// repeated float data = 4;
+inline int HyperParameter::data_size() const {
+  return data_.size();
+}
+inline void HyperParameter::clear_data() {
+  data_.Clear();
+}
+inline float HyperParameter::data(int index) const {
+  return data_.Get(index);
+}
+inline void HyperParameter::set_data(int index, float value) {
+  data_.Set(index, value);
+}
+inline void HyperParameter::add_data(float value) {
+  data_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< float >&
+HyperParameter::data() const {
+  return data_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+HyperParameter::mutable_data() {
+  return &data_;
+}
+
+// -------------------------------------------------------------------
+
 // Layer
 
 // optional int32 count = 1;
@@ -874,52 +1165,52 @@ Layer::mutable_grad() {
   return &grad_;
 }
 
-// repeated float stat = 10;
+// repeated .analyzer.HyperParameter stat = 10;
 inline int Layer::stat_size() const {
   return stat_.size();
 }
 inline void Layer::clear_stat() {
   stat_.Clear();
 }
-inline float Layer::stat(int index) const {
+inline const ::analyzer::HyperParameter& Layer::stat(int index) const {
   return stat_.Get(index);
 }
-inline void Layer::set_stat(int index, float value) {
-  stat_.Set(index, value);
+inline ::analyzer::HyperParameter* Layer::mutable_stat(int index) {
+  return stat_.Mutable(index);
 }
-inline void Layer::add_stat(float value) {
-  stat_.Add(value);
+inline ::analyzer::HyperParameter* Layer::add_stat() {
+  return stat_.Add();
 }
-inline const ::google::protobuf::RepeatedField< float >&
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
 Layer::stat() const {
   return stat_;
 }
-inline ::google::protobuf::RepeatedField< float >*
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
 Layer::mutable_stat() {
   return &stat_;
 }
 
-// repeated float distance = 11;
+// repeated .analyzer.HyperParameter distance = 11;
 inline int Layer::distance_size() const {
   return distance_.size();
 }
 inline void Layer::clear_distance() {
   distance_.Clear();
 }
-inline float Layer::distance(int index) const {
+inline const ::analyzer::HyperParameter& Layer::distance(int index) const {
   return distance_.Get(index);
 }
-inline void Layer::set_distance(int index, float value) {
-  distance_.Set(index, value);
+inline ::analyzer::HyperParameter* Layer::mutable_distance(int index) {
+  return distance_.Mutable(index);
 }
-inline void Layer::add_distance(float value) {
-  distance_.Add(value);
+inline ::analyzer::HyperParameter* Layer::add_distance() {
+  return distance_.Add();
 }
-inline const ::google::protobuf::RepeatedField< float >&
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
 Layer::distance() const {
   return distance_;
 }
-inline ::google::protobuf::RepeatedField< float >*
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
 Layer::mutable_distance() {
   return &distance_;
 }

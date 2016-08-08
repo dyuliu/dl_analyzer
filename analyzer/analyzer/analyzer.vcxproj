@@ -65,9 +65,16 @@
   <ItemGroup>
     <ClCompile Include="include\proto\analyzer.pb.cc" />
     <ClCompile Include="src\analyzer\analyzer.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_distance.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_print.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_stat.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\recorder\recorder.cpp" />
+    <ClCompile Include="src\recorder\recorder_caffepro.cpp" />
+    <ClCompile Include="src\terminal.cpp" />
     <ClCompile Include="src\utils\filesystem.cpp" />
+    <ClCompile Include="src\utils\ini.c" />
+    <ClCompile Include="src\utils\inireader.cpp" />
     <ClCompile Include="src\utils\string_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -75,8 +82,11 @@
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\proto\analyzer.pb.h" />
     <ClInclude Include="include\recorder\recorder.h" />
+    <ClInclude Include="include\terminal.h" />
     <ClInclude Include="include\utils\color_print.h" />
     <ClInclude Include="include\utils\filesystem.h" />
+    <ClInclude Include="include\utils\ini.h" />
+    <ClInclude Include="include\utils\inireader.h" />
     <ClInclude Include="include\utils\string_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

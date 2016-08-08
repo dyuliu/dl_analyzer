@@ -13,7 +13,7 @@
 
 namespace db {
 
-	using STAT_TYPE = analyzer::Infos::STAT_TYPE_CLASS;
+	using STAT_TYPE = analyzer::Infos::TYPE_STAT;
 	using Info = analyzer::Info;
 
 	class DB {

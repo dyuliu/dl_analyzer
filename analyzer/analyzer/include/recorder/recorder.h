@@ -11,7 +11,7 @@ namespace analyzer {
 
 	public:
 
-		enum RECORD_TYPE : unsigned int {
+		enum class TYPE_RECORD : unsigned int {
 			TRAIN_ERROR = 0U,
 			TRAIN_LOSS = 1U,
 			TEST_ERROR = 2U,
@@ -22,7 +22,7 @@ namespace analyzer {
 			LEARNING_RATE = 7U
 		};
 
-		enum FRAMEWORK_TYPE : unsigned int {
+		enum class TYPE_FRAMEWORK : unsigned int {
 			CAFFEPRO = 0U,
 			CAFFE = 1U,
 			CNTK = 2U,
@@ -31,13 +31,14 @@ namespace analyzer {
 		};
 
 		Recorders();
+		Recorders(std::string filename);
 		~Recorders();
 
 	public:
 
 		// print related
 		void print_total_info();
-		void print_specify_type(RECORD_TYPE record_type, int iterval = 1);
+		void print_specify_type(TYPE_RECORD record_type, int iterval = 1);
 		void print_specify_type(std::string record_type, int iterval = 1);
 
 		// dump to file
@@ -47,7 +48,7 @@ namespace analyzer {
 		void load_from_file(std::string filename);
 
 		// parse log file
-		void load_from_log_file(std::string filename, FRAMEWORK_TYPE framework_type);
+		void load_from_log_file(std::string filename, TYPE_FRAMEWORK framework_type);
 
 	protected:
 		// parse
@@ -57,7 +58,7 @@ namespace analyzer {
 
 	private:
 		Recorder recorder;
-		std::map<RECORD_TYPE, std::string> name_of_type;
+		std::map<TYPE_RECORD, std::string> name_of_type;
 
 	};
 
