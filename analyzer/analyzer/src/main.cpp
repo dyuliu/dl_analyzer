@@ -86,7 +86,7 @@ void analyzer_stat() {
 	if (FLAGS_all) {
 		info.compute_all(Infos::TYPE_CONTENT::GRAD);
 		info.compute_all(Infos::TYPE_CONTENT::WEIGHT);
-		info.print_total_info();
+		//info.print_total_info();
 		if (FLAGS_db) {
 			dbInstance->bindInfo(info.getInfo());
 		}
@@ -133,10 +133,8 @@ static inline void analyzer_batch_distance(std::vector<Infos> &batch_infos) {
 	auto last_batch = batch_infos.size()-1;
 	for (int idx = 0; idx < last_batch; idx++) {
 		//auto content = batch_infos[idx].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-		//__FUNC_TIME_CALL(batch_infos[idx].compute(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, batch_infos[last_batch]),
-		//	"Process file with distance " + batch_infos[idx].get().filename());
-		batch_infos[idx].compute_all(Infos::TYPE_CONTENT::GRAD);
-		batch_infos[idx].compute_all(Infos::TYPE_CONTENT::WEIGHT);
+		__FUNC_TIME_CALL(batch_infos[idx].compute_all(Infos::TYPE_CONTENT::GRAD, batch_infos[last_batch]), "Process file with distance " + batch_infos[idx].get().filename());
+		__FUNC_TIME_CALL(batch_infos[idx].compute_all(Infos::TYPE_CONTENT::WEIGHT, batch_infos[last_batch]), "Process file with distance " + batch_infos[idx].get().filename());
 	}
 }
 
