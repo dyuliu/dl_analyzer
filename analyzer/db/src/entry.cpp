@@ -9,7 +9,7 @@ using mongo::BSONObjBuilder;
 using mongo::BulkOperationBuilder;
 
 namespace db {
-	
+
 	DB::DB(std::string dbName, std::string serverAddress) {
 		mongo::client::initialize();
 		try {
@@ -21,19 +21,19 @@ namespace db {
 			std::cout << "caught " << e.what() << std::endl;
 		}
 	}
-	
+
 	DB::~DB() {
 		mongo::client::shutdown();
 	}
 
 	void DB::bindData(Info *data) {
-		this->data = data;
+		this->iData = data;
 	}
 
 	void DB::importGradient(std::string colName) {
 		std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
-		Info *data = this->data;
+		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
 			BSONObjBuilder bObj;
@@ -50,7 +50,7 @@ namespace db {
 	void DB::importWeight(std::string colName) {
 		std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
-		Info *data = this->data;
+		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
 			BSONObjBuilder bObj;
@@ -82,7 +82,7 @@ namespace db {
 		}
 		std::cout << "Importing data to \""<< colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
-		Info *data = this->data;
+		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
 
@@ -111,7 +111,7 @@ namespace db {
 			this->importStat(it->first, TYPE_CONTENT::GRAD);
 		}
 
-		Info *data = this->data;
+		Info *data = this->iData;
 		if (data->worker_id() == 0) {
 			for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
 				this->importStat(it->first, TYPE_CONTENT::WEIGHT);
@@ -122,7 +122,7 @@ namespace db {
 	void DB::importLayerAttrs(std::string colName) {
 		std::cout << "Importing layer attrs to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
-		Info *data = this->data;
+		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			BSONObjBuilder bObj;
 			bObj.append("lid", i)
@@ -140,6 +140,11 @@ namespace db {
 		std::cout << "Begin to import all data into " << this->dbName << std::endl;
 		this->importLayerAttrs();
 		this->importAllStats();
+	}
+
+	void DB::importRecorderInfo(std::string colName) {
+		std::cout << "Importing recorder info to collection \"" << colName << "\"." << std::endl;
+
 	}
 
 }

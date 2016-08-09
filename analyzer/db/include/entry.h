@@ -10,10 +10,12 @@
 #include <mongo/client/dbclient.h>
 #include <analyzer/include/proto/analyzer.pb.h>
 #include <analyzer/include/analyzer/analyzer.h>
+#include <analyzer/include/recorder/recorder.h>
 
 namespace db {
 
 	using Info = analyzer::Info;
+	using Recorder = analyzer::Recorders;
 
 	class DB {
 
@@ -66,12 +68,18 @@ namespace db {
 		Import fine-grained weight data, optional
 		*/
 		void importWeight(std::string colName = "Weight");
+
+		/**
+		Import recorder info, e.g., error rate.
+		*/
+		void importRecorderInfo(std::string colName = "Records");
 		
 	// private data
 	private:
 		mongo::DBClientConnection connection;
 		std::string dbName;
-		Info *data;
+		Info *iData;
+		Recorder *rData;
 	};
 
 }

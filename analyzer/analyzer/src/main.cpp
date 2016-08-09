@@ -76,12 +76,6 @@ void read_from_file() {
 	//dbInstance->importGradient("grad");
 	//dbInstance->importStat(Infos::TYPE_STAT::MEAN, Infos::TYPE_CONTENT::GRAD);
 	dbInstance->importAll();
-	//dbInstance->importLayerAttrs(info.getInfo());
-	//dbInstance->importAllStats(info.getInfo());
-	//info.compute_stat(analyzer::Infos::LAYER_STAT_MIN, analyzer::Infos::DATA_CONTENT::CONTENT_WEIGHT);
-	//info.compute_all_stat(analyzer::Infos::DATA_CONTENT::CONTENT_WEIGHT);
-	//dbInstance->bindData(info.getInfo());
-	//dbInstance->importAllStats();
 }
 
 void read_from_folder() {
@@ -125,7 +119,7 @@ void compute_all_batch(std::string foldername, int batch_size) {
 
 		// process
 		for (int j = i; j < i + batch_size; j++) {
-			Infos info(files[j]);
+			Infos info(files[j], batch_size - 1);
 			auto clock_t = clock();
 			COUT_READ << "Process file with grad: " << info.get().filename() << std::endl;
 			info.compute_all(Infos::TYPE_CONTENT::GRAD);
@@ -151,7 +145,7 @@ void compute_all_batch(std::string foldername, int batch_size) {
 			batch_infos.push_back(info);
 		}
 		
-		dbInstance = new db::DB("dpp");
+		
 
 		for (int x = 0; x < batch_size - 1; x++) {
 			batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
@@ -177,6 +171,8 @@ int main(int argc, char *argv[]) {
 	gflags::SetVersionString(version_info);
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 	gflags::SetUsageMessage(help_info);
+
+	dbInstance = new db::DB("deep_haha");
 
 	if (FLAGS_action == "test") test();
 	if (FLAGS_action == "test_record") test_record();
