@@ -169,6 +169,8 @@ void analyzer_tools() {
 #pragma omp parallel for schedule(dynamic)
 	for (int i = 0; i < files.size(); i += batch_size) {
 		std::vector<Infos> batch_infos;
+		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100*i/float(files.size()) << std::endl;
+		
 		if (i + batch_size > files.size()) continue;
 
 		for (int idx_batch = i; idx_batch < i + batch_size; idx_batch++)
