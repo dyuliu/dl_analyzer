@@ -38,7 +38,7 @@ namespace db {
 	}
 
 	void DB::importGradient(std::string colName) {
-		std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
+		//std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -55,7 +55,7 @@ namespace db {
 	}
 
 	void DB::importWeight(std::string colName) {
-		std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
+		//std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -87,7 +87,7 @@ namespace db {
 		if (colName == "") {
 			colName = iterContent->second + iterStat->second;
 		}
-		std::cout << "Importing data to \""<< colName << "\"." << std::endl;
+		//std::cout << "Importing data to \""<< colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
@@ -112,7 +112,7 @@ namespace db {
 	}
 
 	void DB::importAllStats() {
-		std::cout << "Importing all stats" << std::endl;
+		//std::cout << "Importing all stats" << std::endl;
 
 		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
 			this->importStat(it->first, TYPE_CONTENT::GRAD);
@@ -142,7 +142,7 @@ namespace db {
 		if (colName == "") {
 			colName = iterContent->second + iterDist->second;
 		}
-		std::cout << "Importing data to \"" << colName << "\"." << std::endl;
+		//std::cout << "Importing data to \"" << colName << "\"." << std::endl;
 		std::string col = this->dbName + '.' + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
@@ -167,7 +167,7 @@ namespace db {
 	}
 
 	void DB::importAllDists() {
-		std::cout << "Importing all Dists" << std::endl;
+		//std::cout << "Importing all Dists" << std::endl;
 
 		for (auto it = mapTypeDist.begin(); it != mapTypeDist.end(); ++it) {
 			this->importDist(it->first, TYPE_CONTENT::GRAD);
@@ -176,7 +176,7 @@ namespace db {
 	}
 
 	void DB::importAll() {
-		std::cout << "Begin to import all data to " << this->dbName << std::endl;
+		//std::cout << "Begin to import all data to " << this->dbName << std::endl;
 		//this->importLayerAttrs();
 		this->importAllStats();
 		this->importAllDists();

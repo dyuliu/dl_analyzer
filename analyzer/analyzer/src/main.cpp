@@ -54,7 +54,7 @@ void analyzer_recorder() {
 	Recorders recorder(FLAGS_src);
 	
 	if (FLAGS_all) {
-		recorder.print_total_info();
+		//recorder.print_total_info();
 		if (FLAGS_db) {
 			dbInstance->bindRecorder(recorder.getRecorder());
 			dbInstance->importRecorderInfo();
