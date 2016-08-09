@@ -74,9 +74,7 @@
     <ClCompile Include="src\analyzer\analyzer_stat.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\recorder\recorder.cpp" />
-    <ClCompile Include="src\recorder\recorder_caffepro.cpp" />
     <ClCompile Include="src\utils\filesystem.cpp" />
-    <ClCompile Include="src\utils\string_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\analyzer\analyzer.h" />
@@ -88,7 +86,6 @@
     <ClInclude Include="include\utils\filesystem.h" />
     <ClInclude Include="include\utils\ini.h" />
     <ClInclude Include="include\utils\inireader.h" />
-    <ClInclude Include="include\utils\string_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

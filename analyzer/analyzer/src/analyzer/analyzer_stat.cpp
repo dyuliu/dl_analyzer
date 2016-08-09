@@ -19,6 +19,9 @@ namespace analyzer {
 #endif
 
 			if (info.layers(i).type() == "batch_norm") continue;
+			
+			if (data_content == TYPE_CONTENT::GRAD && !info.layers(i).grad_size()) return;
+			if (data_content == TYPE_CONTENT::WEIGHT && !info.layers(i).weight_size()) return;
 
 			// index of stat
 			const int idx = index(stat_type, data_content);

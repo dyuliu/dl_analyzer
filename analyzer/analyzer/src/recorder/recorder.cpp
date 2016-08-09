@@ -98,18 +98,4 @@ namespace analyzer {
 
 	}
 
-	void Recorders::load_from_log_file(std::string filename, TYPE_FRAMEWORK framework_type) {
-
-		if (!filesystem::exist(filename.c_str()))
-			throw("Error: the file has not been found!");
-
-		if (framework_type == TYPE_FRAMEWORK::CAFFEPRO) {
-			parse_from_log_file_caffepro(filename);
-		}
-		else {
-			throw("Error: not specify framework type!");
-		}
-
-	}
-
 }

@@ -22,20 +22,11 @@ namespace analyzer {
 			LEARNING_RATE = 7U
 		};
 
-		enum class TYPE_FRAMEWORK : unsigned int {
-			CAFFEPRO = 0U,
-			CAFFE = 1U,
-			CNTK = 2U,
-			TORCH = 3U,
-			TENSORFLOW = 4U
-		};
-
 		Recorders();
 		Recorders(std::string filename);
 		~Recorders();
 
 	public:
-
 		// print related
 		void print_total_info();
 		void print_specify_type(TYPE_RECORD record_type, int iterval = 1);
@@ -48,16 +39,16 @@ namespace analyzer {
 		void load_from_file(std::string filename);
 
 		// parse log file
-		void load_from_log_file(std::string filename, TYPE_FRAMEWORK framework_type);
+		// void load_from_log_file(std::string filename, TYPE_FRAMEWORK framework_type);
 
 		// get function
 		Recorder* getRecorder() { return &recorder; }
 
-	protected:
-		// parse
-		void parse_from_log_file_caffepro(std::string filename);
-		void parse_from_log_file_caffe(std::string filename);
-		void parse_from_log_file_cntk(std::string filename);
+	//protected:
+	//	// parse
+	//	void parse_from_log_file_caffepro(std::string filename);
+	//	void parse_from_log_file_caffe(std::string filename);
+	//	void parse_from_log_file_cntk(std::string filename);
 
 	private:
 		Recorder recorder;

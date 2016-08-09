@@ -9,7 +9,7 @@
 
 namespace emath {
 
-	DType distance(const std::vector<DType> &x, const std::vector<DType> &y, DISTANCE method) {
+	DType distance(std::vector<DType> &x, std::vector<DType> &y, DISTANCE method) {
 
 		CHECK_EQ(x.size(), y.size());
 		CHECK_NE(x.size(), 0);
@@ -42,6 +42,18 @@ namespace emath {
 			DType x_std = std(x);
 			DType y_std = std(y);
 			res = 1 - xy_cov / (x_std * y_std);
+		}
+
+		if (method == DISTANCE::COSINE_NORM) {
+			normalization(x, norm_method::MINMAX);
+			normalization(y, norm_method::MINMAX);
+			res = distance(x, y, DISTANCE::COSINE);
+		}
+
+		if (method == DISTANCE::EUCLIDEAN_NORM) {
+			normalization(x, norm_method::MINMAX);
+			normalization(y, norm_method::MINMAX);
+			res = distance(x, y, DISTANCE::EUCLIDEAN);
 		}
 
 		return res;
