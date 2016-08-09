@@ -168,7 +168,7 @@ void analyzer_tools() {
 	CHECK_FLAGS_BATCHSIZE;
 	int batch_size = FLAGS_batchsize;
 
-#pragma omp parallel for schedule(dynamic)
+//#pragma omp parallel for schedule(dynamic)
 	for (int i = 0; i < files.size(); i += batch_size) {
 		std::vector<Infos> batch_infos;
 		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100*i/float(files.size()) << std::endl;
