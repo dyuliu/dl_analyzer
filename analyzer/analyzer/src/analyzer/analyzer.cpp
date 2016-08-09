@@ -36,10 +36,12 @@ namespace analyzer {
 
 	void Infos::init_type_name() {
 		name_distance_type = std::map<TYPE_DISTANCE, std::string> {
-			{ TYPE_DISTANCE::EUCLIDEAN,		"Euclidean" },
-			{ TYPE_DISTANCE::COSINE,		"Cosine" },
-			{ TYPE_DISTANCE::MANHATTAN,		"Manhattan" },
-			{ TYPE_DISTANCE::CORRELATION,	"Correlation" }
+			{ TYPE_DISTANCE::EUCLIDEAN,			"Euclidean" },
+			{ TYPE_DISTANCE::COSINE,			"Cosine" },
+			{ TYPE_DISTANCE::MANHATTAN,			"Manhattan" },
+			{ TYPE_DISTANCE::CORRELATION,		"Correlation" },
+			{ TYPE_DISTANCE::EUCLIDEAN_NORM,	"Euclidean_Norm" },
+			{ TYPE_DISTANCE::COSINE_NORM,		"Cosine_Norm" }
 		};
 
 		name_stat_type = std::map<TYPE_STAT, std::string> {
