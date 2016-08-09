@@ -1,14 +1,15 @@
 
 #include <gflags.h>
+#include <assert.h>
 
-DEFINE_string(action, "analyzer", "record, stat, distance, analyzer");
-// DEFINE_string(src, "records/00000000_000_008.info", "");
-// DEFINE_string(src, "caffepro_log", "");
-DEFINE_string(src, "records", "the specify file/folder path");
+// DEFINE_string(action, "analyzer", "record, stat, distance, analyzer");
+// DEFINE_string(src, "records", "the specify file/folder path");
+
+DEFINE_string(action, "recorder", "recorder, stat, distance, batch");
+DEFINE_string(src, "running_info_0.log", "the specify file/folder path");
 
 DEFINE_string(type, "", "specify output type");
 DEFINE_string(content, "grad", "grad or weight");
-DEFINE_string(hp, "batch", "stat, dist, batch");
 
 DEFINE_uint64(batchsize, 3, "batch size of records");
 DEFINE_uint64(interval, 1, "specify output interval");
@@ -16,12 +17,12 @@ DEFINE_uint64(interval, 1, "specify output interval");
 DEFINE_bool(all, false, "if output all type info");
 DEFINE_bool(db, false, "if upload to db");
 
-#define CHECK_FLAGS_SRC {if (!FLAGS_src.size()) throw("Missing src path!");}
-#define CHECK_FLAGS_TYPE {if (!FLAGS_type.size()) throw("Missing specify output type!");}
-#define CHECK_FLAGS_HP {if (!FLAGS_hp.size()) throw("Missing specify hyperparameter type!");}
-#define CHECK_FLAGS_BATCHSIZE {if (!FLAGS_batchsize) throw("Error input of batchsize!");}
-#define CHECK_FLAGS_INTERVAL {if (FLAGS_interval<=0) throw("The interval should be larger than 0!");}
-#define CHECK_FLAGS_CONTENT {if (FLAGS_content!="grad"||FLAGS_content!="weight") throw("content value is grad or weight");}
+#define CHECK_FLAGS_SRC {if (!FLAGS_src.size()) assert(!"Missing src path!");}
+#define CHECK_FLAGS_TYPE {if (!FLAGS_type.size()) assert(!"Missing specify output type!");}
+#define CHECK_FLAGS_HP {if (!FLAGS_hp.size()) assert(!"Missing specify hyperparameter type!");}
+#define CHECK_FLAGS_BATCHSIZE {if (!FLAGS_batchsize) assert(!"Error input of batchsize!");}
+#define CHECK_FLAGS_INTERVAL {if (FLAGS_interval<=0) assert(!"The interval should be larger than 0!");}
+#define CHECK_FLAGS_CONTENT {if (FLAGS_content!="grad"&&FLAGS_content!="weight") assert(!"content value is grad or weight");}
 
 #include <iostream>
 #include <string>
@@ -70,7 +71,6 @@ void analyzer_recorder() {
 * -action=analyzer -src=*.info -type=max
 * 3. other set
 * -content=weight/grad (grad)
-* -hp=stat/dist (stat)
 ***********************************************************************/
 void analyzer_stat() {
 	CHECK_FLAGS_SRC;
@@ -168,10 +168,10 @@ int main(int argc, char *argv[]) {
 
 	// dbInstance = new db::DB("deep_haha");
 
-	if (FLAGS_action == "analyzer" && FLAGS_hp == "stat") {
+	if (FLAGS_action == "stat") {
 		analyzer_stat();
 	}
-	else if (FLAGS_action == "analyzer" && FLAGS_hp == "batch") {
+	else if (FLAGS_action == "batch") {
 		analyzer_tools();
 	}
 	else if (FLAGS_action == "recorder") {
@@ -179,6 +179,5 @@ int main(int argc, char *argv[]) {
 	}
 
 	gflags::ShutDownCommandLineFlags();
-	system("pause");
 	return 0;
 }
