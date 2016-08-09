@@ -15,7 +15,7 @@
 namespace db {
 
 	using Info = analyzer::Info;
-	using Recorder = analyzer::Recorders;
+	using Recorder = analyzer::Recorder;
 
 	class DB {
 
@@ -35,9 +35,14 @@ namespace db {
 		~DB();
 
 		/**
-		Bind data to private variable data for further operation
+		Bind info to private variable iData for further operation
 		*/
-		void bindData(Info *d);
+		void bindInfo(Info *d);
+
+		/**
+		Bind recorder to private variable rData for further operation
+		*/
+		void bindRecorder(Recorder *d);
 
 		/**
 		Import a selected stat into DB
@@ -50,9 +55,19 @@ namespace db {
 		void importAllStats();
 
 		/**
+		Import a selected distance info into DB
+		*/
+		void importDist(analyzer::Infos::TYPE_DISTANCE distName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
+
+		/**
+		Import all distance information to DB
+		*/
+		void importAllDists();
+
+		/**
 		Import layer attrs
 		*/
-		void importLayerAttrs(std::string colName = "LayerTable");
+		void importLayerAttrs(std::string colName = "LayerInfo");
 
 		/**
 		Import all stats and layer attrs
@@ -72,7 +87,7 @@ namespace db {
 		/**
 		Import recorder info, e.g., error rate.
 		*/
-		void importRecorderInfo(std::string colName = "Records");
+		void importRecorderInfo();
 		
 	// private data
 	private:

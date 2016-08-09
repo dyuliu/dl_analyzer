@@ -50,6 +50,9 @@ namespace analyzer {
 		// parse log file
 		void load_from_log_file(std::string filename, TYPE_FRAMEWORK framework_type);
 
+		// get function
+		Recorder* getRecorder() { return &recorder; }
+
 	protected:
 		// parse
 		void parse_from_log_file_caffepro(std::string filename);

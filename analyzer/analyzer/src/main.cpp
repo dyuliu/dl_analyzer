@@ -68,14 +68,14 @@ void read_from_file() {
 
 	Infos info(FLAGS_src, 8);
 	//info.compute_list({ Infos::TYPE_STAT::MEAN, Infos::TYPE_STAT::VAR}, Infos::TYPE_CONTENT::GRAD);
-	info.compute_all(analyzer::Infos::TYPE_CONTENT::GRAD);
-	info.compute_all(analyzer::Infos::TYPE_CONTENT::WEIGHT);
+	//info.compute_all(analyzer::Infos::TYPE_CONTENT::GRAD);
+	//info.compute_all(analyzer::Infos::TYPE_CONTENT::WEIGHT);
 	//info.print_total_info();
-	dbInstance = new db::DB();
-	dbInstance->bindData(info.getInfo());
+	dbInstance->bindInfo(info.getInfo());
+	dbInstance->importLayerAttrs();
 	//dbInstance->importGradient("grad");
 	//dbInstance->importStat(Infos::TYPE_STAT::MEAN, Infos::TYPE_CONTENT::GRAD);
-	dbInstance->importAll();
+	//dbInstance->importAll();
 }
 
 void read_from_folder() {
@@ -102,7 +102,9 @@ void test_record() {
 	}
 	Recorders recorder(FLAGS_src);
 	// recorder.print_specify_type("test_error", 10);
-	recorder.print_specify_type(Recorders::TYPE_RECORD::FORWARD_TIME);
+	// recorder.print_specify_type(Recorders::TYPE_RECORD::FORWARD_TIME);
+	dbInstance->bindRecorder(recorder.getRecorder());
+	dbInstance->importRecorderInfo();
 }
 
 void compute_all_batch(std::string foldername, int batch_size) {
@@ -138,26 +140,24 @@ void compute_all_batch(std::string foldername, int batch_size) {
 					batch_infos[m].copy_hyperparam(info, Infos::TYPE_CONTENT::WEIGHT, Infos::HyperParam::STAT);
 					// calcute distance to aggregate
 					// batch_infos[m].compute(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, info);
-					// batch_infos[m].compute_all(Infos::TYPE_CONTENT::GRAD, info);
-					// COUT_CHEK << "Finish compute distance from aggregate, spend: " << clock() - clock_t << std::endl;
+					batch_infos[m].compute_all(Infos::TYPE_CONTENT::GRAD, info);
+					batch_infos[m].compute_all(Infos::TYPE_CONTENT::WEIGHT, info);
+					COUT_CHEK << "Finish compute distance from aggregate, spend: " << clock() - clock_t << std::endl;
 				}
 			}
 			batch_infos.push_back(info);
 		}
-		
-		
 
 		for (int x = 0; x < batch_size - 1; x++) {
 			batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
-			dbInstance->bindData(batch_infos[x].getInfo());
+			dbInstance->bindInfo(batch_infos[x].getInfo());
 			dbInstance->importAll();
-			COUT_CHEK << "work_id: " << (batch_infos[x].get().worker_id()) << std::endl;
+			//COUT_CHEK << "work_id: " << (batch_infos[x].get().worker_id()) << std::endl;
 		}
 		batch_infos[batch_size - 1].get().set_worker_id(0);
-		dbInstance->bindData(batch_infos[batch_size - 1].getInfo());
+		dbInstance->bindInfo(batch_infos[batch_size - 1].getInfo());
 		dbInstance->importAll();
-		COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
-
+		//COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
 
 		COUT_SUCC << "FINISH A GROUP OF FILES" << std::endl;
 	}
@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 	gflags::SetUsageMessage(help_info);
 
-	dbInstance = new db::DB("deep_haha");
+	dbInstance = new db::DB("cnnvis");
 
 	if (FLAGS_action == "test") test();
 	if (FLAGS_action == "test_record") test_record();
