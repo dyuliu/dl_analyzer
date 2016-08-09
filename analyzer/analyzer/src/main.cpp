@@ -17,6 +17,8 @@ DEFINE_uint64(interval, 1, "specify output interval");
 DEFINE_bool(all, false, "if output all type info");
 DEFINE_bool(db, false, "if upload to db");
 
+DEFINE_string(dbname, "", "database name");
+
 #define CHECK_FLAGS_SRC {if (!FLAGS_src.size()) assert(!"Missing src path!");}
 #define CHECK_FLAGS_TYPE {if (!FLAGS_type.size()) assert(!"Missing specify output type!");}
 #define CHECK_FLAGS_HP {if (!FLAGS_hp.size()) assert(!"Missing specify hyperparameter type!");}
@@ -190,7 +192,7 @@ int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-	dbInstance = new db::DB("cnnvis");
+	dbInstance = new db::DB(FLAGS_dbname);
 
 	if (FLAGS_action == "stat") {
 		analyzer_stat();
