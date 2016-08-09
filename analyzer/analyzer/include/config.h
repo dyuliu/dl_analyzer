@@ -27,6 +27,10 @@ namespace analyzer {
 
 // fast operation
 #define ArrayToVector(x) (std::vector<DType>{x.data(), x.data() + x.size()})
-#define __FUNC_TIME_CALL(func, str) {auto start_t = clock(); (func); COUT_CHEK << str << ", spend time: " << clock()-start_t << std::endl; }
 
+#ifdef __DEBUG_INFO_OUTPUT
+	#define __FUNC_TIME_CALL(func, str) {auto start_t = clock(); (func); COUT_CHEK << str << ", spend time: " << clock()-start_t << std::endl; }
+#else
+	#define __FUNC_TIME_CALL(func, str) {(func);}
+#endif
 }
