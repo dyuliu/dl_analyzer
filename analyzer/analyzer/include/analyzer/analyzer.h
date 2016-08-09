@@ -25,10 +25,12 @@ namespace analyzer {
 		};
 
 		enum class TYPE_DISTANCE : unsigned int {
-			EUCLIDEAN	= 0U,
-			COSINE		= 1U,
-			MANHATTAN	= 2U,
-			CORRELATION	= 3U,
+			EUCLIDEAN		= 0U,
+			COSINE			= 1U,
+			MANHATTAN		= 2U,
+			CORRELATION		= 3U,
+			EUCLIDEAN_NORM	= 5U,
+			COSINE_NORM		= 6U,
 			END
 		};
 
@@ -56,6 +58,10 @@ namespace analyzer {
 		// get
 		unsigned int index(TYPE_STAT stat_type, TYPE_CONTENT data_content);
 		unsigned int index(TYPE_DISTANCE distance_type, TYPE_CONTENT data_content);
+
+		// string to type
+		template <typename Tout>
+		Tout to_type(std::string);
 
 		// stat
 		void compute(TYPE_STAT stat_type, TYPE_CONTENT data_content);
@@ -102,9 +108,6 @@ namespace analyzer {
 		
 		// dump info
 		Info info;
-
-		// running recorder info
-		Recorder recorder;
 
 		std::map<TYPE_DISTANCE, std::string> name_distance_type;
 		std::map<TYPE_STAT, std::string> name_stat_type;

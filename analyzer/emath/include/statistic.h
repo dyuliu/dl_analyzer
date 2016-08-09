@@ -29,5 +29,5 @@ namespace emath {
 		ZSCORE = 2U
 	};
 
-	void nomrlization(std::vector<DType> &x, norm_method method);
+	void normalization(std::vector<DType> &x, norm_method method);
 }

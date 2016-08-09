@@ -1,6 +1,28 @@
 
 #include <gflags.h>
 
+DEFINE_string(action, "analyzer", "record, stat, distance, analyzer");
+// DEFINE_string(src, "records/00000000_000_008.info", "");
+// DEFINE_string(src, "caffepro_log", "");
+DEFINE_string(src, "records", "the specify file/folder path");
+
+DEFINE_string(type, "", "specify output type");
+DEFINE_string(content, "grad", "grad or weight");
+DEFINE_string(hp, "batch", "stat, dist, batch");
+
+DEFINE_uint64(batchsize, 3, "batch size of records");
+DEFINE_uint64(interval, 1, "specify output interval");
+
+DEFINE_bool(all, false, "if output all type info");
+DEFINE_bool(db, false, "if upload to db");
+
+#define CHECK_FLAGS_SRC {if (!FLAGS_src.size()) throw("Missing src path!");}
+#define CHECK_FLAGS_TYPE {if (!FLAGS_type.size()) throw("Missing specify output type!");}
+#define CHECK_FLAGS_HP {if (!FLAGS_hp.size()) throw("Missing specify hyperparameter type!");}
+#define CHECK_FLAGS_BATCHSIZE {if (!FLAGS_batchsize) throw("Error input of batchsize!");}
+#define CHECK_FLAGS_INTERVAL {if (FLAGS_interval<=0) throw("The interval should be larger than 0!");}
+#define CHECK_FLAGS_CONTENT {if (FLAGS_content!="grad"||FLAGS_content!="weight") throw("content value is grad or weight");}
+
 #include <iostream>
 #include <string>
 #include <config.h>
@@ -13,172 +35,148 @@
 
 db::DB *dbInstance;
 
-DEFINE_string(action, "all", "");
-// DEFINE_string(src, "records/00000000_000_008.info", "");
-// DEFINE_string(src, "caffepro_log", "");
-DEFINE_string(src, "records", "");
-DEFINE_uint64(batchsize, 9, "batch size of records");
-
 using analyzer::Infos;
 using analyzer::Recorders;
 
-const std::string version_info =
-R"(
+/**********************************************************************
+ * COMMAND:
+ * 1. print all type value: 
+ * -action=recorder -src=*.log -all
+ * 2. print one type value:  // see recorder.h
+ * -action=recorder -src=*.log -type=test_error
+ * 3. set interval
+ * -interval=10
+ ***********************************************************************/
+void analyzer_recorder() {
+	CHECK_FLAGS_SRC;
 
-Versions view:
-    Analyzer version:  v1.0.0
-    Math lib version:  v1.0.0
-    DB lib version:    v1.0.0
-)";
-
-const std::string help_info =
-R"(
-Analyzer Commands:
-
-Syntax:
-    analyzer -action=key1 -src=key2
-
-nParameters:
-    -help         - Display this help message
-    -action       - Running function: test_record, test
-    -src          - Source of folder or file
-
-For more information about Analyzer Tools,
-See http://msra-dl:5000/
-)";
-
-void test() {
-	if (FLAGS_src == "") {
-		COUT_ERRO << "Missing file path, please set -src" << std::endl;
-		return;
-	}
-
-	Recorders recorder;
-	recorder.load_from_log_file(FLAGS_src, Recorders::TYPE_FRAMEWORK::CAFFEPRO);
-
-}
-
-void read_from_file() {
-
-	COUT_METD << "Running Function -> Read From File" << std::endl;
-	if (FLAGS_src == "") {
-		COUT_ERRO << "Missing file path, please set -src" << std::endl;
-		return;
-	}
-
-	Infos info(FLAGS_src, 8);
-	//info.compute_list({ Infos::TYPE_STAT::MEAN, Infos::TYPE_STAT::VAR}, Infos::TYPE_CONTENT::GRAD);
-	info.compute_all(analyzer::Infos::TYPE_CONTENT::GRAD);
-	info.compute_all(analyzer::Infos::TYPE_CONTENT::WEIGHT);
-	//info.print_total_info();
-	dbInstance = new db::DB();
-	dbInstance->bindData(info.getInfo());
-	//dbInstance->importGradient("grad");
-	//dbInstance->importStat(Infos::TYPE_STAT::MEAN, Infos::TYPE_CONTENT::GRAD);
-	dbInstance->importAll();
-}
-
-void read_from_folder() {
-
-	COUT_METD << "Running Function -> Read From Folder" << std::endl;
-
-	if (!analyzer::filesystem::exist(FLAGS_src.c_str())) {
-		COUT_ERRO << "Missing file path, please set -src" << std::endl;
-		return;
-	}
-
-	auto file_list = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.*", false);
-	for (auto file : file_list) {
-		FLAGS_src = file;
-		read_from_file();
-	}
-
-}
-
-void test_record() {
-	if (FLAGS_src == "") {
-		COUT_ERRO << "Missing file path, please set -src" << std::endl;
-		return;
-	}
 	Recorders recorder(FLAGS_src);
-	// recorder.print_specify_type("test_error", 10);
-	recorder.print_specify_type(Recorders::TYPE_RECORD::FORWARD_TIME);
+	
+	if (FLAGS_all) {
+		recorder.print_total_info();
+	}
+	else {
+		CHECK_FLAGS_TYPE;
+		CHECK_FLAGS_INTERVAL;
+		recorder.print_specify_type(FLAGS_type, FLAGS_interval);
+	}
 }
 
-void compute_all_batch(std::string foldername, int batch_size) {
-	if (!analyzer::filesystem::exist(foldername.c_str()))
+/**********************************************************************
+* COMMAND:
+* 1. print all type value: (all stat of grad and weight)
+* -action=analyzer -src=*.info -all
+* 2. print one type value:  // see analyzer.h
+* -action=analyzer -src=*.info -type=max
+* 3. other set
+* -content=weight/grad (grad)
+* -hp=stat/dist (stat)
+***********************************************************************/
+void analyzer_stat() {
+	CHECK_FLAGS_SRC;
+
+	Infos info(FLAGS_src);
+
+	if (FLAGS_all) {
+		info.compute_all(Infos::TYPE_CONTENT::GRAD);
+		info.compute_all(Infos::TYPE_CONTENT::WEIGHT);
+		info.print_total_info();
+	}
+	else {
+		CHECK_FLAGS_TYPE;
+		CHECK_FLAGS_CONTENT;
+		auto type = info.to_type<Infos::TYPE_STAT>(FLAGS_type);
+		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+		info.compute(type, content);
+		info.print_stat_info(content);
+	}
+}
+
+static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
+	int batch_size = batch_infos.size();
+	for (int x = 0; x < batch_size - 1; x++) {
+		batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
+		dbInstance->bindData(batch_infos[x].getInfo());
+		dbInstance->importAll();
+		COUT_CHEK << "work_id: " << (batch_infos[x].get().worker_id()) << std::endl;
+	}
+	batch_infos[batch_size - 1].get().set_worker_id(0);
+	dbInstance->bindData(batch_infos[batch_size - 1].getInfo());
+	dbInstance->importAll();
+	COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
+}
+
+static inline void analyzer_batch_distance(std::vector<Infos> &batch_infos) {
+	auto last_batch = batch_infos.size()-1;
+	for (int idx = 0; idx < last_batch; idx++) {
+		auto content = batch_infos[idx].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+		__FUNC_TIME_CALL(batch_infos[idx].compute(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, batch_infos[last_batch]),
+			"Process file with distance " + batch_infos[idx].get().filename());
+		// batch_infos[idx].compute_all(content);
+	}
+}
+
+static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
+	int batch_size = batch_infos.size();
+	for (int idx = 0; idx < batch_size; idx++) {
+		auto &info = batch_infos[idx];
+		__FUNC_TIME_CALL(info.compute_all(Infos::TYPE_CONTENT::GRAD), "Process file with grad " + info.get().filename());
+		
+		if (idx == batch_size - 1){
+			__FUNC_TIME_CALL(info.compute_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
+			// copy weight statistic to all file?
+			// compute all distance
+			analyzer_batch_distance(batch_infos);
+		}
+	}
+}
+
+/**********************************************************************
+* COMMAND:
+***********************************************************************/
+void analyzer_tools() {
+	CHECK_FLAGS_SRC;
+	
+	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
 		throw("Error: Missing folder path!");
-	auto files = analyzer::filesystem::get_files(foldername.c_str(), "*.info", false);
+	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
+
+	CHECK_FLAGS_BATCHSIZE;
+	int batch_size = FLAGS_batchsize;
 
 #pragma omp parallel for schedule(dynamic)
 	for (int i = 0; i < files.size(); i += batch_size) {
 		std::vector<Infos> batch_infos;
-
-		// depleted
 		if (i + batch_size > files.size()) continue;
 
-		// process
-		for (int j = i; j < i + batch_size; j++) {
-			Infos info(files[j], batch_size - 1);
-			auto clock_t = clock();
-			COUT_READ << "Process file with grad: " << info.get().filename() << std::endl;
-			info.compute_all(Infos::TYPE_CONTENT::GRAD);
-			COUT_READ << "All grad statistic has been computed, spend: " << clock() - clock_t << std::endl;
-
-			// process last one
-			if (j == i + batch_size - 1) {
-				clock_t = clock();
-				COUT_CHEK << "Process file with weight: " << info.get().filename() << std::endl;
-				info.compute_all(Infos::TYPE_CONTENT::WEIGHT);
-				COUT_CHEK << "All weight statistic has been computed, spend: " << clock() - clock_t << std::endl;
-				for (int m = 0; m < batch_size - 1; m++) {
-					// copy weight hyper statistic
-					clock_t = clock();
-					COUT_CHEK << "File: " << batch_infos[m].get().filename() << " prepare to compute distance from aggregate!" << std::endl;
-					batch_infos[m].copy_hyperparam(info, Infos::TYPE_CONTENT::WEIGHT, Infos::HyperParam::STAT);
-					// calcute distance to aggregate
-					// batch_infos[m].compute(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, info);
-					// batch_infos[m].compute_all(Infos::TYPE_CONTENT::GRAD, info);
-					// COUT_CHEK << "Finish compute distance from aggregate, spend: " << clock() - clock_t << std::endl;
-				}
-			}
-			batch_infos.push_back(info);
-		}
+		for (int idx_batch = i; idx_batch < i + batch_size; idx_batch++)
+			batch_infos.push_back(Infos(files[idx_batch], batch_size));
 		
-		
+		analyzer_batch(batch_infos);
 
-		for (int x = 0; x < batch_size - 1; x++) {
-			batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
-			dbInstance->bindData(batch_infos[x].getInfo());
-			dbInstance->importAll();
-			COUT_CHEK << "work_id: " << (batch_infos[x].get().worker_id()) << std::endl;
+		if (FLAGS_db) {
+			analyzer_batch_db(batch_infos);
 		}
-		batch_infos[batch_size - 1].get().set_worker_id(0);
-		dbInstance->bindData(batch_infos[batch_size - 1].getInfo());
-		dbInstance->importAll();
-		COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
 
-
-		COUT_SUCC << "FINISH A GROUP OF FILES" << std::endl;
+		batch_infos.clear();
 	}
-	COUT_SUCC << "FINISH ALL JOBS" << std::endl;
 }
-
-static void failureFunction() { exit(0); }
 
 int main(int argc, char *argv[]) {
 
-	gflags::SetVersionString(version_info);
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
-	gflags::SetUsageMessage(help_info);
 
-	dbInstance = new db::DB("deep_haha");
+	// dbInstance = new db::DB("deep_haha");
 
-	if (FLAGS_action == "test") test();
-	if (FLAGS_action == "test_record") test_record();
-	if (FLAGS_action == "read_from_file") read_from_file();
-	if (FLAGS_action == "read_from_folder") read_from_folder();
-	if (FLAGS_action == "all") compute_all_batch(FLAGS_src, FLAGS_batchsize);
+	if (FLAGS_action == "analyzer" && FLAGS_hp == "stat") {
+		analyzer_stat();
+	}
+	else if (FLAGS_action == "analyzer" && FLAGS_hp == "batch") {
+		analyzer_tools();
+	}
+	else if (FLAGS_action == "recorder") {
+		analyzer_recorder();
+	}
 
 	gflags::ShutDownCommandLineFlags();
 	system("pause");

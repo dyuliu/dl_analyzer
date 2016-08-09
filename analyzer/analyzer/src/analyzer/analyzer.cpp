@@ -2,6 +2,7 @@
 #include <analyzer/analyzer.h>
 #include <fstream>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <exception>
 
 namespace analyzer {
 
@@ -125,5 +126,28 @@ namespace analyzer {
 			}
 		}
 
+	}
+
+	template<typename T>
+	inline static T type_search(std::string e, std::map<T, std::string> s) {
+		for (auto name : s)
+			if (e == name.second) 
+				return name.first;
+		throw("Could not find specify type!");
+	}
+
+	template<>
+	Infos::TYPE_STAT Infos::to_type<Infos::TYPE_STAT>(std::string in) {
+		return type_search<TYPE_STAT>(in, name_stat_type);
+	}
+
+	template<>
+	Infos::TYPE_CONTENT Infos::to_type<Infos::TYPE_CONTENT>(std::string in) {
+		return type_search<TYPE_CONTENT>(in, name_content_type);
+	}
+
+	template<>
+	Infos::TYPE_DISTANCE Infos::to_type<Infos::TYPE_DISTANCE>(std::string in) {
+		return type_search<TYPE_DISTANCE>(in, name_distance_type);
 	}
 }

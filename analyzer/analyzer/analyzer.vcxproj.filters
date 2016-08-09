@@ -25,12 +25,10 @@
       <Filter>src\recorder</Filter>
     </ClCompile>
     <ClCompile Include="src\analyzer\analyzer.cpp" />
-    <ClCompile Include="src\utils\string_utils.cpp" />
     <ClCompile Include="include\proto\analyzer.pb.cc" />
     <ClCompile Include="src\analyzer\analyzer_distance.cpp" />
     <ClCompile Include="src\analyzer\analyzer_stat.cpp" />
     <ClCompile Include="src\analyzer\analyzer_print.cpp" />
-    <ClCompile Include="src\recorder\recorder_caffepro.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\analyzer\analyzer.h" />
@@ -38,7 +36,6 @@
     <ClInclude Include="include\recorder\recorder.h" />
     <ClInclude Include="include\utils\filesystem.h" />
     <ClInclude Include="include\config.h" />
-    <ClInclude Include="include\utils\string_utils.h" />
     <ClInclude Include="include\proto\analyzer.pb.h" />
     <ClInclude Include="include\terminal.h" />
     <ClInclude Include="include\utils\inireader.h" />

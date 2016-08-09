@@ -89,7 +89,7 @@ namespace emath {
 	}
 
 	// return to x
-	void nomrlization(std::vector<DType> &x, norm_method method) {
+	void normalization(std::vector<DType> &x, norm_method method) {
 
 		CHECK_NE(x.size(), 0);
 
