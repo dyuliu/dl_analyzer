@@ -38,17 +38,15 @@ namespace analyzer {
 		// load from file
 		void load_from_file(std::string filename);
 
-		// parse log file
-		// void load_from_log_file(std::string filename, TYPE_FRAMEWORK framework_type);
-
 		// get function
-		Recorder* getRecorder() { return &recorder; }
+		Recorder* get() { return &recorder; }
 
-	//protected:
-	//	// parse
-	//	void parse_from_log_file_caffepro(std::string filename);
-	//	void parse_from_log_file_caffe(std::string filename);
-	//	void parse_from_log_file_cntk(std::string filename);
+	public:
+		// data related
+		std::vector<std::tuple<int, std::string, float>> get_specify_type(TYPE_RECORD record_type, int iterval = 1);
+		std::vector<std::tuple<int, std::string, float>> get_specify_type(std::string record_type, int iterval = 1);
+
+		std::vector<std::tuple<int, std::string, float>> get_total_info(int iterval = 1);
 
 	private:
 		Recorder recorder;

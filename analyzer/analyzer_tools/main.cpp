@@ -1,5 +1,5 @@
 
-#include <gflags.h>
+#include <google/gflags/gflags.h>
 #include <assert.h>
 
 // DEFINE_string(action, "analyzer", "record, stat, distance, analyzer");
@@ -56,16 +56,20 @@ void analyzer_recorder() {
 	Recorders recorder(FLAGS_src);
 	
 	if (FLAGS_all) {
-		//recorder.print_total_info();
+		recorder.print_total_info();
 		if (FLAGS_db) {
-			dbInstance->bindRecorder(recorder.getRecorder());
+			dbInstance->bindRecorder(recorder.get());
 			dbInstance->importRecorderInfo();
 		}
 	}
 	else {
 		CHECK_FLAGS_TYPE;
 		CHECK_FLAGS_INTERVAL;
-		recorder.print_specify_type(FLAGS_type, FLAGS_interval);
+		auto val = recorder.get_specify_type(FLAGS_type);
+		for (auto item : val) {
+			COUT_CHEK << "iter: " << std::get<0>(item) << ", type: " << std::get<1>(item) << ", val: " << std::get<2>(item) << std::endl;
+		}
+		// recorder.print_specify_type(FLAGS_type, FLAGS_interval);
 	}
 
 	
@@ -192,7 +196,7 @@ int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-	dbInstance = new db::DB(FLAGS_dbname);
+	if (FLAGS_db) dbInstance = new db::DB(FLAGS_dbname);
 
 	if (FLAGS_action == "stat") {
 		analyzer_stat();

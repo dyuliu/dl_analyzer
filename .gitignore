@@ -57,5 +57,5 @@ Temporary Items
 
 analyzer/protobuf/
 analyzer/dependency/
-analyzer/running_dir/
+analyzer/TEST/
 x64/

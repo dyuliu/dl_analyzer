@@ -11,25 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\analyzer\analyzer.h" />
     <ClInclude Include="include\config.h" />
-    <ClInclude Include="include\distance.h" />
-    <ClInclude Include="include\matrix.h" />
-    <ClInclude Include="include\statistic.h" />
+    <ClInclude Include="include\proto\analyzer.pb.h" />
+    <ClInclude Include="include\recorder\recorder.h" />
+    <ClInclude Include="include\utils\color_print.h" />
+    <ClInclude Include="include\utils\filesystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\distance.cpp" />
-    <ClCompile Include="src\matrix.cpp" />
-    <ClCompile Include="src\statistic.cpp" />
+    <ClCompile Include="include\proto\analyzer.pb.cc" />
+    <ClCompile Include="src\analyzer\analyzer.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_distance.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_print.cpp" />
+    <ClCompile Include="src\analyzer\analyzer_stat.cpp" />
+    <ClCompile Include="src\recorder\recorder.cpp" />
+    <ClCompile Include="src\recorder\recorder_data.cpp" />
+    <ClCompile Include="src\utils\filesystem.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BC0C093E-9359-4E94-8B20-D6E0053587C4}</ProjectGuid>
+    <ProjectGuid>{31C10E46-2327-411F-8B3F-D3995DBE1362}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>emath</RootNamespace>
+    <RootNamespace>libanalyzer</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PlatformToolset>v120</PlatformToolset>
-    <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PlatformToolset>v120</PlatformToolset>
@@ -40,23 +46,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(SolutionDir)dependency\include;$(SolutionDir);$(ProjectDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)\$(PlatformTarget)\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <OutDir>$(SolutionDir)running_dir</OutDir>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

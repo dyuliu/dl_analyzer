@@ -1,4 +1,4 @@
-#include <analyzer/include/analyzer/analyzer.h>
+#include <libanalyzer/include/analyzer/analyzer.h>
 #define MAP_TYPE_DIST std::map<analyzer::Infos::TYPE_DISTANCE, std::string>
 #define DIST_INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_DISTANCE::END + (int)x
 

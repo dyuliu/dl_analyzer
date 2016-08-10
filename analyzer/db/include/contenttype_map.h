@@ -1,4 +1,4 @@
-#include <analyzer/include/analyzer/analyzer.h>
+#include <libanalyzer/include/analyzer/analyzer.h>
 #define MAP_TYPE_CONTENT std::map<analyzer::Infos::TYPE_CONTENT, std::string>
 
 namespace db {

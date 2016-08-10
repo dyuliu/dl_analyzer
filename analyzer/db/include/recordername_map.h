@@ -1,4 +1,4 @@
-#include <analyzer/include/recorder/recorder.h>
+#include <libanalyzer/include/recorder/recorder.h>
 #define MAP_TYPE_RECORD std::map<std::string, std::string>
 
 namespace db {

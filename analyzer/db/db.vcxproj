@@ -44,9 +44,9 @@
     <OutDir>$(SolutionDir)running_dir</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)analyzer\include;$(SolutionDir)protobuf\src;$(SolutionDir)dependency\include;$(ProjectDir)include;$(SolutionDir);$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)running_dir</OutDir>
+    <IncludePath>$(SolutionDir)libanalyzer\include;$(SolutionDir)dependency\include;$(ProjectDir)include;$(SolutionDir);$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)\dependency\lib\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Lib>
