@@ -5,7 +5,7 @@
 
 namespace emath {
 
-#define DType float
+#define DType double
 
 #define NOT_REALIZE throw("Error: This function has not been realized")
 #define DIVIDE_ZERO throw("Error: Divide Zero")

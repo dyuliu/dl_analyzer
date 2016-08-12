@@ -1,5 +1,5 @@
 
-#include <analyzer/analyzer.h>
+#include <info/info.h>
 #include <iomanip>
 
 namespace analyzer{

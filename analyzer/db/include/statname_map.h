@@ -1,4 +1,4 @@
-#include <libanalyzer/include/analyzer/analyzer.h>
+#include <libanalyzer/include/info/info.h>
 #define MAP_TYPE_STAT std::map<analyzer::Infos::TYPE_STAT, std::string>
 #define STAT_INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_STAT::END + (int)x
 

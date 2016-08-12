@@ -7,6 +7,8 @@
 // internel
 #include <utils/color_print.h>
 #include <utils/filesystem.h>
+#include <utils/filestream.h>
+
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -25,7 +27,7 @@ namespace analyzer {
 // constant
 #define MAX_PROTOFILE_SIZE 5368709120
 
-// fast operation
+// google repeated type -> vector
 #define ArrayToVector(x) (std::vector<DType>{x.data(), x.data() + x.size()})
 
 #ifdef __DEBUG_INFO_OUTPUT
@@ -33,4 +35,7 @@ namespace analyzer {
 #else
 	#define __FUNC_TIME_CALL(func, str) {(func);}
 #endif
+
+#define THROW(str) {std::cout << str << std::endl; throw(str);}
+
 }

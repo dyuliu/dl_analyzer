@@ -57,5 +57,6 @@ Temporary Items
 
 analyzer/protobuf/
 analyzer/dependency/
-analyzer/TEST/
+analyzer/unit_test/
+TEST/
 x64/

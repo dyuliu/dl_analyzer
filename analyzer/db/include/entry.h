@@ -9,7 +9,7 @@
 #include <vector>
 #include <mongo/client/dbclient.h>
 #include <libanalyzer/include/proto/analyzer.pb.h>
-#include <libanalyzer/include/analyzer/analyzer.h>
+#include <libanalyzer/include/info/info.h>
 #include <libanalyzer/include/recorder/recorder.h>
 
 namespace db {

@@ -1,5 +1,5 @@
 
-#include <analyzer/analyzer.h>
+#include <info/info.h>
 #include <fstream>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <exception>
@@ -13,7 +13,7 @@ namespace analyzer {
 
 	Infos::Infos(std::string path) {
 		if (!filesystem::exist(path.c_str()))
-			throw("Error: Missing input file!");
+			THROW("Error: Missing input file!");
 		
 		load_from_file(path);
 
@@ -23,7 +23,7 @@ namespace analyzer {
 
 	Infos::Infos(std::string path, int rank_size) {
 		if (!filesystem::exist(path.c_str()))
-			throw("Error: Missing input file!");
+			THROW("Error: Missing input file!");
 
 		load_from_file(path);
 
@@ -135,7 +135,7 @@ namespace analyzer {
 		for (auto name : s)
 			if (e == name.second) 
 				return name.first;
-		throw("Could not find specify type!");
+		THROW("Could not find specify type!");
 	}
 
 	template<>

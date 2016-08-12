@@ -29,8 +29,8 @@ namespace analyzer {
 			COSINE			= 1U,
 			MANHATTAN		= 2U,
 			CORRELATION		= 3U,
-			EUCLIDEAN_NORM	= 5U,
-			COSINE_NORM		= 6U,
+			EUCLIDEAN_NORM	= 4U,
+			COSINE_NORM		= 5U,
 			END
 		};
 
@@ -51,7 +51,7 @@ namespace analyzer {
 		void save_to_file(std::string foldname);
 
 		// load from file
-		void Infos::load_from_file(std::string filename);
+		void load_from_file(std::string filename);
 
 	public:
 
@@ -74,7 +74,10 @@ namespace analyzer {
 		void compute_all(TYPE_CONTENT data_content, Infos &other);
 
 		// data transfer
-		void RepeatedToVector(const ::google::protobuf::RepeatedField<float>& x, std::vector<DType> &y);
+
+		// get data
+		std::vector<DType> get_content_data(TYPE_CONTENT content_type, std::string layer_name);
+		std::vector<DType> get_content_data(std::string content_type, std::string layer_name);
 
 	// Print
 	public:
@@ -88,8 +91,6 @@ namespace analyzer {
 	public:
 
 		Info& get() { return info; }
-		
-		Info* getInfo() { return &info; }
 
 		// constructor
 		Infos();
@@ -98,7 +99,7 @@ namespace analyzer {
 		Infos(std::string path, int rank_size);
 
 		// copy
-		void Infos::copy_hyperparam(Infos &other, TYPE_CONTENT content_type, HyperParam hp);
+		void copy_hyperparam(Infos &other, TYPE_CONTENT content_type, HyperParam hp);
 
 		// init
 		void init_stat();

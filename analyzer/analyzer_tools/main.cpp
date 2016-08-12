@@ -30,11 +30,14 @@ DEFINE_string(dbname, "", "database name");
 #include <string>
 #include <config.h>
 
-#include <analyzer/analyzer.h>
+#include <info/info.h>
 #include <recorder/recorder.h>
 #include <db/include/entry.h>
 
 #include <omp.h>
+
+#include <emath\include\config.h>
+#include <emath\include\distance.h>
 
 db::DB *dbInstance;
 
@@ -94,7 +97,7 @@ void analyzer_stat() {
 		info.compute_all(Infos::TYPE_CONTENT::WEIGHT);
 		//info.print_total_info();
 		if (FLAGS_db) {
-			dbInstance->bindInfo(info.getInfo());
+			dbInstance->bindInfo(&info.get());
 		}
 	}
 	else {
@@ -116,7 +119,7 @@ void analyzer_layerinfo() {
 
 	if (FLAGS_db) {
 		Infos info(FLAGS_src);
-		dbInstance->bindInfo(info.getInfo());
+		dbInstance->bindInfo(&info.get());
 		dbInstance->importLayerAttrs();
 	}
 }
@@ -125,12 +128,12 @@ static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 	int batch_size = batch_infos.size();
 	for (int x = 0; x < batch_size - 1; x++) {
 		batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
-		dbInstance->bindInfo(batch_infos[x].getInfo());
+		dbInstance->bindInfo(&batch_infos[x].get());
 		dbInstance->importAll();
 		//COUT_CHEK << "work_id: " << (batch_infos[x].get().worker_id()) << std::endl;
 	}
 	batch_infos[batch_size - 1].get().set_worker_id(0);
-	dbInstance->bindInfo(batch_infos[batch_size - 1].getInfo());
+	dbInstance->bindInfo(&batch_infos[batch_size - 1].get());
 	dbInstance->importAll();
 	//COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
 }

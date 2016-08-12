@@ -11,19 +11,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\analyzer\analyzer.h" />
+    <ClInclude Include="include\info\info.h" />
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\proto\analyzer.pb.h" />
     <ClInclude Include="include\recorder\recorder.h" />
     <ClInclude Include="include\utils\color_print.h" />
+    <ClInclude Include="include\utils\filestream.h" />
     <ClInclude Include="include\utils\filesystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\proto\analyzer.pb.cc" />
-    <ClCompile Include="src\analyzer\analyzer.cpp" />
-    <ClCompile Include="src\analyzer\analyzer_distance.cpp" />
-    <ClCompile Include="src\analyzer\analyzer_print.cpp" />
-    <ClCompile Include="src\analyzer\analyzer_stat.cpp" />
+    <ClCompile Include="src\info\info.cpp" />
+    <ClCompile Include="src\info\info_data.cpp" />
+    <ClCompile Include="src\info\info_distance.cpp" />
+    <ClCompile Include="src\info\info_print.cpp" />
+    <ClCompile Include="src\info\info_stat.cpp" />
     <ClCompile Include="src\recorder\recorder.cpp" />
     <ClCompile Include="src\recorder\recorder_data.cpp" />
     <ClCompile Include="src\utils\filesystem.cpp" />

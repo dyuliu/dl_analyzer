@@ -1,5 +1,5 @@
 
-#include <analyzer/analyzer.h>
+#include <info/info.h>
 #include <emath/include/distance.h>
 
 namespace analyzer {
@@ -49,6 +49,27 @@ namespace analyzer {
 					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).grad()), data, emath::DISTANCE::CORRELATION));
 				if (data_content == TYPE_CONTENT::WEIGHT)
 					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).weight()), data, emath::DISTANCE::CORRELATION));
+			}
+
+			if (distrance_type == TYPE_DISTANCE::MANHATTAN) {
+				if (data_content == TYPE_CONTENT::GRAD)
+					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).grad()), data, emath::DISTANCE::MANHATTAN));
+				if (data_content == TYPE_CONTENT::WEIGHT)
+					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).weight()), data, emath::DISTANCE::MANHATTAN));
+			}
+
+			if (distrance_type == TYPE_DISTANCE::COSINE_NORM) {
+				if (data_content == TYPE_CONTENT::GRAD)
+					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).grad()), data, emath::DISTANCE::COSINE_NORM));
+				if (data_content == TYPE_CONTENT::WEIGHT)
+					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).weight()), data, emath::DISTANCE::COSINE_NORM));
+			}
+
+			if (distrance_type == TYPE_DISTANCE::EUCLIDEAN_NORM) {
+				if (data_content == TYPE_CONTENT::GRAD)
+					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).grad()), data, emath::DISTANCE::EUCLIDEAN_NORM));
+				if (data_content == TYPE_CONTENT::WEIGHT)
+					ptr->set_value(emath::distance(ArrayToVector(info.layers(i).weight()), data, emath::DISTANCE::EUCLIDEAN_NORM));
 			}
 
 		}
