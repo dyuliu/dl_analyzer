@@ -13,7 +13,8 @@ namespace db {
 		{ TYPE_DISTANCE::MANHATTAN, "DistManhattan" },
 		{ TYPE_DISTANCE::COSINE_NORM, "DistCosineNorm" },
 		{ TYPE_DISTANCE::EUCLIDEAN_NORM, "DistEuclideanNorm" },
-
+		{ TYPE_DISTANCE::COSINE, "DistAdjCosine" },
+		{ TYPE_DISTANCE::EUCLIDEAN, "DistAdjEuclidean" }
 	};
 
 }

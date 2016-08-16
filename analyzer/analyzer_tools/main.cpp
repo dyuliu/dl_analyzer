@@ -224,9 +224,12 @@ void adjacent_distance() {
 		// left.print_distance_info(Infos::TYPE_CONTENT::WEIGHT);
 		// left.print_distance_info(Infos::TYPE_CONTENT::GRAD);
 
-		//if (FLAGS_db) {
-		//	analyzer_batch_db(batch_infos);
-		//}
+		if (FLAGS_db) {
+			dbInstance->importDist(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, "DistAdjEuclidean");
+			dbInstance->importDist(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::WEIGHT, "DistAdjEuclidean");
+			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::GRAD, "DistAdjCosine");
+			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::WEIGHT, "DistAdjCosine");
+		}
 	}
 
 }
