@@ -195,6 +195,42 @@ void analyzer_tools() {
 	}
 }
 
+/**********************************************************************
+* NEW:
+***********************************************************************/
+void adjacent_distance() {
+	CHECK_FLAGS_SRC;
+
+	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
+		throw("Error: Missing folder path!");
+	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
+
+	CHECK_FLAGS_BATCHSIZE;
+	int batch_size = FLAGS_batchsize;
+
+//#pragma omp parallel for schedule(dynamic)
+	for (int i = 2 * batch_size - 1; i < files.size(); i += batch_size) {
+		COUT_CHEK << "Filename: " << files[i-batch_size] << ", ratio:" << 100 * i / float(files.size()) / batch_size << std::endl;
+		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100 * i / float(files.size()) / batch_size << std::endl << std::endl;
+
+		if (i + batch_size > files.size()) continue;
+
+		auto left = Infos(files[i], batch_size);
+		auto right = Infos(files[i + batch_size], batch_size);
+
+		left.compute_all(Infos::TYPE_CONTENT::WEIGHT, right);
+		left.compute_all(Infos::TYPE_CONTENT::GRAD, right);
+
+		// left.print_distance_info(Infos::TYPE_CONTENT::WEIGHT);
+		// left.print_distance_info(Infos::TYPE_CONTENT::GRAD);
+
+		//if (FLAGS_db) {
+		//	analyzer_batch_db(batch_infos);
+		//}
+	}
+
+}
+
 int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -206,6 +242,9 @@ int main(int argc, char *argv[]) {
 	}
 	else if (FLAGS_action == "batch") {
 		analyzer_tools();
+	}
+	else if (FLAGS_action == "adjacent_distance") {
+		adjacent_distance();
 	}
 	else if (FLAGS_action == "recorder") {
 		analyzer_recorder();
