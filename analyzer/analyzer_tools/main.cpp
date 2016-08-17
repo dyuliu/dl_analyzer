@@ -69,7 +69,7 @@ void analyzer_recorder() {
 		CHECK_FLAGS_TYPE;
 		CHECK_FLAGS_INTERVAL;
 		auto val = recorder.get_specify_type(FLAGS_type);
-		for (auto item : val) {
+		for (auto &item : val) {
 			COUT_CHEK << "iter: " << std::get<0>(item) << ", type: " << std::get<1>(item) << ", val: " << std::get<2>(item) << std::endl;
 		}
 		// recorder.print_specify_type(FLAGS_type, FLAGS_interval);
