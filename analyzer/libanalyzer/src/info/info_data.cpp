@@ -15,6 +15,7 @@ namespace analyzer {
 					THROW("can not find content type in get_content_data function.");
 			}
 		}
+		return std::vector<DType>();
 	}
 
 	std::vector<DType> Infos::get_content_data(std::string content_type, std::string layer_name) {

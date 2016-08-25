@@ -43,7 +43,6 @@ Temporary Items
 .apdisk
 
 # This project
-*.sdf
 *.opensdf
 *.suo
 *.rar
@@ -55,8 +54,6 @@ Temporary Items
 *.db
 *.opendb
 
-analyzer/protobuf/
 analyzer/dependency/
-analyzer/unit_test/
 TEST/
 x64/
