@@ -11,7 +11,7 @@ DEFINE_string(src, "running_info_0.log", "the specify file/folder path");
 DEFINE_string(type, "", "specify output type");
 DEFINE_string(content, "grad", "grad or weight");
 
-DEFINE_uint64(batchsize, 3, "batch size of records");
+DEFINE_uint64(batchsize, 1, "batch size of records");
 DEFINE_uint64(interval, 1, "specify output interval");
 
 DEFINE_bool(all, false, "if output all type info");
@@ -157,7 +157,8 @@ static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 			__FUNC_TIME_CALL(info.compute_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
 			// copy weight statistic to all file?
 			// compute all distance
-			analyzer_batch_distance(batch_infos);
+			if (batch_size > 1)
+				analyzer_batch_distance(batch_infos);
 		}
 	}
 }
