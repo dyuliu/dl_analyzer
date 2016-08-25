@@ -4,7 +4,7 @@ import os
 
 import matplotlib.pyplot as plt
 
-mpi_dir = 'F:/v-kaijin/DL_Analyzer/TEST/mpitest'
+mpi_dir = 'F:/v-kaijin/DL_Analyzer/analyzer/TEST/mpitest'
 mpi_list = os.listdir(mpi_dir)
 
 def get_mpi_list_v(mpi_list, v):
