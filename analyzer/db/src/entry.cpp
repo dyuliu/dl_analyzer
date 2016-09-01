@@ -1,5 +1,6 @@
 #include "contenttype_map.h"
 #include "statname_map.h"
+#include "statseqname_map.h"
 #include "distname_map.h"
 #include "recordername_map.h"
 #include "entry.h"
@@ -109,6 +110,24 @@ namespace db {
 		bObj.append("value", valueObj.obj());
 		BSONObj o = bObj.obj();
 		this->connection.insert(col, o);
+	}
+
+	void DB::importStatSeq(TYPE_SEQ statName, TYPE_CONTENT contentName, std::string colName) {
+		MAP_TYPE_STATSEQ::iterator iterStatSeq;
+		iterStatSeq = mapTypeStatSeq.find(statName);
+		if (iterStatSeq == mapTypeStatSeq.end()) {
+			std::cout << "Wrong TYPE_STAT" << std::endl;
+			return;
+		}
+		MAP_TYPE_CONTENT::iterator iterContent;
+		iterContent = mapTypeContent.find(contentName);
+		if (iterContent == mapTypeContent.end()) {
+			std::cout << "Wrong TYPE_CONTENT" << std::endl;
+			return;
+		}
+		if (colName == "") {
+			colName = iterContent->second + iterStatSeq->second;
+		}
 	}
 
 	void DB::importAllStats() {

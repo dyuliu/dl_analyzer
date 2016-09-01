@@ -49,6 +49,8 @@ namespace db {
 		*/
 		void importStat(analyzer::Infos::TYPE_STAT statName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
 
+		void importStatSeq(analyzer::Infos::TYPE_SEQ statName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
+
 		/**
 		Import all stat information to DB
 		*/
