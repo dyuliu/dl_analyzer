@@ -50,7 +50,6 @@ Temporary Items
 *.asv
 *.pdb
 *.sdf
-*.sdf
 
 .vscode/
 *.db
