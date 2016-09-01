@@ -66,7 +66,7 @@ void protobuf_AssignDesc_analyzer_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HyperParameter));
   Layer_descriptor_ = file->message_type(1);
-  static const int Layer_offsets_[11] = {
+  static const int Layer_offsets_[12] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Layer, count_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Layer, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Layer, num_),
@@ -78,6 +78,7 @@ void protobuf_AssignDesc_analyzer_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Layer, grad_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Layer, stat_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Layer, distance_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Layer, seq_),
   };
   Layer_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -191,19 +192,20 @@ void protobuf_AddDesc_analyzer_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\016analyzer.proto\022\010analyzer\"L\n\016HyperParam"
     "eter\022\014\n\004type\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\r\n\005v"
-    "alue\030\003 \001(\002\022\014\n\004data\030\004 \003(\002\"\342\001\n\005Layer\022\r\n\005co"
+    "alue\030\003 \001(\002\022\014\n\004data\030\004 \003(\002\"\211\002\n\005Layer\022\r\n\005co"
     "unt\030\001 \001(\005\022\014\n\004type\030\002 \001(\t\022\013\n\003num\030\003 \001(\005\022\020\n\010"
     "channels\030\004 \001(\005\022\016\n\006height\030\005 \001(\005\022\r\n\005width\030"
     "\006 \001(\005\022\014\n\004name\030\007 \001(\t\022\016\n\006weight\030\010 \003(\002\022\014\n\004g"
     "rad\030\t \003(\002\022&\n\004stat\030\n \003(\0132\030.analyzer.Hyper"
     "Parameter\022*\n\010distance\030\013 \003(\0132\030.analyzer.H"
-    "yperParameter\"o\n\004Info\022\020\n\010filename\030\001 \001(\t\022"
-    "\021\n\titeration\030\002 \001(\005\022\021\n\tworker_id\030\003 \001(\005\022\016\n"
-    "\006sim_id\030\004 \001(\005\022\037\n\006layers\030\005 \003(\0132\017.analyzer"
-    ".Layer\"K\n\013RecordTuple\022\021\n\titeration\030\001 \001(\005"
-    "\022\r\n\005value\030\002 \001(\002\022\014\n\004type\030\003 \001(\t\022\014\n\004data\030\004 "
-    "\003(\002\">\n\010Recorder\022\014\n\004name\030\001 \001(\t\022$\n\005tuple\030\002"
-    " \003(\0132\025.analyzer.RecordTuple", 587);
+    "yperParameter\022%\n\003seq\030\014 \003(\0132\030.analyzer.Hy"
+    "perParameter\"o\n\004Info\022\020\n\010filename\030\001 \001(\t\022\021"
+    "\n\titeration\030\002 \001(\005\022\021\n\tworker_id\030\003 \001(\005\022\016\n\006"
+    "sim_id\030\004 \001(\005\022\037\n\006layers\030\005 \003(\0132\017.analyzer."
+    "Layer\"K\n\013RecordTuple\022\021\n\titeration\030\001 \001(\005\022"
+    "\r\n\005value\030\002 \001(\002\022\014\n\004type\030\003 \001(\t\022\014\n\004data\030\004 \003"
+    "(\002\">\n\010Recorder\022\014\n\004name\030\001 \001(\t\022$\n\005tuple\030\002 "
+    "\003(\0132\025.analyzer.RecordTuple", 626);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "analyzer.proto", &protobuf_RegisterTypes);
   HyperParameter::default_instance_ = new HyperParameter();
@@ -605,6 +607,7 @@ const int Layer::kWeightFieldNumber;
 const int Layer::kGradFieldNumber;
 const int Layer::kStatFieldNumber;
 const int Layer::kDistanceFieldNumber;
+const int Layer::kSeqFieldNumber;
 #endif  // !_MSC_VER
 
 Layer::Layer()
@@ -690,6 +693,7 @@ void Layer::Clear() {
   grad_.Clear();
   stat_.Clear();
   distance_.Clear();
+  seq_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -883,6 +887,21 @@ bool Layer::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(90)) goto parse_distance;
+        if (input->ExpectTag(98)) goto parse_seq;
+        break;
+      }
+      
+      // repeated .analyzer.HyperParameter seq = 12;
+      case 12: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_seq:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_seq()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(98)) goto parse_seq;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -972,6 +991,12 @@ void Layer::SerializeWithCachedSizes(
       11, this->distance(i), output);
   }
   
+  // repeated .analyzer.HyperParameter seq = 12;
+  for (int i = 0; i < this->seq_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      12, this->seq(i), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1049,6 +1074,13 @@ void Layer::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         11, this->distance(i), target);
+  }
+  
+  // repeated .analyzer.HyperParameter seq = 12;
+  for (int i = 0; i < this->seq_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        12, this->seq(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -1142,6 +1174,14 @@ int Layer::ByteSize() const {
         this->distance(i));
   }
   
+  // repeated .analyzer.HyperParameter seq = 12;
+  total_size += 1 * this->seq_size();
+  for (int i = 0; i < this->seq_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->seq(i));
+  }
+  
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -1171,6 +1211,7 @@ void Layer::MergeFrom(const Layer& from) {
   grad_.MergeFrom(from.grad_);
   stat_.MergeFrom(from.stat_);
   distance_.MergeFrom(from.distance_);
+  seq_.MergeFrom(from.seq_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_count()) {
       set_count(from.count());
@@ -1227,6 +1268,7 @@ void Layer::Swap(Layer* other) {
     grad_.Swap(&other->grad_);
     stat_.Swap(&other->stat_);
     distance_.Swap(&other->distance_);
+    seq_.Swap(&other->seq_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

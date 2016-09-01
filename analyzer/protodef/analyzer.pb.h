@@ -327,6 +327,18 @@ class Layer : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
       mutable_distance();
   
+  // repeated .analyzer.HyperParameter seq = 12;
+  inline int seq_size() const;
+  inline void clear_seq();
+  static const int kSeqFieldNumber = 12;
+  inline const ::analyzer::HyperParameter& seq(int index) const;
+  inline ::analyzer::HyperParameter* mutable_seq(int index);
+  inline ::analyzer::HyperParameter* add_seq();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
+      seq() const;
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
+      mutable_seq();
+  
   // @@protoc_insertion_point(class_scope:analyzer.Layer)
  private:
   inline void set_has_count();
@@ -356,10 +368,11 @@ class Layer : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedField< float > grad_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > stat_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > distance_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > seq_;
   ::google::protobuf::int32 width_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
   
   friend void  protobuf_AddDesc_analyzer_2eproto();
   friend void protobuf_AssignDesc_analyzer_2eproto();
@@ -1213,6 +1226,31 @@ Layer::distance() const {
 inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
 Layer::mutable_distance() {
   return &distance_;
+}
+
+// repeated .analyzer.HyperParameter seq = 12;
+inline int Layer::seq_size() const {
+  return seq_.size();
+}
+inline void Layer::clear_seq() {
+  seq_.Clear();
+}
+inline const ::analyzer::HyperParameter& Layer::seq(int index) const {
+  return seq_.Get(index);
+}
+inline ::analyzer::HyperParameter* Layer::mutable_seq(int index) {
+  return seq_.Mutable(index);
+}
+inline ::analyzer::HyperParameter* Layer::add_seq() {
+  return seq_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
+Layer::seq() const {
+  return seq_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
+Layer::mutable_seq() {
+  return &seq_;
 }
 
 // -------------------------------------------------------------------

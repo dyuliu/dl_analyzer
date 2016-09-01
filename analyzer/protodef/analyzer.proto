@@ -21,6 +21,7 @@ message Layer {
   repeated float grad = 9;
   repeated HyperParameter stat = 10;
   repeated HyperParameter distance = 11;
+  repeated HyperParameter seq = 12;
 }
 
 message Info {

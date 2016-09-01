@@ -53,12 +53,19 @@ namespace analyzer {
 			{ TYPE_STAT::STD,	  "std" },
 			{ TYPE_STAT::NORM_0,  "norm0" },
 			{ TYPE_STAT::NORM_1,  "norm1" },
-			{ TYPE_STAT::NORM_2,  "norm2" }
+			{ TYPE_STAT::NORM_2,  "norm2" },
+			{ TYPE_STAT::QUANTILE_1_2, "quantile12" },
+			{ TYPE_STAT::QUANTILE_1_4, "quantile14" },
+			{ TYPE_STAT::QUANTILE_3_4, "quantile34" }
 		};
 
 		name_content_type = std::map<TYPE_CONTENT, std::string> {
 			{ TYPE_CONTENT::GRAD,	"grad" },
 			{ TYPE_CONTENT::WEIGHT, "weight" }
+		};
+
+		name_seq_type = std::map<TYPE_SEQ, std::string> {
+			{ TYPE_SEQ::HISTOGRAM,  "histogram"}
 		};
 	}
 
@@ -76,6 +83,12 @@ namespace analyzer {
 					auto ptr = info.mutable_layers(i)->add_distance();
 					ptr->set_value(0.0);
 					ptr->set_type(name_distance_type[(TYPE_DISTANCE)j].c_str());
+					ptr->set_content(name_content_type[(TYPE_CONTENT)idx].c_str());
+				}
+				for (int j = (int)TYPE_SEQ::HISTOGRAM; j < (int)TYPE_SEQ::END; j++) {
+					auto ptr = info.mutable_layers(i)->add_seq();
+					ptr->set_value(0.0);
+					ptr->set_type(name_seq_type[(TYPE_SEQ)j].c_str());
 					ptr->set_content(name_content_type[(TYPE_CONTENT)idx].c_str());
 				}
 			}
@@ -122,8 +135,14 @@ namespace analyzer {
 			}
 			else if (hp == HyperParam::DISTANCE) {
 				for (int j = (int)TYPE_DISTANCE::EUCLIDEAN; j < (int)TYPE_DISTANCE::END; j++) {
-					auto idx = index((TYPE_STAT)j, content_type);
-					info.mutable_layers(i)->mutable_stat(idx)->CopyFrom(other.get().layers(i).stat(idx));
+					auto idx = index((TYPE_DISTANCE)j, content_type);
+					info.mutable_layers(i)->mutable_distance(idx)->CopyFrom(other.get().layers(i).distance(idx));
+				}
+			}
+			else if (hp == HyperParam::SEQ) {
+				for (int j = (int)TYPE_SEQ::HISTOGRAM; j < (int)TYPE_SEQ::END; j++) {
+					auto idx = index((TYPE_SEQ)j, content_type);
+					info.mutable_layers(i)->mutable_seq(idx)->CopyFrom(other.get().layers(i).seq(idx));
 				}
 			}
 		}
@@ -151,5 +170,10 @@ namespace analyzer {
 	template<>
 	Infos::TYPE_DISTANCE Infos::to_type<Infos::TYPE_DISTANCE>(std::string in) {
 		return type_search<TYPE_DISTANCE>(in, name_distance_type);
+	}
+
+	template<>
+	Infos::TYPE_SEQ Infos::to_type<Infos::TYPE_SEQ>(std::string in) {
+		return type_search<TYPE_SEQ>(in, name_seq_type);
 	}
 }

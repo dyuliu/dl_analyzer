@@ -25,6 +25,57 @@ namespace emath {
 		return res;
 	}
 
+	// q in [0, 1]
+	// return: the q*size() th number of x
+	DType quantile(const std::vector<DType> &x, double q) {
+
+		CHECK_NE(x.size(), 0 );
+
+		CHECK_GE(1, q);
+		CHECK_GE(q, 0);
+		
+		int pos = x.size()*q;
+		if (pos == x.size()) {
+			pos = x.size() - 1;
+		}
+
+		std::vector<DType> x_c(x.size());
+		std::copy(x.begin(), x.end(), x_c.begin());
+
+		std::nth_element(x_c.begin(), x_c.begin() + pos, x_c.end());
+
+		return *(x_c.begin() + pos);
+	}
+
+
+	std::vector<DType> histogram(const std::vector<DType> &x, int bins) {
+
+		CHECK_NE(x.size(), 0);
+		CHECK_GE(bins, 0);
+
+		std::vector<DType> x_c(x.size());
+		std::copy(x.begin(), x.end(), x_c.begin());
+
+		std::sort(x_c.begin(), x_c.end());
+		auto v_min = *(x_c.begin());
+		auto v_max = *(x_c.end()-1);
+
+		DType band = (v_max - v_min) / bins;
+		std::vector<DType> hist(bins);
+
+		auto count = 0;
+		DType inv_size = 1.0 / x_c.size();
+		for (auto v : x_c) {
+			auto band_max = x_c[0] + (count + 1) * band;
+			if (v > band_max) {
+				count++;
+			}
+			hist[count] += inv_size;
+		}
+
+		return hist;
+	}
+
 	DType var(const std::vector<DType> &x) {
 
 		CHECK_NE(x.size(), 0);

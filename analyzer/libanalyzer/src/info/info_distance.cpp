@@ -8,7 +8,7 @@ namespace analyzer {
 		return ((int)data_content * (int)TYPE_DISTANCE::END + (int)distance_type);
 	}
 
-	void Infos::compute(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, Infos &other) {
+	void Infos::compute_dist(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, Infos &other) {
 
 		if (distrance_type == TYPE_DISTANCE::END) return;
 
@@ -75,7 +75,7 @@ namespace analyzer {
 		}
 	}
 
-	void Infos::compute_list(std::vector<TYPE_DISTANCE> distance_list, TYPE_CONTENT data_content, Infos &other) {
+	void Infos::compute_dist_list(std::vector<TYPE_DISTANCE> distance_list, TYPE_CONTENT data_content, Infos &other) {
 
 #ifdef __DEBUG_INFO_OUTPUT
 		COUT_METD << "func: compute_list_distance" << std::endl;
@@ -83,15 +83,15 @@ namespace analyzer {
 
 		for (unsigned int j = 0; j < distance_list.size(); j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			__FUNC_TIME_CALL(compute(distance_list[j], data_content, other), name_distance_type[distance_list[j]]);
+			__FUNC_TIME_CALL(compute_dist(distance_list[j], data_content, other), name_distance_type[distance_list[j]]);
 #else
-			compute((TYPE_DISTANCE)distance_list[j], data_content, other);
+			compute_dist((TYPE_DISTANCE)distance_list[j], data_content, other);
 #endif
 		}
 	}
 
 	// compute all distance
-	void Infos::compute_all(TYPE_CONTENT data_content, Infos &other) {
+	void Infos::compute_dist_all(TYPE_CONTENT data_content, Infos &other) {
 
 #ifdef __DEBUG_INFO_OUTPUT
 		COUT_METD << "func: compute_all_distance" << std::endl;
@@ -99,9 +99,9 @@ namespace analyzer {
 
 		for (unsigned int j = (int)TYPE_DISTANCE::EUCLIDEAN; j < (int)TYPE_DISTANCE::END; j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			__FUNC_TIME_CALL(compute((TYPE_DISTANCE)j, data_content, other), name_distance_type[(TYPE_DISTANCE)j]);
+			__FUNC_TIME_CALL(compute_dist((TYPE_DISTANCE)j, data_content, other), name_distance_type[(TYPE_DISTANCE)j]);
 #else
-			compute((TYPE_DISTANCE)j, data_content, other);
+			compute_dist((TYPE_DISTANCE)j, data_content, other);
 #endif
 		}
 	}

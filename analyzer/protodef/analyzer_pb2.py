@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='analyzer.proto',
   package='analyzer',
-  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"L\n\x0eHyperParameter\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\"\xe2\x01\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12&\n\x04stat\x18\n \x03(\x0b\x32\x18.analyzer.HyperParameter\x12*\n\x08\x64istance\x18\x0b \x03(\x0b\x32\x18.analyzer.HyperParameter\"o\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06layers\x18\x05 \x03(\x0b\x32\x0f.analyzer.Layer\"K\n\x0bRecordTuple\x12\x11\n\titeration\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\">\n\x08Recorder\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x05tuple\x18\x02 \x03(\x0b\x32\x15.analyzer.RecordTuple')
+  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"L\n\x0eHyperParameter\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\"\x89\x02\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12&\n\x04stat\x18\n \x03(\x0b\x32\x18.analyzer.HyperParameter\x12*\n\x08\x64istance\x18\x0b \x03(\x0b\x32\x18.analyzer.HyperParameter\x12%\n\x03seq\x18\x0c \x03(\x0b\x32\x18.analyzer.HyperParameter\"o\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06layers\x18\x05 \x03(\x0b\x32\x0f.analyzer.Layer\"K\n\x0bRecordTuple\x12\x11\n\titeration\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\">\n\x08Recorder\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x05tuple\x18\x02 \x03(\x0b\x32\x15.analyzer.RecordTuple')
 
 
 
@@ -149,6 +149,13 @@ _LAYER = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='seq', full_name='analyzer.Layer.seq', index=11,
+      number=12, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -159,7 +166,7 @@ _LAYER = descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=107,
-  serialized_end=333,
+  serialized_end=372,
 )
 
 
@@ -214,8 +221,8 @@ _INFO = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=335,
-  serialized_end=446,
+  serialized_start=374,
+  serialized_end=485,
 )
 
 
@@ -263,8 +270,8 @@ _RECORDTUPLE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=448,
-  serialized_end=523,
+  serialized_start=487,
+  serialized_end=562,
 )
 
 
@@ -298,12 +305,13 @@ _RECORDER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=525,
-  serialized_end=587,
+  serialized_start=564,
+  serialized_end=626,
 )
 
 _LAYER.fields_by_name['stat'].message_type = _HYPERPARAMETER
 _LAYER.fields_by_name['distance'].message_type = _HYPERPARAMETER
+_LAYER.fields_by_name['seq'].message_type = _HYPERPARAMETER
 _INFO.fields_by_name['layers'].message_type = _LAYER
 _RECORDER.fields_by_name['tuple'].message_type = _RECORDTUPLE
 DESCRIPTOR.message_types_by_name['HyperParameter'] = _HYPERPARAMETER

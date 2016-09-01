@@ -24,9 +24,6 @@ namespace analyzer {
 // for debug
 // #define __DEBUG_INFO_OUTPUT
 
-// constant
-#define MAX_PROTOFILE_SIZE 5368709120
-
 // google repeated type -> vector
 #define ArrayToVector(x) (std::vector<DType>{x.data(), x.data() + x.size()})
 
@@ -37,5 +34,10 @@ namespace analyzer {
 #endif
 
 #define THROW(str) {std::cout << str << std::endl; throw(str);}
+
+
+// constant
+#define MAX_PROTOFILE_SIZE 5368709120
+#define NUM_HISTOGRAM_BINS 64
 
 }

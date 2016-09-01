@@ -8,7 +8,7 @@ namespace analyzer {
 		return ((int)data_content * (int)TYPE_STAT::END + (int)stat_type);
 	}
 
-	void Infos::compute(TYPE_STAT stat_type, TYPE_CONTENT data_content) {
+	void Infos::compute_stat(TYPE_STAT stat_type, TYPE_CONTENT data_content) {
 
 		if (stat_type == TYPE_STAT::END) return;
 
@@ -91,10 +91,31 @@ namespace analyzer {
 				if (data_content == TYPE_CONTENT::WEIGHT)
 					ptr->set_value(emath::norm(ArrayToVector(info.layers(i).weight()), 2));
 			}
+
+			if (stat_type == TYPE_STAT::QUANTILE_1_2) {
+				if (data_content == TYPE_CONTENT::GRAD)
+					ptr->set_value(emath::quantile(ArrayToVector(info.layers(i).grad()), 0.5));
+				if (data_content == TYPE_CONTENT::WEIGHT)
+					ptr->set_value(emath::quantile(ArrayToVector(info.layers(i).weight()), 0.5));
+			}
+
+			if (stat_type == TYPE_STAT::QUANTILE_1_4) {
+				if (data_content == TYPE_CONTENT::GRAD)
+					ptr->set_value(emath::quantile(ArrayToVector(info.layers(i).grad()), 0.25));
+				if (data_content == TYPE_CONTENT::WEIGHT)
+					ptr->set_value(emath::quantile(ArrayToVector(info.layers(i).weight()), 0.25));
+			}
+
+			if (stat_type == TYPE_STAT::QUANTILE_3_4) {
+				if (data_content == TYPE_CONTENT::GRAD)
+					ptr->set_value(emath::quantile(ArrayToVector(info.layers(i).grad()), 0.75));
+				if (data_content == TYPE_CONTENT::WEIGHT)
+					ptr->set_value(emath::quantile(ArrayToVector(info.layers(i).weight()), 0.75));
+			}
 		}
 	}
 
-	void Infos::compute_all(TYPE_CONTENT data_content) {
+	void Infos::compute_stat_all(TYPE_CONTENT data_content) {
 
 #ifdef __DEBUG_INFO_OUTPUT
 		COUT_METD << "func: compute_all_stat" << std::endl;
@@ -102,14 +123,14 @@ namespace analyzer {
 
 		for (unsigned int j = (int)TYPE_STAT::MAX; j < (int)TYPE_STAT::END; j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			__FUNC_TIME_CALL(compute((TYPE_STAT)j, data_content), name_stat_type[(TYPE_STAT)j]);
+			__FUNC_TIME_CALL(compute_stat((TYPE_STAT)j, data_content), name_stat_type[(TYPE_STAT)j]);
 #else
-			compute((TYPE_STAT)j, data_content);
+			compute_stat((TYPE_STAT)j, data_content);
 #endif
 		}
 	}
 
-	void Infos::compute_list(std::vector<TYPE_STAT> stat_list, TYPE_CONTENT data_content) {
+	void Infos::compute_stat_list(std::vector<TYPE_STAT> stat_list, TYPE_CONTENT data_content) {
 
 #ifdef __DEBUG_INFO_OUTPUT
 		COUT_METD << "func: compute_list_stat" << std::endl;
@@ -117,9 +138,9 @@ namespace analyzer {
 
 		for (unsigned int j = 0; j < stat_list.size(); j++) {
 #ifdef __DEBUG_INFO_OUTPUT
-			__FUNC_TIME_CALL(compute(stat_list[j], data_content), name_stat_type[stat_list[j]]);
+			__FUNC_TIME_CALL(compute_stat(stat_list[j], data_content), name_stat_type[stat_list[j]]);
 #else
-			compute((TYPE_STAT)stat_list[j], data_content);
+			compute_stat((TYPE_STAT)stat_list[j], data_content);
 #endif
 		}
 	}

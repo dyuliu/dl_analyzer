@@ -30,4 +30,9 @@ namespace emath {
 	};
 
 	void normalization(std::vector<DType> &x, norm_method method);
+	
+	DType quantile(const std::vector<DType> &x, double q);
+
+	std::vector<DType> histogram(const std::vector<DType> &x, int bins);
+	
 }

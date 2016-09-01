@@ -21,6 +21,14 @@ namespace analyzer {
 			NORM_0	= 6U,
 			NORM_1	= 7U,
 			NORM_2	= 8U,
+			QUANTILE_1_2 = 9U,
+			QUANTILE_1_4 = 10U,
+			QUANTILE_3_4 = 11U,
+			END
+		};
+
+		enum class TYPE_SEQ : unsigned int {
+			HISTOGRAM = 0U,
 			END
 		};
 
@@ -42,7 +50,8 @@ namespace analyzer {
 
 		enum class HyperParam : unsigned int {
 			STAT = 0U,
-			DISTANCE = 1U
+			DISTANCE = 1U,
+			SEQ = 2U
 		};
 
 	public:
@@ -58,20 +67,26 @@ namespace analyzer {
 		// get
 		unsigned int index(TYPE_STAT stat_type, TYPE_CONTENT data_content);
 		unsigned int index(TYPE_DISTANCE distance_type, TYPE_CONTENT data_content);
+		unsigned int index(TYPE_SEQ seq_type, TYPE_CONTENT data_content);
 
 		// string to type
 		template <typename Tout>
 		Tout to_type(std::string);
 
 		// stat
-		void compute(TYPE_STAT stat_type, TYPE_CONTENT data_content);
-		void compute_list(std::vector<TYPE_STAT> stat_list, TYPE_CONTENT data_content);
-		void compute_all(TYPE_CONTENT data_content);
+		void compute_stat(TYPE_STAT stat_type, TYPE_CONTENT data_content);
+		void compute_stat_list(std::vector<TYPE_STAT> stat_list, TYPE_CONTENT data_content);
+		void compute_stat_all(TYPE_CONTENT data_content);
 
 		// distance
-		void compute(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, Infos &other);
-		void compute_list(std::vector<TYPE_DISTANCE> const distance_list, TYPE_CONTENT data_content, Infos &other);
-		void compute_all(TYPE_CONTENT data_content, Infos &other);
+		void compute_dist(TYPE_DISTANCE distrance_type, TYPE_CONTENT data_content, Infos &other);
+		void compute_dist_list(std::vector<TYPE_DISTANCE> const distance_list, TYPE_CONTENT data_content, Infos &other);
+		void compute_dist_all(TYPE_CONTENT data_content, Infos &other);
+
+		// seq
+		void compute_seq(TYPE_SEQ seq_type, TYPE_CONTENT data_content);
+	    void compute_seq_list(std::vector<TYPE_SEQ> stat_list, TYPE_CONTENT data_content);
+		void compute_seq_all(TYPE_CONTENT data_content);
 
 		// data transfer
 
@@ -86,6 +101,7 @@ namespace analyzer {
 		void print_conv_layer_info();
 		void print_stat_info(TYPE_CONTENT data_content);
 		void print_distance_info(TYPE_CONTENT data_content);
+		void print_seq_info(TYPE_CONTENT data_content);
 
 	// Interface
 	public:
@@ -113,6 +129,7 @@ namespace analyzer {
 		std::map<TYPE_DISTANCE, std::string> name_distance_type;
 		std::map<TYPE_STAT, std::string> name_stat_type;
 		std::map<TYPE_CONTENT, std::string> name_content_type;
+		std::map<TYPE_SEQ, std::string> name_seq_type;
 
 	};
 }
