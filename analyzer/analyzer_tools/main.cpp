@@ -9,6 +9,7 @@ DEFINE_string(action, "recorder", "recorder, stat, distance, batch");
 DEFINE_string(src, "running_info_0.log", "the specify file/folder path");
 
 DEFINE_string(type, "", "specify output type");
+DEFINE_string(hp, "", "stat, dist, seq");
 DEFINE_string(content, "grad", "grad or weight");
 
 DEFINE_uint64(batchsize, 1, "batch size of records");
@@ -172,18 +173,49 @@ static inline void analyzer_batch_distance(std::vector<Infos> &batch_infos) {
 	}
 }
 
+static inline void analyzer_batch_distance(std::vector<Infos> &batch_infos, Infos::TYPE_CONTENT type_content, Infos::TYPE_DISTANCE type_dist) {
+	auto last_batch = batch_infos.size() - 1;
+	for (int idx = 0; idx < last_batch; idx++) {
+		__FUNC_TIME_CALL(batch_infos[idx].compute_dist(type_dist, type_content, batch_infos[last_batch]), "Process file with distance " + batch_infos[idx].get().filename());
+	}
+}
+
 static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 	int batch_size = batch_infos.size();
 	for (int idx = 0; idx < batch_size; idx++) {
 		auto &info = batch_infos[idx];
-		__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::GRAD), "Process file with grad " + info.get().filename());
-		
-		if (idx == batch_size - 1){
-			__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
-			// copy weight statistic to all file?
-			// compute all distance
-			if (batch_size > 1)
-				analyzer_batch_distance(batch_infos);
+		if (FLAGS_all) {
+			__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::GRAD), "Process file with grad " + info.get().filename());
+
+			if (idx == batch_size - 1) {
+				__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
+				// copy weight statistic to all file?
+				// compute all distance
+				if (batch_size > 1)
+					analyzer_batch_distance(batch_infos);
+			}
+		}
+		else {
+			CHECK_FLAGS_HP;
+			CHECK_FLAGS_CONTENT;
+			CHECK_FLAGS_TYPE;
+			
+			auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+
+			if (FLAGS_hp == "stat") {
+				auto type = info.to_type<Infos::TYPE_STAT>(FLAGS_type);
+				__FUNC_TIME_CALL(info.compute_stat(type, content), "Process file with " + info.get().filename() + ", type: " + FLAGS_type + ", content: " + FLAGS_content);
+			}
+			else if (FLAGS_hp == "dist") {
+				auto type = info.to_type<Infos::TYPE_DISTANCE>(FLAGS_type);
+				if (batch_size > 1) {
+					analyzer_batch_distance(batch_infos, content, type);
+				}
+			}
+			else if (FLAGS_hp == "seq") {
+				auto type = info.to_type<Infos::TYPE_SEQ>(FLAGS_type);
+				__FUNC_TIME_CALL(info.compute_seq(type, content), "Process file with " + info.get().filename() + ", type: " + FLAGS_type + ", content: " + FLAGS_content);
+			}
 		}
 	}
 }
