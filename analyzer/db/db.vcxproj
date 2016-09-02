@@ -15,6 +15,7 @@
     <ClInclude Include="include\distname_map.h" />
     <ClInclude Include="include\recordername_map.h" />
     <ClInclude Include="include\statname_map.h" />
+    <ClInclude Include="include\statseqname_map.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F1ACF5B5-3F6C-428C-B9A3-E26F5C73EDE8}</ProjectGuid>

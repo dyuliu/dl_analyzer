@@ -54,8 +54,8 @@ namespace analyzer {
 			{ TYPE_STAT::NORM_0,  "norm0" },
 			{ TYPE_STAT::NORM_1,  "norm1" },
 			{ TYPE_STAT::NORM_2,  "norm2" },
-			{ TYPE_STAT::QUANTILE_1_2, "quarter1" },
-			{ TYPE_STAT::QUANTILE_1_4, "mid" },
+			{ TYPE_STAT::QUANTILE_1_2, "mid" },
+			{ TYPE_STAT::QUANTILE_1_4, "quarter1" },
 			{ TYPE_STAT::QUANTILE_3_4, "quarter3" }
 		};
 

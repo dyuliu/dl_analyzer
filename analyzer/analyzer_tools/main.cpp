@@ -145,6 +145,7 @@ void analyzer_layerinfo() {
 
 	if (FLAGS_db) {
 		Infos info(FLAGS_src);
+		std::cout << "here" << std::endl;
 		dbInstance->bindInfo(&info.get());
 		dbInstance->importLayerAttrs();
 	}
@@ -155,12 +156,58 @@ static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 	for (int x = 0; x < batch_size - 1; x++) {
 		batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
 		dbInstance->bindInfo(&batch_infos[x].get());
-		dbInstance->importAll();
+		if (FLAGS_all) {
+			dbInstance->importAll();
+		}
+		else {
+			CHECK_FLAGS_HP;
+			CHECK_FLAGS_CONTENT;
+			CHECK_FLAGS_TYPE;
+
+			auto content = batch_infos[x].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+
+			if (FLAGS_hp == "stat") {
+				auto type = batch_infos[x].to_type<Infos::TYPE_STAT>(FLAGS_type);
+				dbInstance->importStat(type, content);
+			}
+			else if (FLAGS_hp == "dist") {
+				auto type = batch_infos[x].to_type<Infos::TYPE_DISTANCE>(FLAGS_type);
+				dbInstance->importDist(type, content);
+			}
+			else if (FLAGS_hp == "seq") {
+				auto type = batch_infos[x].to_type<Infos::TYPE_SEQ>(FLAGS_type);
+				dbInstance->importStatSeq(type, content);
+			}
+		}
+		
 		//COUT_CHEK << "work_id: " << (batch_infos[x].get().worker_id()) << std::endl;
 	}
 	batch_infos[batch_size - 1].get().set_worker_id(0);
 	dbInstance->bindInfo(&batch_infos[batch_size - 1].get());
-	dbInstance->importAll();
+	if (FLAGS_all) {
+		dbInstance->importAll();
+	}
+	else {
+		CHECK_FLAGS_HP;
+		CHECK_FLAGS_CONTENT;
+		CHECK_FLAGS_TYPE;
+
+		auto content = batch_infos[batch_size - 1].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+
+		if (FLAGS_hp == "stat") {
+			auto type = batch_infos[batch_size - 1].to_type<Infos::TYPE_STAT>(FLAGS_type);
+			dbInstance->importStat(type, content);
+		}
+		else if (FLAGS_hp == "dist") {
+			auto type = batch_infos[batch_size - 1].to_type<Infos::TYPE_DISTANCE>(FLAGS_type);
+			dbInstance->importDist(type, content);
+		}
+		else if (FLAGS_hp == "seq") {
+			auto type = batch_infos[batch_size - 1].to_type<Infos::TYPE_SEQ>(FLAGS_type);
+			dbInstance->importStatSeq(type, content);
+		}
+	}
+	
 	//COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
 }
 
@@ -186,9 +233,11 @@ static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 		auto &info = batch_infos[idx];
 		if (FLAGS_all) {
 			__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::GRAD), "Process file with grad " + info.get().filename());
+			__FUNC_TIME_CALL(info.compute_seq_all(Infos::TYPE_CONTENT::GRAD), "Process file with " + info.get().filename());
 
 			if (idx == batch_size - 1) {
 				__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
+				__FUNC_TIME_CALL(info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with " + info.get().filename());
 				// copy weight statistic to all file?
 				// compute all distance
 				if (batch_size > 1)

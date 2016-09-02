@@ -56,6 +56,8 @@ namespace db {
 		*/
 		void importAllStats();
 
+		void importAllStatSeqs();
+
 		/**
 		Import a selected distance info into DB
 		*/

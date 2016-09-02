@@ -1,6 +1,6 @@
 #include <libanalyzer/include/info/info.h>
 #define MAP_TYPE_STATSEQ std::map<analyzer::Infos::TYPE_SEQ, std::string>
-#define STAT_INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_SEQ::END + (int)x
+#define STATSEQ_INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_SEQ::END + (int)x
 
 namespace db {
 

@@ -40,7 +40,7 @@ namespace db {
 
 	void DB::importGradient(std::string colName) {
 		//std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
-		std::string col = this->dbName + '.' + colName;
+		std::string col = "cnnvis." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
@@ -57,7 +57,7 @@ namespace db {
 
 	void DB::importWeight(std::string colName) {
 		//std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
-		std::string col = this->dbName + '.' + colName;
+		std::string col = "cnnvis." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
@@ -89,7 +89,7 @@ namespace db {
 			colName = iterContent->second + iterStat->second;
 		}
 		//std::cout << "Importing data to \""<< colName << "\"." << std::endl;
-		std::string col = this->dbName + '.' + colName;
+		std::string col = "cnnvis." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -112,9 +112,24 @@ namespace db {
 		this->connection.insert(col, o);
 	}
 
-	void DB::importStatSeq(TYPE_SEQ statName, TYPE_CONTENT contentName, std::string colName) {
+	void DB::importAllStats() {
+		//std::cout << "Importing all stats" << std::endl;
+
+		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
+			this->importStat(it->first, TYPE_CONTENT::GRAD);
+		}
+
+		Info *data = this->iData;
+		if (data->worker_id() == 0) {
+			for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
+				this->importStat(it->first, TYPE_CONTENT::WEIGHT);
+			}
+		}
+	}
+
+	void DB::importStatSeq(TYPE_SEQ statSeqName, TYPE_CONTENT contentName, std::string colName) {
 		MAP_TYPE_STATSEQ::iterator iterStatSeq;
-		iterStatSeq = mapTypeStatSeq.find(statName);
+		iterStatSeq = mapTypeStatSeq.find(statSeqName);
 		if (iterStatSeq == mapTypeStatSeq.end()) {
 			std::cout << "Wrong TYPE_STAT" << std::endl;
 			return;
@@ -128,19 +143,42 @@ namespace db {
 		if (colName == "") {
 			colName = iterContent->second + iterStatSeq->second;
 		}
+
+		//std::cout << "Importing data to \""<< colName << "\"." << std::endl;
+		std::string col = "cnnvis." + this->dbName + "_" + colName;
+		Info *data = this->iData;
+		BSONObjBuilder bObj;
+		//BSONArrayBuilder floatArrValue, floatArrLayerId;
+
+		bObj.append("iter", data->iteration())
+			.append("wid", data->worker_id());
+
+		BSONObjBuilder valueObj;
+		for (int i = 0; i < data->layers_size(); i++) {
+
+			if (data->layers(i).type() == "batch_norm") continue;
+			BSONArrayBuilder floatArrValue;
+			for (auto v : data->layers(i).seq(STATSEQ_INDEX(statSeqName, contentName)).data()) {
+				floatArrValue.append(v);
+			}
+			valueObj.append(std::to_string(i), floatArrValue.arr());
+		}
+		bObj.append("value", valueObj.obj());
+		BSONObj o = bObj.obj();
+		this->connection.insert(col, o);
 	}
 
-	void DB::importAllStats() {
+	void DB::importAllStatSeqs() {
 		//std::cout << "Importing all stats" << std::endl;
 
-		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
-			this->importStat(it->first, TYPE_CONTENT::GRAD);
+		for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
+			this->importStatSeq(it->first, TYPE_CONTENT::GRAD);
 		}
 
 		Info *data = this->iData;
 		if (data->worker_id() == 0) {
-			for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
-				this->importStat(it->first, TYPE_CONTENT::WEIGHT);
+			for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
+				this->importStatSeq(it->first, TYPE_CONTENT::WEIGHT);
 			}
 		}
 	}
@@ -162,7 +200,7 @@ namespace db {
 			colName = iterContent->second + iterDist->second;
 		}
 		//std::cout << "Importing data to \"" << colName << "\"." << std::endl;
-		std::string col = this->dbName + '.' + colName;
+		std::string col = "cnnvis." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -198,12 +236,13 @@ namespace db {
 		//std::cout << "Begin to import all data to " << this->dbName << std::endl;
 		//this->importLayerAttrs();
 		this->importAllStats();
+		this->importAllStatSeqs();
 		this->importAllDists();
 	}
 
 	void DB::importLayerAttrs(std::string colName) {
 		std::cout << "Importing layer attrs to collection \"" << colName << "\"." << std::endl;
-		std::string col = this->dbName + '.' + colName;
+		std::string col = "cnnvis." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			BSONObjBuilder bObj;
@@ -229,7 +268,7 @@ namespace db {
 				std::cout << "Wrong TYPE_RECORD_MAP" << std::endl;
 				return;
 			}
-			col = this->dbName + '.' + iterRecord->second;
+			"cnnvis." + this->dbName + "_" + iterRecord->second;
 
 			BSONObjBuilder bObj;
 			bObj.append("iter", data->tuple(i).iteration())

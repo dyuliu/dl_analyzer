@@ -15,7 +15,10 @@ namespace db {
 		{ TYPE_STAT::STD, "StatStd" },
 		{ TYPE_STAT::NORM_0, "StatNorm0" },
 		{ TYPE_STAT::NORM_1, "StatNorm1" },
-		{ TYPE_STAT::NORM_2, "StatNorm2" }
+		{ TYPE_STAT::NORM_2, "StatNorm2" },
+		{ TYPE_STAT::QUANTILE_1_2, "StatMid" },
+		{ TYPE_STAT::QUANTILE_1_4, "StatQuarter1" },
+		{ TYPE_STAT::QUANTILE_3_4, "StatQuarter3" }
 	};
 
 }
