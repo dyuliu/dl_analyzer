@@ -23,6 +23,7 @@
     <ClCompile Include="src\info\info_print.cpp" />
     <ClCompile Include="src\info\info_seq.cpp" />
     <ClCompile Include="src\info\info_stat.cpp" />
+    <ClCompile Include="src\recorder\parse_caffepro.cpp" />
     <ClCompile Include="src\recorder\recorder.cpp" />
     <ClCompile Include="src\recorder\recorder_data.cpp" />
     <ClCompile Include="src\utils\filesystem.cpp" />

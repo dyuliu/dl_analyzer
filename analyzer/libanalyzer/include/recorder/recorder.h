@@ -19,7 +19,16 @@ namespace analyzer {
 			FORWARD_TIME = 4U,
 			BACKWARD_TIME = 5U,
 			UPDATE_TIME = 6U,
-			LEARNING_RATE = 7U
+			SUM_TIME = 7U,
+			LEARNING_RATE = 8U
+		};
+
+		enum class TYPE_FRAMEWORK : unsigned int {
+			CAFFEPRO = 0U,
+			CAFFE = 1U,
+			TORCH = 2U,
+			TENSORFLOW = 3U,
+			END
 		};
 
 		Recorders();
@@ -27,6 +36,10 @@ namespace analyzer {
 		~Recorders();
 
 	public:
+		// string to TYPE
+		template <typename Tout>
+		Tout to_type(std::string);
+
 		// print related
 		void print_total_info();
 		void print_specify_type(TYPE_RECORD record_type, int iterval = 1);
@@ -41,6 +54,13 @@ namespace analyzer {
 		// get function
 		Recorder* get() { return &recorder; }
 
+		// parse
+		void parse_from_log(std::string src, std::string framework);
+		void parse_from_log_caffepro(std::string src);
+
+	public:
+		void add_data(int iter, TYPE_RECORD type, DType value, DType *data = NULL, int len_data = 0);
+
 	public:
 		// data related
 		std::vector<std::tuple<int, std::string, float>> get_specify_type(TYPE_RECORD record_type, int iterval = 1);
@@ -52,6 +72,7 @@ namespace analyzer {
 		Recorder recorder;
 		std::map<TYPE_RECORD, std::string> name_of_type;
 
+		std::map<TYPE_FRAMEWORK, std::string> name_of_framework;
 	};
 
 }

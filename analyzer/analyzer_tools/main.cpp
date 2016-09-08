@@ -11,12 +11,14 @@ DEFINE_string(src, "running_info_0.log", "the specify file/folder path");
 DEFINE_string(type, "", "specify output type");
 DEFINE_string(hp, "", "stat, dist, seq");
 DEFINE_string(content, "grad", "grad or weight");
+DEFINE_string(framework, "caffepro", "caffepro, caffe, torch, cntk");
 
 DEFINE_uint64(batchsize, 1, "batch size of records");
 DEFINE_uint64(interval, 1, "specify output interval");
 
 DEFINE_bool(all, false, "if output all type info");
 DEFINE_bool(db, false, "if upload to db");
+DEFINE_bool(parse, false, "parse log file to recorders");
 
 DEFINE_string(dbname, "", "database name");
 
@@ -26,6 +28,7 @@ DEFINE_string(dbname, "", "database name");
 #define CHECK_FLAGS_BATCHSIZE {if (!FLAGS_batchsize) assert(!"Error input of batchsize!");}
 #define CHECK_FLAGS_INTERVAL {if (FLAGS_interval<=0) assert(!"The interval should be larger than 0!");}
 #define CHECK_FLAGS_CONTENT {if (FLAGS_content!="grad"&&FLAGS_content!="weight") assert(!"content value is grad or weight");}
+#define CHECK_FLAGS_FRAMEWORK {if (!FLAGS_framework.size()) assert(!"Please enter caffepro, caffe, torch, cntk");}
 
 #include <iostream>
 #include <string>
@@ -57,10 +60,16 @@ using analyzer::Recorders;
 void analyzer_recorder() {
 	CHECK_FLAGS_SRC;
 
-	Recorders recorder(FLAGS_src);
-	
 	if (FLAGS_all) {
-		recorder.print_total_info();
+		Recorders recorder;
+		if (FLAGS_parse) {
+			CHECK_FLAGS_FRAMEWORK;
+			recorder.parse_from_log(FLAGS_src, FLAGS_framework);
+		}
+		else {
+			recorder.load_from_file(FLAGS_src);
+		}
+		// recorder.print_total_info();
 		if (FLAGS_db) {
 			dbInstance->bindRecorder(recorder.get());
 			dbInstance->importRecorderInfo();
@@ -69,14 +78,13 @@ void analyzer_recorder() {
 	else {
 		CHECK_FLAGS_TYPE;
 		CHECK_FLAGS_INTERVAL;
+		Recorders recorder(FLAGS_src);
 		auto val = recorder.get_specify_type(FLAGS_type);
 		for (auto &item : val) {
 			COUT_CHEK << "iter: " << std::get<0>(item) << ", type: " << std::get<1>(item) << ", val: " << std::get<2>(item) << std::endl;
 		}
 		// recorder.print_specify_type(FLAGS_type, FLAGS_interval);
 	}
-
-	
 }
 
 /**********************************************************************

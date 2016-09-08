@@ -7,7 +7,7 @@
 namespace analyzer {
 
 	Recorders::Recorders() {
-		name_of_type = std::map <TYPE_RECORD, std::string> {
+		name_of_type = std::map<TYPE_RECORD, std::string> {
 			{ TYPE_RECORD::TRAIN_ERROR,   "train_error" },
 			{ TYPE_RECORD::TRAIN_LOSS,	  "train_loss" },
 			{ TYPE_RECORD::TEST_ERROR,	  "test_error" },
@@ -15,7 +15,15 @@ namespace analyzer {
 			{ TYPE_RECORD::FORWARD_TIME,  "forward_time" },
 			{ TYPE_RECORD::BACKWARD_TIME, "backward_time" },
 			{ TYPE_RECORD::UPDATE_TIME,	  "update_time" },
+			{ TYPE_RECORD::SUM_TIME,	  "sum_time" },
 			{ TYPE_RECORD::LEARNING_RATE, "learning_rate" }
+		};
+
+		name_of_framework = std::map<TYPE_FRAMEWORK, std::string> {
+			{ TYPE_FRAMEWORK::CAFFEPRO, "caffepro" },
+			{ TYPE_FRAMEWORK::CAFFE, "caffe" },
+			{ TYPE_FRAMEWORK::TENSORFLOW, "tensorflow" },
+			{ TYPE_FRAMEWORK::TORCH, "torch" }
 		};
 	}
 
@@ -96,6 +104,30 @@ namespace analyzer {
 
 		fp.close();
 
+	}
+
+	template<typename T>
+	inline static T type_search(std::string e, std::map<T, std::string> s) {
+		for (auto name : s)
+			if (e == name.second)
+				return name.first;
+		THROW("Could not find specify type!");
+	}
+
+	template<>
+	Recorders::TYPE_FRAMEWORK Recorders::to_type<Recorders::TYPE_FRAMEWORK>(std::string in) {
+		return type_search<TYPE_FRAMEWORK>(in, name_of_framework);
+	}
+
+	// data related
+	void Recorders::add_data(int iter, TYPE_RECORD type, DType value, DType *data, int len_data) {
+		auto tup = recorder.add_tuple();
+		tup->set_iteration(iter);
+		tup->set_type(name_of_type[type]);
+		tup->set_value(value);
+		if (!data) {
+			for (int i = 0; i < len_data; i++) tup->set_data(i, data[i]);
+		}
 	}
 
 }

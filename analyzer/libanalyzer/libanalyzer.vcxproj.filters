@@ -68,5 +68,8 @@
     <ClCompile Include="src\info\info_seq.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\recorder\parse_caffepro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
