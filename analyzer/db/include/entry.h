@@ -92,6 +92,16 @@ namespace db {
 		Import recorder info, e.g., error rate.
 		*/
 		void importRecorderInfo();
+
+		/**
+		Import cluster info
+		*/
+		void importClusterInfo();
+
+		/**
+		Create Indexes for dist, stat, statseq, and recorder collections
+		*/
+		void createIndexes();
 		
 	// private data
 	private:

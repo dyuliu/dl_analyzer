@@ -11,6 +11,7 @@ using mongo::BSONElement;
 using mongo::BSONObj;
 using mongo::BSONObjBuilder;
 using mongo::BulkOperationBuilder;
+using mongo::fromjson;
 
 namespace db {
 
@@ -40,7 +41,7 @@ namespace db {
 
 	void DB::importGradient(std::string colName) {
 		//std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
@@ -57,7 +58,7 @@ namespace db {
 
 	void DB::importWeight(std::string colName) {
 		//std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
@@ -89,7 +90,7 @@ namespace db {
 			colName = iterContent->second + iterStat->second;
 		}
 		//std::cout << "Importing data to \""<< colName << "\"." << std::endl;
-		std::string col = "cnnvis." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -145,7 +146,7 @@ namespace db {
 		}
 
 		//std::cout << "Importing data to \""<< colName << "\"." << std::endl;
-		std::string col = "cnnvis." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -200,7 +201,7 @@ namespace db {
 			colName = iterContent->second + iterDist->second;
 		}
 		//std::cout << "Importing data to \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -242,7 +243,7 @@ namespace db {
 
 	void DB::importLayerAttrs(std::string colName) {
 		std::cout << "Importing layer attrs to collection \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			BSONObjBuilder bObj;
@@ -255,6 +256,9 @@ namespace db {
 				.append("kernelHeight", data->layers(i).height());
 			this->connection.insert(col, bObj.obj());
 		}
+		this->connection.createIndex(col, fromjson("{lid:1}"));
+		this->connection.createIndex(col, fromjson("{type:1}"));
+		this->connection.createIndex("cnnvis-cifar.helloindex", fromjson("{type:1}"));
 	}
 
 	void DB::importRecorderInfo() {
@@ -268,7 +272,7 @@ namespace db {
 				std::cout << "Wrong TYPE_RECORD_MAP" << std::endl;
 				return;
 			}
-			"cnnvis." + this->dbName + "_" + iterRecord->second;
+			col = "cnnvis-cifar." + this->dbName + "_" + iterRecord->second;
 
 			BSONObjBuilder bObj;
 			bObj.append("iter", data->tuple(i).iteration())
@@ -281,7 +285,55 @@ namespace db {
 		}
 
 		std::cout << data->tuple_size() << "tuples have been inserted successfully" << std::endl;
+	}
 
+	void DB::importClusterInfo() {
+
+	}
+
+	void DB::createIndexes() {
+		
+		std::string col;
+		for (auto it = mapTypeRecord.begin(); it != mapTypeRecord.end(); ++it) {
+			col = "cnnvis-cifar." + this->dbName + "_" + it->second;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+		}
+
+		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
+			col = "cnnvis-cifar." + this->dbName + "_Grad" + it->second;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+
+			col = "cnnvis-cifar." + this->dbName + "_Weight" + it->second;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+		}
+
+		for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
+			col = "cnnvis-cifar." + this->dbName + "_Grad" + it->second;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+
+			col = "cnnvis-cifar." + this->dbName + "_Weight" + it->second;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+		}
+
+		for (auto it = mapTypeDist.begin(); it != mapTypeDist.end(); ++it) {
+			col = "cnnvis-cifar." + this->dbName + "_Grad" + it->second;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+
+			col = "cnnvis-cifar." + this->dbName + "_Weight" + it->second;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+		}
 	}
 
 }

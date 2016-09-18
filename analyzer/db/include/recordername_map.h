@@ -13,6 +13,7 @@ namespace db {
 		{ "forward_time", "RecForwardTime" },
 		{ "backward_time", "RecBackwardTime" },
 		{ "update_time", "RecUpdateTime" },
+		{ "sum_time", "RecSumTime" },
 		{ "learning_rate", "RecLearningRate" }
 	};
 
