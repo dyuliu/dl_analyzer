@@ -10,7 +10,7 @@ DEFINE_string(src, "running_info_0.log", "the specify file/folder path");
 
 DEFINE_string(type, "", "specify output type");
 DEFINE_string(hp, "", "stat, dist, seq");
-DEFINE_string(content, "grad", "grad or weight");
+DEFINE_string(content, "weight", "grad or weight");
 DEFINE_string(framework, "caffepro", "caffepro, caffe, torch, cntk");
 
 DEFINE_uint64(batchsize, 1, "batch size of records");
@@ -58,6 +58,38 @@ void analyzer_cluster() {
 	info.print_cluster_info(content);
 }
 
+static inline void analyzer_cluster_batch_db(std::vector<Infos> &batch_infos) {
+	int batch_size = batch_infos.size();
+	for (int x = 0; x <= batch_size - 1; x++) {
+		dbInstance->bindInfo(&batch_infos[x].get());
+		if (FLAGS_all) {
+			dbInstance->importAll();
+		}
+		else {
+			CHECK_FLAGS_HP;
+			CHECK_FLAGS_CONTENT;
+			CHECK_FLAGS_TYPE;
+
+			auto content = batch_infos[x].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+
+			if (FLAGS_hp == "stat") {
+				auto type = batch_infos[x].to_type<Infos::TYPE_STAT>(FLAGS_type);
+				dbInstance->importStat(type, content);
+			}
+			else if (FLAGS_hp == "dist") {
+				auto type = batch_infos[x].to_type<Infos::TYPE_DISTANCE>(FLAGS_type);
+				dbInstance->importDist(type, content);
+			}
+			else if (FLAGS_hp == "seq") {
+				auto type = batch_infos[x].to_type<Infos::TYPE_SEQ>(FLAGS_type);
+				dbInstance->importStatSeq(type, content);
+			}
+		}
+	}
+
+	//COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
+}
+
 void analyzer_cluster_batch() {
 	CHECK_FLAGS_SRC;
 	CHECK_FLAGS_TYPE;
@@ -72,7 +104,6 @@ void analyzer_cluster_batch() {
 		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
 		info.compute_cluster(type, content);
 		if (FLAGS_db) {
-
 		}
 		COUT_SUCC << "Success to process: " << files[i] << std::endl;
 
@@ -196,8 +227,7 @@ void analyzer_layerinfo() {
 
 static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 	int batch_size = batch_infos.size();
-	for (int x = 0; x < batch_size - 1; x++) {
-		batch_infos[x].get().set_worker_id(batch_infos[x].get().worker_id() + 1);
+	for (int x = 0; x <= batch_size - 1; x++) {
 		dbInstance->bindInfo(&batch_infos[x].get());
 		if (FLAGS_all) {
 			dbInstance->importAll();
@@ -221,33 +251,6 @@ static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 				auto type = batch_infos[x].to_type<Infos::TYPE_SEQ>(FLAGS_type);
 				dbInstance->importStatSeq(type, content);
 			}
-		}
-		
-		//COUT_CHEK << "work_id: " << (batch_infos[x].get().worker_id()) << std::endl;
-	}
-	batch_infos[batch_size - 1].get().set_worker_id(0);
-	dbInstance->bindInfo(&batch_infos[batch_size - 1].get());
-	if (FLAGS_all) {
-		dbInstance->importAll();
-	}
-	else {
-		CHECK_FLAGS_HP;
-		CHECK_FLAGS_CONTENT;
-		CHECK_FLAGS_TYPE;
-
-		auto content = batch_infos[batch_size - 1].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-
-		if (FLAGS_hp == "stat") {
-			auto type = batch_infos[batch_size - 1].to_type<Infos::TYPE_STAT>(FLAGS_type);
-			dbInstance->importStat(type, content);
-		}
-		else if (FLAGS_hp == "dist") {
-			auto type = batch_infos[batch_size - 1].to_type<Infos::TYPE_DISTANCE>(FLAGS_type);
-			dbInstance->importDist(type, content);
-		}
-		else if (FLAGS_hp == "seq") {
-			auto type = batch_infos[batch_size - 1].to_type<Infos::TYPE_SEQ>(FLAGS_type);
-			dbInstance->importStatSeq(type, content);
 		}
 	}
 	
