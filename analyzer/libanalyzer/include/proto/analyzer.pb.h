@@ -37,6 +37,8 @@ void  protobuf_AddDesc_analyzer_2eproto();
 void protobuf_AssignDesc_analyzer_2eproto();
 void protobuf_ShutdownFile_analyzer_2eproto();
 
+class ClusterPoint;
+class Cluster;
 class HyperParameter;
 class Layer;
 class Info;
@@ -44,6 +46,285 @@ class RecordTuple;
 class Recorder;
 
 // ===================================================================
+
+class ClusterPoint : public ::google::protobuf::Message {
+ public:
+  ClusterPoint();
+  virtual ~ClusterPoint();
+  
+  ClusterPoint(const ClusterPoint& from);
+  
+  inline ClusterPoint& operator=(const ClusterPoint& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ClusterPoint& default_instance();
+  
+  void Swap(ClusterPoint* other);
+  
+  // implements Message ----------------------------------------------
+  
+  ClusterPoint* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ClusterPoint& from);
+  void MergeFrom(const ClusterPoint& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional string name = 1;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 1;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const char* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  
+  // optional string type = 2;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 2;
+  inline const ::std::string& type() const;
+  inline void set_type(const ::std::string& value);
+  inline void set_type(const char* value);
+  inline void set_type(const char* value, size_t size);
+  inline ::std::string* mutable_type();
+  inline ::std::string* release_type();
+  
+  // optional int32 index = 3;
+  inline bool has_index() const;
+  inline void clear_index();
+  static const int kIndexFieldNumber = 3;
+  inline ::google::protobuf::int32 index() const;
+  inline void set_index(::google::protobuf::int32 value);
+  
+  // optional int32 group_id = 4;
+  inline bool has_group_id() const;
+  inline void clear_group_id();
+  static const int kGroupIdFieldNumber = 4;
+  inline ::google::protobuf::int32 group_id() const;
+  inline void set_group_id(::google::protobuf::int32 value);
+  
+  // optional float value = 5;
+  inline bool has_value() const;
+  inline void clear_value();
+  static const int kValueFieldNumber = 5;
+  inline float value() const;
+  inline void set_value(float value);
+  
+  // repeated float data = 6;
+  inline int data_size() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 6;
+  inline float data(int index) const;
+  inline void set_data(int index, float value);
+  inline void add_data(float value);
+  inline const ::google::protobuf::RepeatedField< float >&
+      data() const;
+  inline ::google::protobuf::RepeatedField< float >*
+      mutable_data();
+  
+  // @@protoc_insertion_point(class_scope:analyzer.ClusterPoint)
+ private:
+  inline void set_has_name();
+  inline void clear_has_name();
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_index();
+  inline void clear_has_index();
+  inline void set_has_group_id();
+  inline void clear_has_group_id();
+  inline void set_has_value();
+  inline void clear_has_value();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* name_;
+  ::std::string* type_;
+  ::google::protobuf::int32 index_;
+  ::google::protobuf::int32 group_id_;
+  ::google::protobuf::RepeatedField< float > data_;
+  float value_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_analyzer_2eproto();
+  friend void protobuf_AssignDesc_analyzer_2eproto();
+  friend void protobuf_ShutdownFile_analyzer_2eproto();
+  
+  void InitAsDefaultInstance();
+  static ClusterPoint* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Cluster : public ::google::protobuf::Message {
+ public:
+  Cluster();
+  virtual ~Cluster();
+  
+  Cluster(const Cluster& from);
+  
+  inline Cluster& operator=(const Cluster& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Cluster& default_instance();
+  
+  void Swap(Cluster* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Cluster* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Cluster& from);
+  void MergeFrom(const Cluster& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional string type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline const ::std::string& type() const;
+  inline void set_type(const ::std::string& value);
+  inline void set_type(const char* value);
+  inline void set_type(const char* value, size_t size);
+  inline ::std::string* mutable_type();
+  inline ::std::string* release_type();
+  
+  // optional string content = 2;
+  inline bool has_content() const;
+  inline void clear_content();
+  static const int kContentFieldNumber = 2;
+  inline const ::std::string& content() const;
+  inline void set_content(const ::std::string& value);
+  inline void set_content(const char* value);
+  inline void set_content(const char* value, size_t size);
+  inline ::std::string* mutable_content();
+  inline ::std::string* release_content();
+  
+  // optional float num = 3;
+  inline bool has_num() const;
+  inline void clear_num();
+  static const int kNumFieldNumber = 3;
+  inline float num() const;
+  inline void set_num(float value);
+  
+  // repeated .analyzer.ClusterPoint points = 4;
+  inline int points_size() const;
+  inline void clear_points();
+  static const int kPointsFieldNumber = 4;
+  inline const ::analyzer::ClusterPoint& points(int index) const;
+  inline ::analyzer::ClusterPoint* mutable_points(int index);
+  inline ::analyzer::ClusterPoint* add_points();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >&
+      points() const;
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >*
+      mutable_points();
+  
+  // repeated .analyzer.ClusterPoint centre = 5;
+  inline int centre_size() const;
+  inline void clear_centre();
+  static const int kCentreFieldNumber = 5;
+  inline const ::analyzer::ClusterPoint& centre(int index) const;
+  inline ::analyzer::ClusterPoint* mutable_centre(int index);
+  inline ::analyzer::ClusterPoint* add_centre();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >&
+      centre() const;
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >*
+      mutable_centre();
+  
+  // @@protoc_insertion_point(class_scope:analyzer.Cluster)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_content();
+  inline void clear_has_content();
+  inline void set_has_num();
+  inline void clear_has_num();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* type_;
+  ::std::string* content_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint > points_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint > centre_;
+  float num_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_analyzer_2eproto();
+  friend void protobuf_AssignDesc_analyzer_2eproto();
+  friend void protobuf_ShutdownFile_analyzer_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Cluster* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class HyperParameter : public ::google::protobuf::Message {
  public:
@@ -339,6 +620,18 @@ class Layer : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
       mutable_seq();
   
+  // repeated .analyzer.Cluster cluster = 13;
+  inline int cluster_size() const;
+  inline void clear_cluster();
+  static const int kClusterFieldNumber = 13;
+  inline const ::analyzer::Cluster& cluster(int index) const;
+  inline ::analyzer::Cluster* mutable_cluster(int index);
+  inline ::analyzer::Cluster* add_cluster();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::Cluster >&
+      cluster() const;
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::Cluster >*
+      mutable_cluster();
+  
   // @@protoc_insertion_point(class_scope:analyzer.Layer)
  private:
   inline void set_has_count();
@@ -369,10 +662,11 @@ class Layer : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > stat_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > distance_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > seq_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::Cluster > cluster_;
   ::google::protobuf::int32 width_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
   
   friend void  protobuf_AddDesc_analyzer_2eproto();
   friend void protobuf_AssignDesc_analyzer_2eproto();
@@ -732,6 +1026,409 @@ class Recorder : public ::google::protobuf::Message {
 
 
 // ===================================================================
+
+// ClusterPoint
+
+// optional string name = 1;
+inline bool ClusterPoint::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ClusterPoint::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ClusterPoint::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ClusterPoint::clear_name() {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    name_->clear();
+  }
+  clear_has_name();
+}
+inline const ::std::string& ClusterPoint::name() const {
+  return *name_;
+}
+inline void ClusterPoint::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void ClusterPoint::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void ClusterPoint::set_name(const char* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ClusterPoint::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  return name_;
+}
+inline ::std::string* ClusterPoint::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string type = 2;
+inline bool ClusterPoint::has_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ClusterPoint::set_has_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ClusterPoint::clear_has_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ClusterPoint::clear_type() {
+  if (type_ != &::google::protobuf::internal::kEmptyString) {
+    type_->clear();
+  }
+  clear_has_type();
+}
+inline const ::std::string& ClusterPoint::type() const {
+  return *type_;
+}
+inline void ClusterPoint::set_type(const ::std::string& value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void ClusterPoint::set_type(const char* value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void ClusterPoint::set_type(const char* value, size_t size) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ClusterPoint::mutable_type() {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  return type_;
+}
+inline ::std::string* ClusterPoint::release_type() {
+  clear_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = type_;
+    type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional int32 index = 3;
+inline bool ClusterPoint::has_index() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ClusterPoint::set_has_index() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ClusterPoint::clear_has_index() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ClusterPoint::clear_index() {
+  index_ = 0;
+  clear_has_index();
+}
+inline ::google::protobuf::int32 ClusterPoint::index() const {
+  return index_;
+}
+inline void ClusterPoint::set_index(::google::protobuf::int32 value) {
+  set_has_index();
+  index_ = value;
+}
+
+// optional int32 group_id = 4;
+inline bool ClusterPoint::has_group_id() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void ClusterPoint::set_has_group_id() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void ClusterPoint::clear_has_group_id() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void ClusterPoint::clear_group_id() {
+  group_id_ = 0;
+  clear_has_group_id();
+}
+inline ::google::protobuf::int32 ClusterPoint::group_id() const {
+  return group_id_;
+}
+inline void ClusterPoint::set_group_id(::google::protobuf::int32 value) {
+  set_has_group_id();
+  group_id_ = value;
+}
+
+// optional float value = 5;
+inline bool ClusterPoint::has_value() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void ClusterPoint::set_has_value() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void ClusterPoint::clear_has_value() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void ClusterPoint::clear_value() {
+  value_ = 0;
+  clear_has_value();
+}
+inline float ClusterPoint::value() const {
+  return value_;
+}
+inline void ClusterPoint::set_value(float value) {
+  set_has_value();
+  value_ = value;
+}
+
+// repeated float data = 6;
+inline int ClusterPoint::data_size() const {
+  return data_.size();
+}
+inline void ClusterPoint::clear_data() {
+  data_.Clear();
+}
+inline float ClusterPoint::data(int index) const {
+  return data_.Get(index);
+}
+inline void ClusterPoint::set_data(int index, float value) {
+  data_.Set(index, value);
+}
+inline void ClusterPoint::add_data(float value) {
+  data_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< float >&
+ClusterPoint::data() const {
+  return data_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+ClusterPoint::mutable_data() {
+  return &data_;
+}
+
+// -------------------------------------------------------------------
+
+// Cluster
+
+// optional string type = 1;
+inline bool Cluster::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Cluster::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Cluster::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Cluster::clear_type() {
+  if (type_ != &::google::protobuf::internal::kEmptyString) {
+    type_->clear();
+  }
+  clear_has_type();
+}
+inline const ::std::string& Cluster::type() const {
+  return *type_;
+}
+inline void Cluster::set_type(const ::std::string& value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void Cluster::set_type(const char* value) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(value);
+}
+inline void Cluster::set_type(const char* value, size_t size) {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  type_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Cluster::mutable_type() {
+  set_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    type_ = new ::std::string;
+  }
+  return type_;
+}
+inline ::std::string* Cluster::release_type() {
+  clear_has_type();
+  if (type_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = type_;
+    type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string content = 2;
+inline bool Cluster::has_content() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Cluster::set_has_content() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Cluster::clear_has_content() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Cluster::clear_content() {
+  if (content_ != &::google::protobuf::internal::kEmptyString) {
+    content_->clear();
+  }
+  clear_has_content();
+}
+inline const ::std::string& Cluster::content() const {
+  return *content_;
+}
+inline void Cluster::set_content(const ::std::string& value) {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  content_->assign(value);
+}
+inline void Cluster::set_content(const char* value) {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  content_->assign(value);
+}
+inline void Cluster::set_content(const char* value, size_t size) {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  content_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Cluster::mutable_content() {
+  set_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    content_ = new ::std::string;
+  }
+  return content_;
+}
+inline ::std::string* Cluster::release_content() {
+  clear_has_content();
+  if (content_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = content_;
+    content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional float num = 3;
+inline bool Cluster::has_num() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Cluster::set_has_num() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Cluster::clear_has_num() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Cluster::clear_num() {
+  num_ = 0;
+  clear_has_num();
+}
+inline float Cluster::num() const {
+  return num_;
+}
+inline void Cluster::set_num(float value) {
+  set_has_num();
+  num_ = value;
+}
+
+// repeated .analyzer.ClusterPoint points = 4;
+inline int Cluster::points_size() const {
+  return points_.size();
+}
+inline void Cluster::clear_points() {
+  points_.Clear();
+}
+inline const ::analyzer::ClusterPoint& Cluster::points(int index) const {
+  return points_.Get(index);
+}
+inline ::analyzer::ClusterPoint* Cluster::mutable_points(int index) {
+  return points_.Mutable(index);
+}
+inline ::analyzer::ClusterPoint* Cluster::add_points() {
+  return points_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >&
+Cluster::points() const {
+  return points_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >*
+Cluster::mutable_points() {
+  return &points_;
+}
+
+// repeated .analyzer.ClusterPoint centre = 5;
+inline int Cluster::centre_size() const {
+  return centre_.size();
+}
+inline void Cluster::clear_centre() {
+  centre_.Clear();
+}
+inline const ::analyzer::ClusterPoint& Cluster::centre(int index) const {
+  return centre_.Get(index);
+}
+inline ::analyzer::ClusterPoint* Cluster::mutable_centre(int index) {
+  return centre_.Mutable(index);
+}
+inline ::analyzer::ClusterPoint* Cluster::add_centre() {
+  return centre_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >&
+Cluster::centre() const {
+  return centre_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::ClusterPoint >*
+Cluster::mutable_centre() {
+  return &centre_;
+}
+
+// -------------------------------------------------------------------
 
 // HyperParameter
 
@@ -1251,6 +1948,31 @@ Layer::seq() const {
 inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
 Layer::mutable_seq() {
   return &seq_;
+}
+
+// repeated .analyzer.Cluster cluster = 13;
+inline int Layer::cluster_size() const {
+  return cluster_.size();
+}
+inline void Layer::clear_cluster() {
+  cluster_.Clear();
+}
+inline const ::analyzer::Cluster& Layer::cluster(int index) const {
+  return cluster_.Get(index);
+}
+inline ::analyzer::Cluster* Layer::mutable_cluster(int index) {
+  return cluster_.Mutable(index);
+}
+inline ::analyzer::Cluster* Layer::add_cluster() {
+  return cluster_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::Cluster >&
+Layer::cluster() const {
+  return cluster_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::Cluster >*
+Layer::mutable_cluster() {
+  return &cluster_;
 }
 
 // -------------------------------------------------------------------

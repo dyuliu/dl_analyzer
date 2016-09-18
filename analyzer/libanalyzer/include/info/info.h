@@ -48,6 +48,11 @@ namespace analyzer {
 			END
 		};
 
+		enum class TYPE_CLUSTER : unsigned int {
+			KMEANS	= 0U,
+			END
+		};
+
 		enum class HyperParam : unsigned int {
 			STAT = 0U,
 			DISTANCE = 1U,
@@ -68,6 +73,7 @@ namespace analyzer {
 		unsigned int index(TYPE_STAT stat_type, TYPE_CONTENT data_content);
 		unsigned int index(TYPE_DISTANCE distance_type, TYPE_CONTENT data_content);
 		unsigned int index(TYPE_SEQ seq_type, TYPE_CONTENT data_content);
+		unsigned int index(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content);
 
 		// string to type
 		template <typename Tout>
@@ -94,6 +100,10 @@ namespace analyzer {
 		std::vector<DType> get_content_data(TYPE_CONTENT content_type, std::string layer_name);
 		std::vector<DType> get_content_data(std::string content_type, std::string layer_name);
 
+		// cluster
+		void compute_cluster(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content);
+		static void compute_cluster_kmeans(analyzer::Cluster *ptr, const float *data, int size, int length, int max_iter, int num_K = 5, int rand_seed = 0);
+
 	// Print
 	public:
 		void print_total_info();
@@ -102,6 +112,7 @@ namespace analyzer {
 		void print_stat_info(TYPE_CONTENT data_content);
 		void print_distance_info(TYPE_CONTENT data_content);
 		void print_seq_info(TYPE_CONTENT data_content);
+		void print_cluster_info(TYPE_CONTENT data_content);
 
 	// Interface
 	public:
@@ -130,6 +141,7 @@ namespace analyzer {
 		std::map<TYPE_STAT, std::string> name_stat_type;
 		std::map<TYPE_CONTENT, std::string> name_content_type;
 		std::map<TYPE_SEQ, std::string> name_seq_type;
+		std::map<TYPE_CLUSTER, std::string> name_cluster_type;
 
 	};
 }

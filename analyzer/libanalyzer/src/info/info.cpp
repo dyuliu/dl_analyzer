@@ -67,6 +67,10 @@ namespace analyzer {
 		name_seq_type = std::map<TYPE_SEQ, std::string> {
 			{ TYPE_SEQ::HISTOGRAM,  "histogram"}
 		};
+
+		name_cluster_type = std::map<TYPE_CLUSTER, std::string> {
+			{ TYPE_CLUSTER::KMEANS, "kmeans"}
+		};
 	}
 
 	void Infos::init_stat() {
@@ -89,6 +93,12 @@ namespace analyzer {
 					auto ptr = info.mutable_layers(i)->add_seq();
 					ptr->set_value(0.0);
 					ptr->set_type(name_seq_type[(TYPE_SEQ)j].c_str());
+					ptr->set_content(name_content_type[(TYPE_CONTENT)idx].c_str());
+				}
+				for (int j = (int)TYPE_CLUSTER::KMEANS; j < (int)TYPE_CLUSTER::END; j++) {
+					auto ptr = info.mutable_layers(i)->add_cluster();
+					ptr->set_type(name_cluster_type[(TYPE_CLUSTER)j].c_str());
+					ptr->set_num(0);
 					ptr->set_content(name_content_type[(TYPE_CONTENT)idx].c_str());
 				}
 			}
@@ -175,5 +185,10 @@ namespace analyzer {
 	template<>
 	Infos::TYPE_SEQ Infos::to_type<Infos::TYPE_SEQ>(std::string in) {
 		return type_search<TYPE_SEQ>(in, name_seq_type);
+	}
+
+	template<>
+	Infos::TYPE_CLUSTER Infos::to_type<Infos::TYPE_CLUSTER>(std::string in) {
+		return type_search<TYPE_CLUSTER>(in, name_cluster_type);
 	}
 }

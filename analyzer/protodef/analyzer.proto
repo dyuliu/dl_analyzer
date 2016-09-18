@@ -1,6 +1,27 @@
 
 package analyzer;
 
+message ClusterPoint {
+  optional string name = 1;
+  optional string type = 2;
+  optional int32 index = 3;
+  optional int32 group_id = 4;
+  // one-dim value
+  optional float value = 5;
+  // multi-dim value
+  repeated float data = 6;
+}
+
+message Cluster {
+  optional string type = 1;
+  // weight or grad
+  optional string content = 2;
+  // number of group
+  optional float num = 3;
+  repeated ClusterPoint points = 4;
+  repeated ClusterPoint centre = 5;
+}
+
 message HyperParameter {
   optional string type = 1;
   optional string content = 2;
@@ -22,6 +43,7 @@ message Layer {
   repeated HyperParameter stat = 10;
   repeated HyperParameter distance = 11;
   repeated HyperParameter seq = 12;
+  repeated Cluster cluster = 13;
 }
 
 message Info {

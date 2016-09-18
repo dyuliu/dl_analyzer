@@ -48,6 +48,17 @@ db::DB *dbInstance;
 using analyzer::Infos;
 using analyzer::Recorders;
 
+void analyzer_cluster() {
+	CHECK_FLAGS_SRC;
+	CHECK_FLAGS_TYPE;
+	Infos info(FLAGS_src);
+	auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
+	auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+	info.compute_cluster(type, content);
+	info.print_cluster_info(content);
+
+}
+
 /**********************************************************************
 * COMMAND:
 * 1. print all type value: 
@@ -73,6 +84,9 @@ void analyzer_recorder() {
 		if (FLAGS_db) {
 			dbInstance->bindRecorder(recorder.get());
 			dbInstance->importRecorderInfo();
+		}
+		else {
+			recorder.print_total_info();
 		}
 	}
 	else {
@@ -104,7 +118,7 @@ void analyzer_stat() {
 	if (FLAGS_all) {
 		info.compute_stat_all(Infos::TYPE_CONTENT::GRAD);
 		info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT);
-		// info.print_total_info();
+		info.print_total_info();
 		if (FLAGS_db) {
 			dbInstance->bindInfo(&info.get());
 		}
@@ -373,6 +387,9 @@ int main(int argc, char *argv[]) {
 	}
 	else if (FLAGS_action == "layerinfo") {
 		analyzer_layerinfo();
+	}
+	else if (FLAGS_action == "cluster") {
+		analyzer_cluster();
 	}
 
 	gflags::ShutDownCommandLineFlags();

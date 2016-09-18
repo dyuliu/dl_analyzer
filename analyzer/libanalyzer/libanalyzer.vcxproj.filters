@@ -71,5 +71,8 @@
     <ClCompile Include="src\recorder\parse_caffepro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\info\info_cluster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

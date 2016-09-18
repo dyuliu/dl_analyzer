@@ -149,4 +149,38 @@ namespace analyzer{
 		}
 	}
 
+	void Infos::print_cluster_info(TYPE_CONTENT data_content) {
+		std::cout << std::endl;
+		if (data_content == TYPE_CONTENT::GRAD)
+			COUT_METD << "----- PRINT GRAD CLUSTER INFO -----" << std::endl;
+
+		if (data_content == TYPE_CONTENT::WEIGHT)
+			COUT_METD << "----- PRINT WEIGHT CLUSTER INFO -----" << std::endl;
+
+		// print sequence infomation
+		size_t weight_size = 0, grad_size = 0;
+		for (int i = 0; i < info.layers_size(); i++) {
+
+			weight_size += info.layers(i).weight_size();
+			grad_size += info.layers(i).grad_size();
+
+			if (info.layers(i).type() == "batch_norm") continue;
+
+			COUT_CHEK << std::setw(3) << i << ", " << std::setw(30) << info.layers(i).name() << std::endl;
+			for (int j = (int)data_content*(int)TYPE_CLUSTER::END; j < ((int)data_content + 1)*(int)TYPE_CLUSTER::END; j++) {
+				if (info.layers(i).cluster(j).content() == name_content_type[data_content]) {
+					std::cout << info.layers(i).cluster(j).type() << ": ";
+					int count = 0;
+					double sum = 0;
+					for (auto val : info.layers(i).cluster(j).centre()) {
+						std::cout << std::endl << "\tcentre point-> ";
+						for (int idx_cluster = 0; idx_cluster < val.data_size(); idx_cluster++)
+							std::cout << val.data(idx_cluster) << " ";
+					}
+					std::cout << "sum: " << sum << std::endl;
+				}
+			}
+		}
+	}
+
 }
