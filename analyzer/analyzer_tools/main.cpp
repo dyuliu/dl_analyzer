@@ -56,7 +56,28 @@ void analyzer_cluster() {
 	auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
 	info.compute_cluster(type, content);
 	info.print_cluster_info(content);
+}
 
+void analyzer_cluster_batch() {
+	CHECK_FLAGS_SRC;
+	CHECK_FLAGS_TYPE;
+
+	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
+		throw("Error: Missing folder path!");
+	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
+
+	for (int i = 0; i < files.size(); i += 8) {
+		Infos info(files[i]);
+		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
+		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+		info.compute_cluster(type, content);
+		if (FLAGS_db) {
+
+		}
+		COUT_SUCC << "Success to process: " << files[i] << std::endl;
+
+	}
+	
 }
 
 /**********************************************************************
@@ -390,6 +411,9 @@ int main(int argc, char *argv[]) {
 	}
 	else if (FLAGS_action == "cluster") {
 		analyzer_cluster();
+	}
+	else if (FLAGS_action == "cluster_batch") {
+		analyzer_cluster_batch();
 	}
 
 	gflags::ShutDownCommandLineFlags();

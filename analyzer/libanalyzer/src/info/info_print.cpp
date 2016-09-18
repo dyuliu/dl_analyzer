@@ -157,18 +157,18 @@ namespace analyzer{
 		if (data_content == TYPE_CONTENT::WEIGHT)
 			COUT_METD << "----- PRINT WEIGHT CLUSTER INFO -----" << std::endl;
 
-
-		auto ptr = info.layers(0).cluster((int)TYPE_CLUSTER::KMEANS);
-		
-		ptr.type();
-		ptr.content();
-		ptr.num();
-		ptr.points_size();
-		ptr.points(0).index();
-		ptr.points(0).group_id();
-		ptr.points(0).value();
-		ptr.points(0).data_size();
-		ptr.points(0).data(0);
+		//auto ptr = info.layers(0).cluster(index(TYPE_CLUSTER::KMEANS, TYPE_CONTENT::WEIGHT));
+		//
+		//ptr.type();
+		//ptr.content();
+		//ptr.num();
+		//ptr.centre_size();
+		//ptr.points_size();
+		//ptr.points(0).index();
+		//ptr.points(0).group_id();
+		//ptr.points(0).value();
+		//ptr.points(0).data_size();
+		//ptr.points(0).data(0);
 
 		// print sequence infomation
 		size_t weight_size = 0, grad_size = 0;
