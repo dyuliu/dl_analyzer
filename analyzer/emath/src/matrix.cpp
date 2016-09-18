@@ -24,4 +24,27 @@ namespace emath {
 		return res;
 	}
 
+	// dst = dst + src;
+	void add(std::vector<DType> &dst, const std::vector<DType> &src) {
+
+		assert(dst.size() == src.size());
+
+		size_t len = dst.size();
+
+		for (int i = 0; i < len; i++) {
+			dst[i] = dst[i] + src[i];
+		}
+	}
+
+	// x * scale for each element
+	void element_mul(std::vector<DType> &x, DType y) {
+		
+		size_t len = x.size();
+
+		for (int i = 0; i < len; i++) {
+			x[i] = x[i] * y;
+		}
+
+	}
+
 }

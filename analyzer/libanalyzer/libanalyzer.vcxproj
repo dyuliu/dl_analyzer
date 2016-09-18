@@ -18,6 +18,7 @@
   <ItemGroup>
     <ClCompile Include="include\proto\analyzer.pb.cc" />
     <ClCompile Include="src\info\info.cpp" />
+    <ClCompile Include="src\info\info_cluster.cpp" />
     <ClCompile Include="src\info\info_data.cpp" />
     <ClCompile Include="src\info\info_distance.cpp" />
     <ClCompile Include="src\info\info_print.cpp" />
