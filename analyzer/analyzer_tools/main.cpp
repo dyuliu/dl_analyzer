@@ -61,12 +61,13 @@ void analyzer_cluster() {
 void analyzer_cluster_batch() {
 	CHECK_FLAGS_SRC;
 	CHECK_FLAGS_TYPE;
+	CHECK_FLAGS_BATCHSIZE;
 
 	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
 		throw("Error: Missing folder path!");
 	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
 
-	for (int i = 0; i < files.size(); i += 8) {
+	for (int i = 0; i < files.size(); i += 8*FLAGS_batchsize) {
 		Infos info(files[i]);
 		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
 		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
