@@ -102,7 +102,7 @@ namespace analyzer {
 
 		// cluster
 		void compute_cluster(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content);
-		static void compute_cluster_kmeans(analyzer::Cluster *ptr, const float *data, int size, int length, int max_iter, int num_K = 5, int rand_seed = 0);
+		static void compute_cluster_kmeans(analyzer::Cluster *ptr, int channels, const float *data, int size, int length, int max_iter, int num_K = 5, int rand_seed = 0);
 
 	// Print
 	public:

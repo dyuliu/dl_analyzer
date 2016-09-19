@@ -49,7 +49,7 @@ namespace analyzer {
 	// data is all data from all kernels, arranged by a vector
 	// length is stride_w * stride_h
 	// size related with data
-	void Infos::compute_cluster_kmeans(analyzer::Cluster *ptr, const float *data, int size, int length, int max_iter, int num_K, int rand_seed) {
+	void Infos::compute_cluster_kmeans(analyzer::Cluster *ptr, int channels, const float *data, int size, int length, int max_iter, int num_K, int rand_seed) {
 
 		// divdie into small kernel
 		std::vector<std::vector<DType>> kernels;
@@ -108,7 +108,6 @@ namespace analyzer {
 			std::cout << "iter: " << iter << " ";
 			print_vector(error);
 #endif
-
 		}
 
 		// copy result to struct
@@ -123,11 +122,16 @@ namespace analyzer {
 				ptr_centre->add_data(centre[idx_clusters][idx_num]);
 			ptr_centre->set_value(error[idx_clusters]);
 		}
+		int channel_id = 0;
 		for (int idx_ker = 0; idx_ker < kernels.size(); idx_ker++) {
 			auto ptr_point = ptr->add_points();
 			ptr_point->set_name("");
 			ptr_point->set_type("point");
 			ptr_point->set_index(idx_ker);
+
+			ptr_point->set_channel_id(channel_id++);
+			if (channel_id == channels) channel_id = 0;
+			
 			ptr_point->set_group_id(arr[idx_ker].first);
 			for (int idx_num = 0; idx_num < kernels[idx_ker].size(); idx_num++)
 				ptr_point->add_data(kernels[idx_ker][idx_num]);
@@ -172,8 +176,9 @@ namespace analyzer {
 			}
 
 			if (cluster_type == TYPE_CLUSTER::KMEANS) {
-				compute_cluster_kmeans(ptr, data, size, length, 10, 5, 0);
+				compute_cluster_kmeans(ptr, info.layers(i).channels(), data, size, length, 10, 5, 0);
 			}
+
 		}
 	}
 

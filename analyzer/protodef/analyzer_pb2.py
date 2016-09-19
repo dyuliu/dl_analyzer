@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='analyzer.proto',
   package='analyzer',
-  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"h\n\x0c\x43lusterPoint\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\r\n\x05index\x18\x03 \x01(\x05\x12\x10\n\x08group_id\x18\x04 \x01(\x05\x12\r\n\x05value\x18\x05 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x06 \x03(\x02\"\x85\x01\n\x07\x43luster\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x02\x12&\n\x06points\x18\x04 \x03(\x0b\x32\x16.analyzer.ClusterPoint\x12&\n\x06\x63\x65ntre\x18\x05 \x03(\x0b\x32\x16.analyzer.ClusterPoint\"L\n\x0eHyperParameter\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\"\xad\x02\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12&\n\x04stat\x18\n \x03(\x0b\x32\x18.analyzer.HyperParameter\x12*\n\x08\x64istance\x18\x0b \x03(\x0b\x32\x18.analyzer.HyperParameter\x12%\n\x03seq\x18\x0c \x03(\x0b\x32\x18.analyzer.HyperParameter\x12\"\n\x07\x63luster\x18\r \x03(\x0b\x32\x11.analyzer.Cluster\"o\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06layers\x18\x05 \x03(\x0b\x32\x0f.analyzer.Layer\"K\n\x0bRecordTuple\x12\x11\n\titeration\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\">\n\x08Recorder\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x05tuple\x18\x02 \x03(\x0b\x32\x15.analyzer.RecordTuple')
+  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"|\n\x0c\x43lusterPoint\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\r\n\x05index\x18\x03 \x01(\x05\x12\x10\n\x08group_id\x18\x04 \x01(\x05\x12\x12\n\nchannel_id\x18\x07 \x01(\x05\x12\r\n\x05value\x18\x05 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x06 \x03(\x02\"\x85\x01\n\x07\x43luster\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x02\x12&\n\x06points\x18\x04 \x03(\x0b\x32\x16.analyzer.ClusterPoint\x12&\n\x06\x63\x65ntre\x18\x05 \x03(\x0b\x32\x16.analyzer.ClusterPoint\"L\n\x0eHyperParameter\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\"\xad\x02\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12&\n\x04stat\x18\n \x03(\x0b\x32\x18.analyzer.HyperParameter\x12*\n\x08\x64istance\x18\x0b \x03(\x0b\x32\x18.analyzer.HyperParameter\x12%\n\x03seq\x18\x0c \x03(\x0b\x32\x18.analyzer.HyperParameter\x12\"\n\x07\x63luster\x18\r \x03(\x0b\x32\x11.analyzer.Cluster\"o\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06layers\x18\x05 \x03(\x0b\x32\x0f.analyzer.Layer\"K\n\x0bRecordTuple\x12\x11\n\titeration\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\">\n\x08Recorder\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x05tuple\x18\x02 \x03(\x0b\x32\x15.analyzer.RecordTuple')
 
 
 
@@ -52,14 +52,21 @@ _CLUSTERPOINT = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='value', full_name='analyzer.ClusterPoint.value', index=4,
+      name='channel_id', full_name='analyzer.ClusterPoint.channel_id', index=4,
+      number=7, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='value', full_name='analyzer.ClusterPoint.value', index=5,
       number=5, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='data', full_name='analyzer.ClusterPoint.data', index=5,
+      name='data', full_name='analyzer.ClusterPoint.data', index=6,
       number=6, type=2, cpp_type=6, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -75,7 +82,7 @@ _CLUSTERPOINT = descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=28,
-  serialized_end=132,
+  serialized_end=152,
 )
 
 
@@ -130,8 +137,8 @@ _CLUSTER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=135,
-  serialized_end=268,
+  serialized_start=155,
+  serialized_end=288,
 )
 
 
@@ -179,8 +186,8 @@ _HYPERPARAMETER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=270,
-  serialized_end=346,
+  serialized_start=290,
+  serialized_end=366,
 )
 
 
@@ -291,8 +298,8 @@ _LAYER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=349,
-  serialized_end=650,
+  serialized_start=369,
+  serialized_end=670,
 )
 
 
@@ -347,8 +354,8 @@ _INFO = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=652,
-  serialized_end=763,
+  serialized_start=672,
+  serialized_end=783,
 )
 
 
@@ -396,8 +403,8 @@ _RECORDTUPLE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=765,
-  serialized_end=840,
+  serialized_start=785,
+  serialized_end=860,
 )
 
 
@@ -431,8 +438,8 @@ _RECORDER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=842,
-  serialized_end=904,
+  serialized_start=862,
+  serialized_end=924,
 )
 
 _CLUSTER.fields_by_name['points'].message_type = _CLUSTERPOINT

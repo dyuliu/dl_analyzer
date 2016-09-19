@@ -54,11 +54,12 @@ void protobuf_AssignDesc_analyzer_2eproto() {
       "analyzer.proto");
   GOOGLE_CHECK(file != NULL);
   ClusterPoint_descriptor_ = file->message_type(0);
-  static const int ClusterPoint_offsets_[6] = {
+  static const int ClusterPoint_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClusterPoint, name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClusterPoint, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClusterPoint, index_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClusterPoint, group_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClusterPoint, channel_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClusterPoint, value_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClusterPoint, data_),
   };
@@ -244,29 +245,30 @@ void protobuf_AddDesc_analyzer_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\016analyzer.proto\022\010analyzer\"h\n\014ClusterPoi"
+    "\n\016analyzer.proto\022\010analyzer\"|\n\014ClusterPoi"
     "nt\022\014\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005index\030"
-    "\003 \001(\005\022\020\n\010group_id\030\004 \001(\005\022\r\n\005value\030\005 \001(\002\022\014"
-    "\n\004data\030\006 \003(\002\"\205\001\n\007Cluster\022\014\n\004type\030\001 \001(\t\022\017"
-    "\n\007content\030\002 \001(\t\022\013\n\003num\030\003 \001(\002\022&\n\006points\030\004"
-    " \003(\0132\026.analyzer.ClusterPoint\022&\n\006centre\030\005"
-    " \003(\0132\026.analyzer.ClusterPoint\"L\n\016HyperPar"
-    "ameter\022\014\n\004type\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\r\n"
-    "\005value\030\003 \001(\002\022\014\n\004data\030\004 \003(\002\"\255\002\n\005Layer\022\r\n\005"
-    "count\030\001 \001(\005\022\014\n\004type\030\002 \001(\t\022\013\n\003num\030\003 \001(\005\022\020"
-    "\n\010channels\030\004 \001(\005\022\016\n\006height\030\005 \001(\005\022\r\n\005widt"
-    "h\030\006 \001(\005\022\014\n\004name\030\007 \001(\t\022\016\n\006weight\030\010 \003(\002\022\014\n"
-    "\004grad\030\t \003(\002\022&\n\004stat\030\n \003(\0132\030.analyzer.Hyp"
-    "erParameter\022*\n\010distance\030\013 \003(\0132\030.analyzer"
-    ".HyperParameter\022%\n\003seq\030\014 \003(\0132\030.analyzer."
-    "HyperParameter\022\"\n\007cluster\030\r \003(\0132\021.analyz"
-    "er.Cluster\"o\n\004Info\022\020\n\010filename\030\001 \001(\t\022\021\n\t"
-    "iteration\030\002 \001(\005\022\021\n\tworker_id\030\003 \001(\005\022\016\n\006si"
-    "m_id\030\004 \001(\005\022\037\n\006layers\030\005 \003(\0132\017.analyzer.La"
-    "yer\"K\n\013RecordTuple\022\021\n\titeration\030\001 \001(\005\022\r\n"
-    "\005value\030\002 \001(\002\022\014\n\004type\030\003 \001(\t\022\014\n\004data\030\004 \003(\002"
-    "\">\n\010Recorder\022\014\n\004name\030\001 \001(\t\022$\n\005tuple\030\002 \003("
-    "\0132\025.analyzer.RecordTuple", 904);
+    "\003 \001(\005\022\020\n\010group_id\030\004 \001(\005\022\022\n\nchannel_id\030\007 "
+    "\001(\005\022\r\n\005value\030\005 \001(\002\022\014\n\004data\030\006 \003(\002\"\205\001\n\007Clu"
+    "ster\022\014\n\004type\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\013\n\003n"
+    "um\030\003 \001(\002\022&\n\006points\030\004 \003(\0132\026.analyzer.Clus"
+    "terPoint\022&\n\006centre\030\005 \003(\0132\026.analyzer.Clus"
+    "terPoint\"L\n\016HyperParameter\022\014\n\004type\030\001 \001(\t"
+    "\022\017\n\007content\030\002 \001(\t\022\r\n\005value\030\003 \001(\002\022\014\n\004data"
+    "\030\004 \003(\002\"\255\002\n\005Layer\022\r\n\005count\030\001 \001(\005\022\014\n\004type\030"
+    "\002 \001(\t\022\013\n\003num\030\003 \001(\005\022\020\n\010channels\030\004 \001(\005\022\016\n\006"
+    "height\030\005 \001(\005\022\r\n\005width\030\006 \001(\005\022\014\n\004name\030\007 \001("
+    "\t\022\016\n\006weight\030\010 \003(\002\022\014\n\004grad\030\t \003(\002\022&\n\004stat\030"
+    "\n \003(\0132\030.analyzer.HyperParameter\022*\n\010dista"
+    "nce\030\013 \003(\0132\030.analyzer.HyperParameter\022%\n\003s"
+    "eq\030\014 \003(\0132\030.analyzer.HyperParameter\022\"\n\007cl"
+    "uster\030\r \003(\0132\021.analyzer.Cluster\"o\n\004Info\022\020"
+    "\n\010filename\030\001 \001(\t\022\021\n\titeration\030\002 \001(\005\022\021\n\tw"
+    "orker_id\030\003 \001(\005\022\016\n\006sim_id\030\004 \001(\005\022\037\n\006layers"
+    "\030\005 \003(\0132\017.analyzer.Layer\"K\n\013RecordTuple\022\021"
+    "\n\titeration\030\001 \001(\005\022\r\n\005value\030\002 \001(\002\022\014\n\004type"
+    "\030\003 \001(\t\022\014\n\004data\030\004 \003(\002\">\n\010Recorder\022\014\n\004name"
+    "\030\001 \001(\t\022$\n\005tuple\030\002 \003(\0132\025.analyzer.RecordT"
+    "uple", 924);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "analyzer.proto", &protobuf_RegisterTypes);
   ClusterPoint::default_instance_ = new ClusterPoint();
@@ -301,6 +303,7 @@ const int ClusterPoint::kNameFieldNumber;
 const int ClusterPoint::kTypeFieldNumber;
 const int ClusterPoint::kIndexFieldNumber;
 const int ClusterPoint::kGroupIdFieldNumber;
+const int ClusterPoint::kChannelIdFieldNumber;
 const int ClusterPoint::kValueFieldNumber;
 const int ClusterPoint::kDataFieldNumber;
 #endif  // !_MSC_VER
@@ -325,6 +328,7 @@ void ClusterPoint::SharedCtor() {
   type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   index_ = 0;
   group_id_ = 0;
+  channel_id_ = 0;
   value_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -378,6 +382,7 @@ void ClusterPoint::Clear() {
     }
     index_ = 0;
     group_id_ = 0;
+    channel_id_ = 0;
     value_ = 0;
   }
   data_.Clear();
@@ -490,6 +495,22 @@ bool ClusterPoint::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(53)) goto parse_data;
+        if (input->ExpectTag(56)) goto parse_channel_id;
+        break;
+      }
+      
+      // optional int32 channel_id = 7;
+      case 7: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_channel_id:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &channel_id_)));
+          set_has_channel_id();
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -551,6 +572,11 @@ void ClusterPoint::SerializeWithCachedSizes(
       6, this->data(i), output);
   }
   
+  // optional int32 channel_id = 7;
+  if (has_channel_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->channel_id(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -600,6 +626,11 @@ void ClusterPoint::SerializeWithCachedSizes(
       WriteFloatToArray(6, this->data(i), target);
   }
   
+  // optional int32 channel_id = 7;
+  if (has_channel_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->channel_id(), target);
+  }
+  
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -637,6 +668,13 @@ int ClusterPoint::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->group_id());
+    }
+    
+    // optional int32 channel_id = 7;
+    if (has_channel_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->channel_id());
     }
     
     // optional float value = 5;
@@ -691,6 +729,9 @@ void ClusterPoint::MergeFrom(const ClusterPoint& from) {
     if (from.has_group_id()) {
       set_group_id(from.group_id());
     }
+    if (from.has_channel_id()) {
+      set_channel_id(from.channel_id());
+    }
     if (from.has_value()) {
       set_value(from.value());
     }
@@ -721,6 +762,7 @@ void ClusterPoint::Swap(ClusterPoint* other) {
     std::swap(type_, other->type_);
     std::swap(index_, other->index_);
     std::swap(group_id_, other->group_id_);
+    std::swap(channel_id_, other->channel_id_);
     std::swap(value_, other->value_);
     data_.Swap(&other->data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);

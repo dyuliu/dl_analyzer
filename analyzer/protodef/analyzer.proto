@@ -6,6 +6,7 @@ message ClusterPoint {
   optional string type = 2;
   optional int32 index = 3;
   optional int32 group_id = 4;
+  optional int32 channel_id = 7;
   // one-dim value
   optional float value = 5;
   // multi-dim value

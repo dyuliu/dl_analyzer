@@ -48,6 +48,13 @@ db::DB *dbInstance;
 using analyzer::Infos;
 using analyzer::Recorders;
 
+void print_info() {
+	CHECK_FLAGS_SRC;
+	Infos info(FLAGS_src);
+	info.print_file_info();
+	info.print_conv_layer_info();
+}
+
 void analyzer_cluster() {
 	CHECK_FLAGS_SRC;
 	CHECK_FLAGS_TYPE;
@@ -62,12 +69,13 @@ void analyzer_cluster_batch() {
 	CHECK_FLAGS_SRC;
 	CHECK_FLAGS_TYPE;
 	CHECK_FLAGS_BATCHSIZE;
+	CHECK_FLAGS_INTERVAL;
 
 	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
 		throw("Error: Missing folder path!");
 	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
 
-	for (int i = 0; i < files.size(); i += 8*FLAGS_batchsize) {
+	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
 		Infos info(files[i]);
 		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
 		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
@@ -369,7 +377,10 @@ int main(int argc, char *argv[]) {
 
 	if (FLAGS_db) dbInstance = new db::DB(FLAGS_dbname);
 
-	if (FLAGS_action == "stat") {
+	if (FLAGS_action == "info") {
+		print_info();
+	}
+	else if (FLAGS_action == "stat") {
 		analyzer_stat();
 	}
 	else if (FLAGS_action == "seq") {

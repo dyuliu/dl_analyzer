@@ -157,20 +157,6 @@ namespace analyzer{
 		if (data_content == TYPE_CONTENT::WEIGHT)
 			COUT_METD << "----- PRINT WEIGHT CLUSTER INFO -----" << std::endl;
 
-		auto ptr = info.layers(0).cluster(index(TYPE_CLUSTER::KMEANS, TYPE_CONTENT::WEIGHT));
-		//
-		//ptr.type();
-		//ptr.content();
-		//ptr.num();
-		//ptr.centre_size();
-		//ptr.points_size();
-		//ptr.points(0).index();
-		//ptr.points(0).group_id();
-		//ptr.points(0).value();
-		//ptr.points(0).data_size();
-		//ptr.points(0).data(0);
-
-		// print sequence infomation
 		size_t weight_size = 0, grad_size = 0;
 		for (int i = 0; i < info.layers_size(); i++) {
 
@@ -186,7 +172,7 @@ namespace analyzer{
 					int count = 0;
 					double sum = 0;
 					for (auto val : info.layers(i).cluster(j).centre()) {
-						std::cout << std::endl << "\tcentre point-> ";
+						std::cout << std::endl << "chanal id: " << val.channel_id() << ", centre point-> ";
 						for (int idx_cluster = 0; idx_cluster < val.data_size(); idx_cluster++)
 							std::cout << val.data(idx_cluster) << " ";
 					}

@@ -137,6 +137,13 @@ class ClusterPoint : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 group_id() const;
   inline void set_group_id(::google::protobuf::int32 value);
   
+  // optional int32 channel_id = 7;
+  inline bool has_channel_id() const;
+  inline void clear_channel_id();
+  static const int kChannelIdFieldNumber = 7;
+  inline ::google::protobuf::int32 channel_id() const;
+  inline void set_channel_id(::google::protobuf::int32 value);
+  
   // optional float value = 5;
   inline bool has_value() const;
   inline void clear_value();
@@ -166,6 +173,8 @@ class ClusterPoint : public ::google::protobuf::Message {
   inline void clear_has_index();
   inline void set_has_group_id();
   inline void clear_has_group_id();
+  inline void set_has_channel_id();
+  inline void clear_has_channel_id();
   inline void set_has_value();
   inline void clear_has_value();
   
@@ -175,11 +184,12 @@ class ClusterPoint : public ::google::protobuf::Message {
   ::std::string* type_;
   ::google::protobuf::int32 index_;
   ::google::protobuf::int32 group_id_;
-  ::google::protobuf::RepeatedField< float > data_;
+  ::google::protobuf::int32 channel_id_;
   float value_;
+  ::google::protobuf::RepeatedField< float > data_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
   
   friend void  protobuf_AddDesc_analyzer_2eproto();
   friend void protobuf_AssignDesc_analyzer_2eproto();
@@ -1189,15 +1199,37 @@ inline void ClusterPoint::set_group_id(::google::protobuf::int32 value) {
   group_id_ = value;
 }
 
-// optional float value = 5;
-inline bool ClusterPoint::has_value() const {
+// optional int32 channel_id = 7;
+inline bool ClusterPoint::has_channel_id() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void ClusterPoint::set_has_value() {
+inline void ClusterPoint::set_has_channel_id() {
   _has_bits_[0] |= 0x00000010u;
 }
-inline void ClusterPoint::clear_has_value() {
+inline void ClusterPoint::clear_has_channel_id() {
   _has_bits_[0] &= ~0x00000010u;
+}
+inline void ClusterPoint::clear_channel_id() {
+  channel_id_ = 0;
+  clear_has_channel_id();
+}
+inline ::google::protobuf::int32 ClusterPoint::channel_id() const {
+  return channel_id_;
+}
+inline void ClusterPoint::set_channel_id(::google::protobuf::int32 value) {
+  set_has_channel_id();
+  channel_id_ = value;
+}
+
+// optional float value = 5;
+inline bool ClusterPoint::has_value() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void ClusterPoint::set_has_value() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void ClusterPoint::clear_has_value() {
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void ClusterPoint::clear_value() {
   value_ = 0;
