@@ -58,38 +58,6 @@ void analyzer_cluster() {
 	info.print_cluster_info(content);
 }
 
-static inline void analyzer_cluster_batch_db(std::vector<Infos> &batch_infos) {
-	int batch_size = batch_infos.size();
-	for (int x = 0; x <= batch_size - 1; x++) {
-		dbInstance->bindInfo(&batch_infos[x].get());
-		if (FLAGS_all) {
-			dbInstance->importAll();
-		}
-		else {
-			CHECK_FLAGS_HP;
-			CHECK_FLAGS_CONTENT;
-			CHECK_FLAGS_TYPE;
-
-			auto content = batch_infos[x].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-
-			if (FLAGS_hp == "stat") {
-				auto type = batch_infos[x].to_type<Infos::TYPE_STAT>(FLAGS_type);
-				dbInstance->importStat(type, content);
-			}
-			else if (FLAGS_hp == "dist") {
-				auto type = batch_infos[x].to_type<Infos::TYPE_DISTANCE>(FLAGS_type);
-				dbInstance->importDist(type, content);
-			}
-			else if (FLAGS_hp == "seq") {
-				auto type = batch_infos[x].to_type<Infos::TYPE_SEQ>(FLAGS_type);
-				dbInstance->importStatSeq(type, content);
-			}
-		}
-	}
-
-	//COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
-}
-
 void analyzer_cluster_batch() {
 	CHECK_FLAGS_SRC;
 	CHECK_FLAGS_TYPE;
@@ -104,10 +72,12 @@ void analyzer_cluster_batch() {
 		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
 		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
 		info.compute_cluster(type, content);
+
 		if (FLAGS_db) {
+			dbInstance->bindInfo(&info.get());
+			dbInstance->importClusterInfo(Infos::TYPE_CLUSTER::KMEANS, Infos::TYPE_CONTENT::WEIGHT, "");
 		}
 		COUT_SUCC << "Success to process: " << files[i] << std::endl;
-
 	}
 	
 }
@@ -389,6 +359,10 @@ void adjacent_distance() {
 
 }
 
+void analyzer_index() {
+	dbInstance->createIndexes();
+}
+
 int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -418,6 +392,9 @@ int main(int argc, char *argv[]) {
 	}
 	else if (FLAGS_action == "cluster_batch") {
 		analyzer_cluster_batch();
+	}
+	else if (FLAGS_action == "index") {
+		analyzer_index();
 	}
 
 	gflags::ShutDownCommandLineFlags();

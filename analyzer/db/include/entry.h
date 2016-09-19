@@ -96,7 +96,7 @@ namespace db {
 		/**
 		Import cluster info
 		*/
-		void importClusterInfo();
+		void importClusterInfo(analyzer::Infos::TYPE_CLUSTER clusterName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "ClusterInfo");
 
 		/**
 		Create Indexes for dist, stat, statseq, and recorder collections

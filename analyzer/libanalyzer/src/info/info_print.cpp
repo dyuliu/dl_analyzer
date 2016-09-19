@@ -157,7 +157,7 @@ namespace analyzer{
 		if (data_content == TYPE_CONTENT::WEIGHT)
 			COUT_METD << "----- PRINT WEIGHT CLUSTER INFO -----" << std::endl;
 
-		//auto ptr = info.layers(0).cluster(index(TYPE_CLUSTER::KMEANS, TYPE_CONTENT::WEIGHT));
+		auto ptr = info.layers(0).cluster(index(TYPE_CLUSTER::KMEANS, TYPE_CONTENT::WEIGHT));
 		//
 		//ptr.type();
 		//ptr.content();

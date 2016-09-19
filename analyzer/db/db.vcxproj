@@ -10,6 +10,7 @@
     <ClCompile Include="src\entry.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\cluster_map.h" />
     <ClInclude Include="include\contenttype_map.h" />
     <ClInclude Include="include\entry.h" />
     <ClInclude Include="include\distname_map.h" />
