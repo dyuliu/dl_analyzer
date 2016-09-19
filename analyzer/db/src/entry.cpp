@@ -42,7 +42,7 @@ namespace db {
 
 	void DB::importGradient(std::string colName) {
 		//std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-imagenet." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
@@ -59,7 +59,7 @@ namespace db {
 
 	void DB::importWeight(std::string colName) {
 		//std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-imagenet." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
@@ -91,7 +91,7 @@ namespace db {
 			colName = iterContent->second + iterStat->second;
 		}
 		//std::cout << "Importing data to \""<< colName << "\"." << std::endl;
-		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-imagenet." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -147,7 +147,7 @@ namespace db {
 		}
 
 		//std::cout << "Importing data to \""<< colName << "\"." << std::endl;
-		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-imagenet." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -202,7 +202,7 @@ namespace db {
 			colName = iterContent->second + iterDist->second;
 		}
 		//std::cout << "Importing data to \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-imagenet." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
@@ -244,7 +244,7 @@ namespace db {
 
 	void DB::importLayerAttrs(std::string colName) {
 		std::cout << "Importing layer attrs to collection \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-imagenet." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		for (int i = 0; i < data->layers_size(); i++) {
 			BSONObjBuilder bObj;
@@ -272,7 +272,7 @@ namespace db {
 				std::cout << "Wrong TYPE_RECORD_MAP" << std::endl;
 				return;
 			}
-			col = "cnnvis-cifar." + this->dbName + "_" + iterRecord->second;
+			col = "cnnvis-imagenet." + this->dbName + "_" + iterRecord->second;
 
 			BSONObjBuilder bObj;
 			bObj.append("iter", data->tuple(i).iteration())
@@ -304,15 +304,11 @@ namespace db {
 			colName = iterContent->second + iterCluster->second;
 		}
 		//std::cout << "Importing data to \"" << colName << "\"." << std::endl;
-		std::string col = "cnnvis-cifar." + this->dbName + "_" + colName;
+		std::string col = "cnnvis-imagenet." + this->dbName + "_" + colName;
 		Info *data = this->iData;
 		
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
-			BSONObjBuilder bObj;
-			bObj.append("iter", data->iteration())
-				.append("wid", data->worker_id())
-				.append("lid", i);
 
 			auto ptr = data->layers(i).cluster(CLUSTER_INDEX(TYPE_CLUSTER::KMEANS, TYPE_CONTENT::WEIGHT));
 
@@ -328,8 +324,9 @@ namespace db {
 				centerObj.append("coord", floatArrValue.arr());
 				centersObj.append(std::to_string(ptr.centre(ic).index()), centerObj.obj());
 			}
+			BSONObj centers = centersObj.obj();
 
-			BSONObjBuilder pointsObj;
+			BSONObjBuilder *pointsObjs = new BSONObjBuilder[data->layers(i).channels()];
 			for (int ip = 0; ip < ptr.points_size(); ip++) {
 				BSONObjBuilder pointObj;
 				pointObj.append("group_id", ptr.points(ip).group_id());
@@ -339,13 +336,24 @@ namespace db {
 					floatArrValue.append(v);
 				}
 				pointObj.append("coord", floatArrValue.arr());
-				pointsObj.append(std::to_string(ptr.points(ip).index()), pointObj.obj());
+				pointsObjs[ptr.points(ip).channel_id()].append(std::to_string(ptr.points(ip).index()), pointObj.obj());
 			}
 
-			bObj.append("clusterNumbers", ptr.num());
-			bObj.append("centers", centersObj.obj());
-			bObj.append("points", pointsObj.obj());
-			this->connection.insert(col, bObj.obj());
+			BulkOperationBuilder bulk = this->connection.initializeUnorderedBulkOp(col);
+			for (int fc = 0; fc < data->layers(i).channels(); fc++) {
+				BSONObjBuilder bObj;
+				bObj
+					.append("iter", data->iteration())
+					.append("wid", data->worker_id())
+					.append("lid", i)
+					.append("cid", fc)
+					.append("clusterNumbers", ptr.num())
+					.append("centers", centers)
+					.append("points", pointsObjs[fc].obj());
+				bulk.insert(bObj.obj());
+			}
+			mongo::WriteResult rs;
+			bulk.execute(0, &rs);
 		}
 	}
 
@@ -354,19 +362,19 @@ namespace db {
 		std::cout << "Creating Indexes " << this->dbName << std::endl;
 		std::string col;
 		for (auto it = mapTypeRecord.begin(); it != mapTypeRecord.end(); ++it) {
-			col = "cnnvis-cifar." + this->dbName + "_" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 		}
 
 		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
-			col = "cnnvis-cifar." + this->dbName + "_Grad" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_Grad" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 
-			col = "cnnvis-cifar." + this->dbName + "_Weight" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_Weight" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
@@ -374,13 +382,13 @@ namespace db {
 		}
 
 		for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
-			col = "cnnvis-cifar." + this->dbName + "_Grad" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_Grad" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 
-			col = "cnnvis-cifar." + this->dbName + "_Weight" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_Weight" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
@@ -388,13 +396,13 @@ namespace db {
 		}
 
 		for (auto it = mapTypeDist.begin(); it != mapTypeDist.end(); ++it) {
-			col = "cnnvis-cifar." + this->dbName + "_Grad" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_Grad" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 
-			col = "cnnvis-cifar." + this->dbName + "_Weight" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_Weight" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
@@ -402,7 +410,7 @@ namespace db {
 		}
 
 		for (auto it = mapTypeCluster.begin(); it != mapTypeCluster.end(); ++it) {
-			col = "cnnvis-cifar." + this->dbName + "_Weight" + it->second;
+			col = "cnnvis-imagenet." + this->dbName + "_Weight" + it->second;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{wid:1}"));

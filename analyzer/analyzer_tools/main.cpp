@@ -237,18 +237,16 @@ static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 }
 
 static inline void analyzer_batch_distance(std::vector<Infos> &batch_infos) {
-	auto last_batch = batch_infos.size()-1;
-	for (int idx = 0; idx < last_batch; idx++) {
+	for (int idx = 1; idx < batch_infos.size(); idx++) {
 		//auto content = batch_infos[idx].to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-		__FUNC_TIME_CALL(batch_infos[idx].compute_dist_all(Infos::TYPE_CONTENT::GRAD, batch_infos[last_batch]), "Process file with distance " + batch_infos[idx].get().filename());
-		__FUNC_TIME_CALL(batch_infos[idx].compute_dist_all(Infos::TYPE_CONTENT::WEIGHT, batch_infos[last_batch]), "Process file with distance " + batch_infos[idx].get().filename());
+		__FUNC_TIME_CALL(batch_infos[idx].compute_dist_all(Infos::TYPE_CONTENT::GRAD, batch_infos[0]), "Process file with distance " + batch_infos[idx].get().filename());
+		__FUNC_TIME_CALL(batch_infos[idx].compute_dist_all(Infos::TYPE_CONTENT::WEIGHT, batch_infos[0]), "Process file with distance " + batch_infos[idx].get().filename());
 	}
 }
 
 static inline void analyzer_batch_distance(std::vector<Infos> &batch_infos, Infos::TYPE_CONTENT type_content, Infos::TYPE_DISTANCE type_dist) {
-	auto last_batch = batch_infos.size() - 1;
-	for (int idx = 0; idx < last_batch; idx++) {
-		__FUNC_TIME_CALL(batch_infos[idx].compute_dist(type_dist, type_content, batch_infos[last_batch]), "Process file with distance " + batch_infos[idx].get().filename());
+	for (int idx = 1; idx < batch_infos.size(); idx++) {
+		__FUNC_TIME_CALL(batch_infos[idx].compute_dist(type_dist, type_content, batch_infos[0]), "Process file with distance " + batch_infos[idx].get().filename());
 	}
 }
 
