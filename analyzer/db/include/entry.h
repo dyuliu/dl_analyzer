@@ -103,6 +103,8 @@ namespace db {
 		*/
 		void createIndexes();
 		
+		void deleteDB();
+
 	// private data
 	private:
 		mongo::DBClientConnection connection;

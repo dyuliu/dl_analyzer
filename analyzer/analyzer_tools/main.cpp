@@ -369,6 +369,10 @@ void analyzer_index() {
 	dbInstance->createIndexes();
 }
 
+void analyzer_deleteDB() {
+	dbInstance->deleteDB();
+}
+
 int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -404,6 +408,9 @@ int main(int argc, char *argv[]) {
 	}
 	else if (FLAGS_action == "index") {
 		analyzer_index();
+	}
+	else if (FLAGS_action == "delete") {
+		analyzer_deleteDB();
 	}
 
 	gflags::ShutDownCommandLineFlags();
