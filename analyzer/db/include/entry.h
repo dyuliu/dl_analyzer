@@ -27,7 +27,7 @@ namespace db {
 		@param serverAddress e.g., "192.168.1.10", 
 		the default value is "localhost".
 		*/
-		DB(std::string dbName = "DeepLearning", std::string serverAddress = "localhost");
+		DB(std::string database = "cnnvis", std::string dbName = "DeepLearning", std::string serverAddress = "localhost");
 
 		/**
 		Deconstruction Function 
@@ -96,7 +96,7 @@ namespace db {
 		/**
 		Import cluster info
 		*/
-		void importClusterInfo(analyzer::Infos::TYPE_CLUSTER clusterName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "ClusterInfo");
+		void importClusterInfo(analyzer::Infos::TYPE_CLUSTER clusterName, analyzer::Infos::TYPE_CONTENT contentName, unsigned int maxlayer = 2, std::string colName = "ClusterInfo");
 
 		/**
 		Create Indexes for dist, stat, statseq, and recorder collections
@@ -109,6 +109,7 @@ namespace db {
 	private:
 		mongo::DBClientConnection connection;
 		std::string dbName;
+		std::string database;
 		Info *iData;
 		Recorder *rData;
 	};

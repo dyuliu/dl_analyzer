@@ -10,11 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entry.h" />
-    <ClInclude Include="include\statname_map.h" />
-    <ClInclude Include="include\recordername_map.h" />
-    <ClInclude Include="include\distname_map.h" />
-    <ClInclude Include="include\contenttype_map.h" />
-    <ClInclude Include="include\statseqname_map.h" />
-    <ClInclude Include="include\cluster_map.h" />
+    <ClInclude Include="include\type_map.h" />
   </ItemGroup>
 </Project>

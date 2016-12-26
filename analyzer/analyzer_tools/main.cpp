@@ -15,12 +15,14 @@ DEFINE_string(framework, "caffepro", "caffepro, caffe, torch, cntk");
 
 DEFINE_uint64(batchsize, 1, "batch size of records");
 DEFINE_uint64(interval, 1, "specify output interval");
+DEFINE_uint64(maxlayer, 2, "specify max layers to calculate");
 
 DEFINE_bool(all, false, "if output all type info");
 DEFINE_bool(db, false, "if upload to db");
 DEFINE_bool(parse, false, "parse log file to recorders");
 
-DEFINE_string(dbname, "", "database name");
+DEFINE_string(dbname, "", "sub-database name");
+DEFINE_string(database, "", "database name");
 
 #define CHECK_FLAGS_SRC {if (!FLAGS_src.size()) assert(!"Missing src path!");}
 #define CHECK_FLAGS_TYPE {if (!FLAGS_type.size()) assert(!"Missing specify output type!");}
@@ -61,7 +63,7 @@ void analyzer_cluster() {
 	Infos info(FLAGS_src);
 	auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
 	auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-	info.compute_cluster(type, content);
+	info.compute_cluster(type, content, FLAGS_maxlayer);
 	info.print_cluster_info(content);
 }
 
@@ -79,11 +81,11 @@ void analyzer_cluster_batch() {
 		Infos info(files[i]);
 		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
 		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-		info.compute_cluster(type, content);
+		info.compute_cluster(type, content, FLAGS_maxlayer);
 
 		if (FLAGS_db) {
 			dbInstance->bindInfo(&info.get());
-			dbInstance->importClusterInfo(Infos::TYPE_CLUSTER::KMEANS, Infos::TYPE_CONTENT::WEIGHT, "");
+			dbInstance->importClusterInfo(type, content, FLAGS_maxlayer, "");
 		}
 		COUT_SUCC << "Success to process: " << files[i] << std::endl;
 	}
@@ -198,7 +200,6 @@ void analyzer_layerinfo() {
 
 	if (FLAGS_db) {
 		Infos info(FLAGS_src);
-		std::cout << "here" << std::endl;
 		dbInstance->bindInfo(&info.get());
 		dbInstance->importLayerAttrs();
 	}
@@ -377,7 +378,7 @@ int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-	if (FLAGS_db) dbInstance = new db::DB(FLAGS_dbname);
+	if (FLAGS_db) dbInstance = new db::DB(FLAGS_database, FLAGS_dbname);
 
 	if (FLAGS_action == "info") {
 		print_info();

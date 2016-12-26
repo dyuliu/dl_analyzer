@@ -141,16 +141,22 @@ namespace analyzer {
 	}
 
 
-	void Infos::compute_cluster(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content) {
+	void Infos::compute_cluster(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content, unsigned int maxlayer) {
 		
 		if (cluster_type == TYPE_CLUSTER::END) return;
 
+		int count = 0;
 		for (int i = 0; i < info.layers_size(); i++) {
 
 #ifdef __DEBUG_INFO_OUTPUT
 			COUT_WARN << "Compute cluster of layer: " << info.layers(i).name() << std::endl;
 #endif
-			if (info.layers(i).type() == "batch_norm") continue;
+			if (info.layers(i).type() == "batch_norm") 
+				{ continue; } 
+			else 
+				{ count++; }
+
+			if (count > maxlayer) return;
 
 			if (data_content == TYPE_CONTENT::GRAD && !info.layers(i).grad_size()) return;
 			if (data_content == TYPE_CONTENT::WEIGHT && !info.layers(i).weight_size()) return;

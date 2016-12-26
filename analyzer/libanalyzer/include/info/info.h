@@ -101,7 +101,7 @@ namespace analyzer {
 		std::vector<DType> get_content_data(std::string content_type, std::string layer_name);
 
 		// cluster
-		void compute_cluster(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content);
+		void compute_cluster(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content, unsigned int maxlayer);
 		static void compute_cluster_kmeans(analyzer::Cluster *ptr, int channels, const float *data, int size, int length, int max_iter, int num_K = 5, int rand_seed = 0);
 
 	// Print
