@@ -2,9 +2,6 @@
 #include <google/gflags/gflags.h>
 #include <assert.h>
 
-// DEFINE_string(action, "analyzer", "record, stat, distance, analyzer");
-// DEFINE_string(src, "records", "the specify file/folder path");
-
 DEFINE_string(action, "recorder", "recorder, stat, distance, batch");
 DEFINE_string(src, "running_info_0.log", "the specify file/folder path");
 
@@ -59,7 +56,111 @@ void print_info() {
 
 /**********************************************************************
 * COMMAND:
-* 1. print all type value: 
+* 1. print all type value: (all stat of grad and weight)
+* -action=analyzer -src=*.info -all
+* 2. print one type value:  // see analyzer.h
+* -action=analyzer -src=*.info -type=max
+* 3. other set
+* -content=weight/grad (grad)
+***********************************************************************/
+void analyzer_stat() {
+	CHECK_FLAGS_SRC;
+
+	Infos info(FLAGS_src);
+
+	if (FLAGS_all) {
+		info.compute_stat_all(Infos::TYPE_CONTENT::GRAD);
+		info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT);
+		info.print_stat_info(Infos::TYPE_CONTENT::GRAD);
+		info.print_stat_info(Infos::TYPE_CONTENT::WEIGHT);
+	}
+	else {
+		CHECK_FLAGS_TYPE;
+		CHECK_FLAGS_CONTENT;
+		auto type = info.to_type<Infos::TYPE_STAT>(FLAGS_type);
+		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+		info.compute_stat(type, content);
+		info.print_stat_info(content);
+	}
+}
+
+void analyzer_seq() {
+
+	CHECK_FLAGS_SRC;
+
+	Infos info(FLAGS_src);
+
+	if (FLAGS_all) {
+		info.compute_seq_all(Infos::TYPE_CONTENT::GRAD);
+		info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT);
+		info.print_seq_info(Infos::TYPE_CONTENT::GRAD);
+		info.print_seq_info(Infos::TYPE_CONTENT::WEIGHT);
+	}
+	else {
+		CHECK_FLAGS_TYPE;
+		CHECK_FLAGS_CONTENT;
+		auto type = info.to_type<Infos::TYPE_SEQ>(FLAGS_type);
+		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+		info.compute_seq(type, content);
+		info.print_seq_info(content);
+	}
+}
+
+/**********************************************************************
+* To Add
+***********************************************************************/
+void analyzer_dist() {
+	CHECK_FLAGS_SRC;
+
+	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
+		throw("Error: Missing folder path!");
+	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
+
+	CHECK_FLAGS_BATCHSIZE;
+	int batch_size = FLAGS_batchsize;
+
+	//#pragma omp parallel for schedule(dynamic)
+	for (int i = 2 * batch_size - 1; i < files.size(); i += batch_size) {
+		COUT_CHEK << "Filename: " << files[i - batch_size] << ", ratio:" << 100 * i / float(files.size()) / batch_size << std::endl;
+		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100 * i / float(files.size()) / batch_size << std::endl << std::endl;
+
+		if (i + batch_size > files.size()) continue;
+
+		auto left = Infos(files[i], batch_size);
+		auto right = Infos(files[i + batch_size], batch_size);
+
+		left.compute_dist_all(Infos::TYPE_CONTENT::WEIGHT, right);
+		left.compute_dist_all(Infos::TYPE_CONTENT::GRAD, right);
+
+		// left.print_distance_info(Infos::TYPE_CONTENT::WEIGHT);
+		// left.print_distance_info(Infos::TYPE_CONTENT::GRAD);
+
+		if (FLAGS_db) {
+			dbInstance->bindInfo(&left.get());
+			dbInstance->importDist(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, "GradDistAdjEuclidean");
+			dbInstance->importDist(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::WEIGHT, "WeightDistAdjEuclidean");
+			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::GRAD, "GradDistAdjCosine");
+			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::WEIGHT, "WeightDistAdjCosine");
+		}
+	}
+}
+
+/**********************************************************************
+* COMMAND:
+***********************************************************************/
+void analyzer_layerinfo() {
+	CHECK_FLAGS_SRC;
+
+	if (FLAGS_db) {
+		Infos info(FLAGS_src);
+		dbInstance->bindInfo(&info.get());
+		dbInstance->importLayerAttrs();
+	}
+}
+
+/**********************************************************************
+* COMMAND:
+* 1. print all type value:
 * -action=recorder -src=*.log -all
 * 2. print one type value:  // see recorder.h
 * -action=recorder -src=*.log -type=test_error
@@ -98,73 +199,6 @@ void analyzer_recorder() {
 		// recorder.print_specify_type(FLAGS_type, FLAGS_interval);
 	}
 }
-
-/**********************************************************************
-* COMMAND:
-* 1. print all type value: (all stat of grad and weight)
-* -action=analyzer -src=*.info -all
-* 2. print one type value:  // see analyzer.h
-* -action=analyzer -src=*.info -type=max
-* 3. other set
-* -content=weight/grad (grad)
-***********************************************************************/
-void analyzer_stat() {
-	CHECK_FLAGS_SRC;
-
-	Infos info(FLAGS_src);
-
-	if (FLAGS_all) {
-		info.compute_stat_all(Infos::TYPE_CONTENT::GRAD);
-		info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT);
-		info.print_total_info();
-	}
-	else {
-		CHECK_FLAGS_TYPE;
-		CHECK_FLAGS_CONTENT;
-		auto type = info.to_type<Infos::TYPE_STAT>(FLAGS_type);
-		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-		info.compute_stat(type, content);
-		info.print_stat_info(content);
-	}
-}
-
-void analyzer_seq() {
-
-	CHECK_FLAGS_SRC;
-
-	Infos info(FLAGS_src);
-
-	if (FLAGS_all) {
-		info.compute_seq_all(Infos::TYPE_CONTENT::GRAD);
-		info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT);
-		if (FLAGS_db) {
-			dbInstance->bindInfo(&info.get());
-		}
-	}
-	else {
-		CHECK_FLAGS_TYPE;
-		CHECK_FLAGS_CONTENT;
-		auto type = info.to_type<Infos::TYPE_SEQ>(FLAGS_type);
-		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-		info.compute_seq(type, content);
-		info.print_seq_info(content);
-	}
-}
-
-
-/**********************************************************************
-* COMMAND:
-***********************************************************************/
-void analyzer_layerinfo() {
-	CHECK_FLAGS_SRC;
-
-	if (FLAGS_db) {
-		Infos info(FLAGS_src);
-		dbInstance->bindInfo(&info.get());
-		dbInstance->importLayerAttrs();
-	}
-}
-
 static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 	int batch_size = batch_infos.size();
 	for (int x = 0; x <= batch_size - 1; x++) {
@@ -286,46 +320,6 @@ void analyzer_tools() {
 	}
 }
 
-/**********************************************************************
-* NEW:
-***********************************************************************/
-void adjacent_distance() {
-	CHECK_FLAGS_SRC;
-
-	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
-		throw("Error: Missing folder path!");
-	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
-
-	CHECK_FLAGS_BATCHSIZE;
-	int batch_size = FLAGS_batchsize;
-
-//#pragma omp parallel for schedule(dynamic)
-	for (int i = 2 * batch_size - 1; i < files.size(); i += batch_size) {
-		COUT_CHEK << "Filename: " << files[i-batch_size] << ", ratio:" << 100 * i / float(files.size()) / batch_size << std::endl;
-		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100 * i / float(files.size()) / batch_size << std::endl << std::endl;
-
-		if (i + batch_size > files.size()) continue;
-
-		auto left = Infos(files[i], batch_size);
-		auto right = Infos(files[i + batch_size], batch_size);
-
-		left.compute_dist_all(Infos::TYPE_CONTENT::WEIGHT, right);
-		left.compute_dist_all(Infos::TYPE_CONTENT::GRAD, right);
-
-		// left.print_distance_info(Infos::TYPE_CONTENT::WEIGHT);
-		// left.print_distance_info(Infos::TYPE_CONTENT::GRAD);
-
-		if (FLAGS_db) {
-			dbInstance->bindInfo(&left.get());
-			dbInstance->importDist(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::GRAD, "GradDistAdjEuclidean");
-			dbInstance->importDist(Infos::TYPE_DISTANCE::EUCLIDEAN, Infos::TYPE_CONTENT::WEIGHT, "WeightDistAdjEuclidean");
-			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::GRAD, "GradDistAdjCosine");
-			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::WEIGHT, "WeightDistAdjCosine");
-		}
-	}
-
-}
-
 void analyzer_cluster() {
 	CHECK_FLAGS_SRC;
 	CHECK_FLAGS_TYPE;
@@ -400,14 +394,15 @@ int main(int argc, char *argv[]) {
 			print_info();
 		else if (FLAGS_action == "stat") 
 			analyzer_stat();
-		else if (FLAGS_action == "dist") 
-			adjacent_distance();
+		
 		else if (FLAGS_action == "seq") 
 			analyzer_seq();
-		else if (FLAGS_action == "raw") 
+		else if (FLAGS_action == "raw")
 			analyzer_raw();
-		else if (FLAGS_action == "cluster") 
+		else if (FLAGS_action == "cluster")
 			analyzer_cluster();
+		else if (FLAGS_action == "dist") // batchsize required
+			analyzer_dist();
 	}
 
 

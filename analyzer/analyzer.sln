@@ -1,18 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "emath", "emath\emath.vcxproj", "{BC0C093E-9359-4E94-8B20-D6E0053587C4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "db", "db\db.vcxproj", "{F1ACF5B5-3F6C-428C-B9A3-E26F5C73EDE8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libanalyzer", "libanalyzer\libanalyzer.vcxproj", "{31C10E46-2327-411F-8B3F-D3995DBE1362}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyanalyzer", "pyanalyzer\pyanalyzer.vcxproj", "{042C5F07-2232-425E-BEE9-27DE97464631}"
-	ProjectSection(ProjectDependencies) = postProject
-		{31C10E46-2327-411F-8B3F-D3995DBE1362} = {31C10E46-2327-411F-8B3F-D3995DBE1362}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "analyzer_tools", "analyzer_tools\analyzer_tools.vcxproj", "{7F6F35C8-0987-44E8-8C37-902763C34B98}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -32,8 +27,6 @@ Global
 		{F1ACF5B5-3F6C-428C-B9A3-E26F5C73EDE8}.Release|x64.Build.0 = Release|x64
 		{31C10E46-2327-411F-8B3F-D3995DBE1362}.Release|x64.ActiveCfg = Release|x64
 		{31C10E46-2327-411F-8B3F-D3995DBE1362}.Release|x64.Build.0 = Release|x64
-		{042C5F07-2232-425E-BEE9-27DE97464631}.Release|x64.ActiveCfg = Release|x64
-		{042C5F07-2232-425E-BEE9-27DE97464631}.Release|x64.Build.0 = Release|x64
 		{7F6F35C8-0987-44E8-8C37-902763C34B98}.Release|x64.ActiveCfg = Release|x64
 		{7F6F35C8-0987-44E8-8C37-902763C34B98}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
