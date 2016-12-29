@@ -37,37 +37,100 @@ namespace db {
 	}
 
 	void DB::importGradient(std::string colName) {
-		//std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
+		// std::cout << "Importing gradient data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->database + "." + this->dbName + "_" + colName;
 		Info *data = this->iData;
+		const float *dt = NULL;
+		int kernelSize = 0, kernelNum = 0, layerLength = 0, channelNum = 0, offset = 0;
+
+
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
-			BSONObjBuilder bObj;
-			BSONArrayBuilder floatArrValue;
-			bObj.append("iter", data->iteration())
-				.append("wid", data->worker_id())
-				.append("lid", i)
-				.appendArray("v", BSON_ARRAY(1.0 << 2.0 << 3.0 << 4.0 << 5.0));
-			BSONObj o = bObj.obj();
-			this->connection.insert(col, o);
+			dt = data->layers(i).grad().data();
+			kernelSize = data->layers(i).width() * data->layers(i).height();
+			layerLength = data->layers(i).grad().size();
+			channelNum = data->layers(i).channels();
+			kernelNum = data->layers(i).num();
+			offset = channelNum * kernelSize;
+
+			BulkOperationBuilder bulk = this->connection.initializeUnorderedBulkOp(col);
+
+			// save mongo document by cid
+			for (int cid = 0; cid < channelNum; cid++) {
+				// fetch kernels with cid j
+				BSONObjBuilder bObj;
+				bObj
+					.append("iter", data->iteration())
+					.append("wid", data->worker_id())
+					.append("lid", i)
+					.append("cid", cid);
+				BSONObjBuilder valueObj;
+				int kcount = 0;
+				for (int k = cid * kernelSize; k < layerLength; k += offset) {
+					std::vector<DType> kn(dt + k, dt + k + kernelSize);
+					BSONArrayBuilder floatArrValue;
+					for (auto &d : kn) { floatArrValue.append(d); }
+					valueObj.append(std::to_string(kcount * channelNum + cid), floatArrValue.arr());
+					kcount++;
+				}
+				bObj.append("value", valueObj.obj());
+				bulk.insert(bObj.obj());
+			}
+
+			mongo::WriteResult rs;
+			bulk.execute(0, &rs);
 		}
 	}
 
 	void DB::importWeight(std::string colName) {
-		//std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
+		// std::cout << "Importing weight data to collection \"" << colName << "\"." << std::endl;
 		std::string col = this->database + "." + this->dbName + "_" + colName;
 		Info *data = this->iData;
+		const float *dt = NULL;
+		int kernelSize = 0, kernelNum = 0, layerLength = 0, channelNum = 0, offset = 0;
+
+
 		for (int i = 0; i < data->layers_size(); i++) {
 			if (data->layers(i).type() == "batch_norm") continue;
-			BSONObjBuilder bObj;
-			BSONArrayBuilder floatArrValue;
-			bObj.append("iter", data->iteration())
-				.append("wid", data->worker_id())
-				.append("lid", i)
-				.appendArray("v", BSON_ARRAY(1.0 << 2.0 << 3.0 << 4.0 << 5.0));
-			BSONObj o = bObj.obj();
-			this->connection.insert(col, o);
+			dt = data->layers(i).weight().data();
+			kernelSize = data->layers(i).width() * data->layers(i).height();
+			layerLength = data->layers(i).weight().size();
+			channelNum = data->layers(i).channels();
+			kernelNum = data->layers(i).num();
+			offset = channelNum * kernelSize;
+
+			BulkOperationBuilder bulk = this->connection.initializeUnorderedBulkOp(col);
+
+			// save mongo document by cid
+			for (int cid = 0; cid < channelNum; cid++) {
+				// fetch kernels with cid j
+				BSONObjBuilder bObj;
+				bObj
+					.append("iter", data->iteration())
+					.append("wid", data->worker_id())
+					.append("lid", i)
+					.append("cid", cid);
+				BSONObjBuilder valueObj;
+				int kcount = 0;
+				for (int k = cid * kernelSize; k < layerLength; k += offset) {
+					std::vector<DType> kn(dt + k, dt + k + kernelSize);
+					BSONArrayBuilder floatArrValue;
+					for (auto &d : kn) { floatArrValue.append(d); }
+					valueObj.append(std::to_string(kcount * channelNum  + cid), floatArrValue.arr());
+					kcount++;
+				}
+				bObj.append("value", valueObj.obj());
+				bulk.insert(bObj.obj());
+			}
+
+			mongo::WriteResult rs;
+			bulk.execute(0, &rs);
 		}
+	}
+
+	void DB::importRaw() {
+		this->importWeight();
+		this->importGradient();
 	}
 
 	void DB::importStat(TYPE_STAT statName, TYPE_CONTENT contentName, std::string colName) {
@@ -125,9 +188,9 @@ namespace db {
 		}
 	}
 
-	void DB::importStatSeq(TYPE_SEQ statSeqName, TYPE_CONTENT contentName, std::string colName) {
+	void DB::importSeq(TYPE_SEQ seqName, TYPE_CONTENT contentName, std::string colName) {
 		MAP_TYPE_STATSEQ::iterator iterStatSeq;
-		iterStatSeq = mapTypeStatSeq.find(statSeqName);
+		iterStatSeq = mapTypeStatSeq.find(seqName);
 		if (iterStatSeq == mapTypeStatSeq.end()) {
 			std::cout << "Wrong TYPE_STAT" << std::endl;
 			return;
@@ -156,7 +219,7 @@ namespace db {
 
 			if (data->layers(i).type() == "batch_norm") continue;
 			BSONArrayBuilder floatArrValue;
-			for (auto v : data->layers(i).seq(STATSEQ_INDEX(statSeqName, contentName)).data()) {
+			for (auto v : data->layers(i).seq(STATSEQ_INDEX(seqName, contentName)).data()) {
 				floatArrValue.append(v);
 			}
 			valueObj.append(std::to_string(i), floatArrValue.arr());
@@ -166,17 +229,17 @@ namespace db {
 		this->connection.insert(col, o);
 	}
 
-	void DB::importAllStatSeqs() {
+	void DB::importAllSeqs() {
 		//std::cout << "Importing all stats" << std::endl;
 
 		for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
-			this->importStatSeq(it->first, TYPE_CONTENT::GRAD);
+			this->importSeq(it->first, TYPE_CONTENT::GRAD);
 		}
 
 		Info *data = this->iData;
 		if (data->worker_id() == 0) {
 			for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
-				this->importStatSeq(it->first, TYPE_CONTENT::WEIGHT);
+				this->importSeq(it->first, TYPE_CONTENT::WEIGHT);
 			}
 		}
 	}
@@ -234,7 +297,7 @@ namespace db {
 		//std::cout << "Begin to import all data to " << this->dbName << std::endl;
 		//this->importLayerAttrs();
 		this->importAllStats();
-		this->importAllStatSeqs();
+		this->importAllSeqs();
 		this->importAllDists();
 	}
 
@@ -421,11 +484,21 @@ namespace db {
 
 		for (auto it = mapTypeCluster.begin(); it != mapTypeCluster.end(); ++it) {
 			col = this->database + "." + this->dbName + "_Weight" + it->second;
-			this->connection.createIndex(col, fromjson("{iter:1}"));
 			std::cout << "Creating Index on " << col << std::endl;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
 			this->connection.createIndex(col, fromjson("{lid:1}"));
-			this->connection.createIndex(col, fromjson("{iter:1, wid: 1, lid: 1}"));
+			this->connection.createIndex(col, fromjson("{wid: 1, lid: 1, iter:1}"));
+		}
+
+		std::vector<std::string> names = { "WeightRaw", "GradRaw" };
+		for (auto it : names) {
+			col = this->database + "." + this->dbName + "_" + it;
+			std::cout << "Creating Index on " << col << std::endl;
+			this->connection.createIndex(col, fromjson("{iter:1}"));
+			this->connection.createIndex(col, fromjson("{wid:1}"));
+			this->connection.createIndex(col, fromjson("{lid:1}"));
+			this->connection.createIndex(col, fromjson("{wid: 1, lid: 1, iter:1}"));
 		}
 	}
 
@@ -470,6 +543,13 @@ namespace db {
 
 		for (auto it = mapTypeCluster.begin(); it != mapTypeCluster.end(); ++it) {
 			col = this->database + "." + this->dbName + "_Weight" + it->second;
+			std::cout << "Deleting collection " << col << std::endl;
+			this->connection.dropCollection(col);
+		}
+
+		std::vector<std::string> names = { "WeightRaw", "GradRaw" };
+		for (auto it : names) {
+			col = this->database + "." + this->dbName + "_" + it;
 			std::cout << "Deleting collection " << col << std::endl;
 			this->connection.dropCollection(col);
 		}

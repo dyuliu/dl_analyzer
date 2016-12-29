@@ -29,6 +29,7 @@ namespace analyzer {
 
 		enum class TYPE_SEQ : unsigned int {
 			HISTOGRAM = 0U,
+			CHANGERATIO = 1U,
 			END
 		};
 

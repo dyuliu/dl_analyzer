@@ -1,0 +1,69 @@
+
+package analyzer;
+
+message ClusterPoint {
+  optional string name = 1;
+  optional string type = 2;
+  optional int32 index = 3;
+  optional int32 group_id = 4;
+  optional int32 channel_id = 7;
+  // one-dim value
+  optional float value = 5;
+  // multi-dim value
+  repeated float data = 6;
+}
+
+message Cluster {
+  optional string type = 1;
+  // weight or grad
+  optional string content = 2;
+  // number of group
+  optional float num = 3;
+  repeated ClusterPoint points = 4;
+  repeated ClusterPoint centre = 5;
+}
+
+message HyperParameter {
+  optional string type = 1;
+  optional string content = 2;
+  optional float value = 3;
+  repeated float data = 4;
+}
+
+message Layer {
+  optional int32 count = 1;
+  // layer type
+  optional string type = 2; 
+  optional int32 num = 3;
+  optional int32 channels = 4;
+  optional int32 height = 5;
+  optional int32 width = 6;
+  optional string name = 7;
+  repeated float weight = 8;
+  repeated float grad = 9;
+  repeated HyperParameter stat = 10;
+  repeated HyperParameter distance = 11;
+  repeated HyperParameter seq = 12;
+  repeated Cluster cluster = 13;
+}
+
+message Info {
+  optional string filename = 1;
+  optional int32 iteration = 2;
+  optional int32 worker_id = 3;
+  optional int32 sim_id = 4;
+  repeated Layer layers = 5;
+}
+
+message RecordTuple {
+  optional int32 iteration = 1;
+  optional float value = 2;
+  optional string type = 3;
+  // maybe used in multi-value
+  repeated float data = 4;
+}
+
+message Recorder {
+  optional string name = 1;
+  repeated RecordTuple tuple = 2;
+}

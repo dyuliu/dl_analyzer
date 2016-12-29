@@ -5,15 +5,20 @@
 
 namespace emath {
 
-#define DType double
+	#define DType double
 
-#define NOT_REALIZE throw("Error: This function has not been realized")
-#define DIVIDE_ZERO throw("Error: Divide Zero")
+	typedef struct NumScaleBin{
+		int count;
+		DType ls;
+	}STNumScaleBin;
 
-#define CHECK_EQ(x, y) {assert( x == y );}
-#define CHECK_NE(x, y) {assert( x != y );}
+	#define NOT_REALIZE throw("Error: This function has not been realized")
+	#define DIVIDE_ZERO throw("Error: Divide Zero")
 
-#define CHECK_GE(x, y) {assert( x >= y );}
-#define CHECK_GT(x, y) {assert( x > y);}
+	#define CHECK_EQ(x, y) {assert( x == y );}
+	#define CHECK_NE(x, y) {assert( x != y );}
+
+	#define CHECK_GE(x, y) {assert( x >= y );}
+	#define CHECK_GT(x, y) {assert( x > y);}
 
 }

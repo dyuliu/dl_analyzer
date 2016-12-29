@@ -2,9 +2,11 @@
 
 #include <statistic.h>
 #include <cmath>
+#include <limits>
 #include <algorithm>
 #include <numeric>
 #include <matrix.h>
+#include <iostream>
 
 namespace emath {
 
@@ -47,6 +49,33 @@ namespace emath {
 		return *(x_c.begin() + pos);
 	}
 
+
+	std::vector<DType> changeratio(const std::vector<DType> &w, const std::vector<DType> &g, 
+		std::vector<STNumScaleBin> bins) {
+
+		CHECK_NE(w.size(), 0);
+		CHECK_EQ(w.size(), g.size());
+
+		size_t len = w.size();
+		DType ratio;
+		// count numbers
+		for (int i = 0; i < len; i++) {
+			ratio = abs(g[i] / w[i]);
+			for (auto &b : bins) {
+				if (ratio <= b.ls) 
+					b.count++;
+			}
+		}
+
+		// divide total length
+		size_t lenBins = bins.size();
+		std::vector<DType> res(lenBins);
+		for (int i = 0; i < lenBins; i++) {
+			res[i] = (DType)bins[i].count / len;
+		}
+
+		return res;
+	}
 
 	std::vector<DType> histogram(const std::vector<DType> &x, int bins) {
 

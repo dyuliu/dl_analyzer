@@ -49,14 +49,20 @@ namespace db {
 		*/
 		void importStat(analyzer::Infos::TYPE_STAT statName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
 
-		void importStatSeq(analyzer::Infos::TYPE_SEQ statName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
-
 		/**
 		Import all stat information to DB
 		*/
 		void importAllStats();
 
-		void importAllStatSeqs();
+		/**
+		Import a selected seq into DB
+		*/
+		void importSeq(analyzer::Infos::TYPE_SEQ seqName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
+
+		/**
+		Import all seq information to DB
+		*/
+		void importAllSeqs();
 
 		/**
 		Import a selected distance info into DB
@@ -81,12 +87,17 @@ namespace db {
 		/**
 		Import fine-grained gradient data, optional
 		*/
-		void importGradient(std::string colName = "Gradient");
+		void importGradient(std::string colName = "GradRaw");
 
 		/**
 		Import fine-grained weight data, optional
 		*/
-		void importWeight(std::string colName = "Weight");
+		void importWeight(std::string colName = "WeightRaw");
+
+		/**
+		Import raw gradient and weight data
+		*/
+		void importRaw();
 
 		/**
 		Import recorder info, e.g., error rate.

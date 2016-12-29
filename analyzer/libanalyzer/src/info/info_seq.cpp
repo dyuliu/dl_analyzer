@@ -12,6 +12,19 @@ namespace analyzer {
 
 		if (seq_type == TYPE_SEQ::END) return;
 
+		std::vector<emath::STNumScaleBin> bins(NUM_CHANGERATIO_BINS);
+		bins[0] = emath::NumScaleBin{ 0, std::numeric_limits<DType>::max() };
+		bins[1] = emath::NumScaleBin{ 0, 1 };
+		int bini = 2;
+		DType r = 0.1;
+		for (int j = 0; j < NUM_CHANGERATIO_SCALES; j++) {
+			for (int mul = 9; mul > 0; mul--) {
+				bins[bini] = emath::STNumScaleBin{ 0, r * mul };
+				bini += 1;
+			}
+			r /= 10;
+		}
+
 		for (int i = 0; i < info.layers_size(); i++) {
 
 #ifdef __DEBUG_INFO_OUTPUT
@@ -21,13 +34,21 @@ namespace analyzer {
 
 			if (data_content == TYPE_CONTENT::GRAD && !info.layers(i).grad_size()) return;
 			if (data_content == TYPE_CONTENT::WEIGHT && !info.layers(i).weight_size()) return;
-
 			std::vector<DType> ret_data;
 
 			const int idx = index(seq_type, data_content);
 			auto ptr = info.mutable_layers(i)->mutable_seq(idx);
 
 			if (ptr->data().size() != 0) continue;
+
+			if (seq_type == TYPE_SEQ::CHANGERATIO) {
+				ret_data.resize(NUM_CHANGERATIO_BINS);
+				// generate Bins here
+				if (data_content == TYPE_CONTENT::WEIGHT) {
+					ret_data = emath::changeratio(ArrayToVector(info.layers(i).weight()), 
+						ArrayToVector(info.layers(i).grad()), bins);
+				}
+			}
 
 			if (seq_type == TYPE_SEQ::HISTOGRAM) {
 				ret_data.resize(NUM_HISTOGRAM_BINS);

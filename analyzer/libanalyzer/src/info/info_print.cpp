@@ -136,14 +136,19 @@ namespace analyzer{
 			COUT_CHEK << std::setw(3) << i << ", " << std::setw(30) << info.layers(i).name() << std::endl;
 			for (int j = (int)data_content*(int)TYPE_SEQ::END; j < ((int)data_content + 1)*(int)TYPE_SEQ::END; j++) {
 				if (info.layers(i).seq(j).content() == name_content_type[data_content]) {
-					std::cout << info.layers(i).seq(j).type() << ": ";
-					int count = 0;
+					if (info.layers(i).seq(j).type() == "changeratio") {
+						std::cout << info.layers(i).seq(j).type() << ": ";
+						std::cout << info.layers(i).seq(j).data().data()[0] << "  ";
+						std::cout << info.layers(i).seq(j).data().data()[1] << "  ";
+						std::cout << info.layers(i).seq(j).data().data()[2] << std::endl;
+					}
+					/* int count = 0;
 					double sum = 0;
 					for (auto val : info.layers(i).seq(j).data()) {
 						sum += val;
 						std::cout << val << " ";
 					}
-					std::cout << "sum: " << sum << std::endl;
+					std::cout << "sum: " << sum << std::endl; */
 				}
 			}
 		}

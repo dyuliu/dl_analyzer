@@ -44,12 +44,14 @@ namespace emath {
 			res = 1 - xy_cov / (x_std * y_std);
 		}
 
+		// does not make sense - marked by dy
 		if (method == DISTANCE::COSINE_NORM) {
 			normalization(x, norm_method::MINMAX);
 			normalization(y, norm_method::MINMAX);
 			res = distance(x, y, DISTANCE::COSINE);
 		}
 
+		// does not make sense - marked by dy
 		if (method == DISTANCE::EUCLIDEAN_NORM) {
 			normalization(x, norm_method::MINMAX);
 			normalization(y, norm_method::MINMAX);

@@ -39,5 +39,7 @@ namespace analyzer {
 // constant
 #define MAX_PROTOFILE_SIZE 5368709120
 #define NUM_HISTOGRAM_BINS 64
+#define NUM_CHANGERATIO_BINS 56
+#define	NUM_CHANGERATIO_SCALES 6
 
 }

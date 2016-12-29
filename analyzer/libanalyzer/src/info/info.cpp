@@ -65,7 +65,8 @@ namespace analyzer {
 		};
 
 		name_seq_type = std::map<TYPE_SEQ, std::string> {
-			{ TYPE_SEQ::HISTOGRAM,  "histogram"}
+			{ TYPE_SEQ::HISTOGRAM,  "histogram"},
+			{ TYPE_SEQ::CHANGERATIO, "changeratio" }
 		};
 
 		name_cluster_type = std::map<TYPE_CLUSTER, std::string> {
@@ -114,7 +115,6 @@ namespace analyzer {
 		code_input.SetTotalBytesLimit((int)MAX_PROTOFILE_SIZE, (int)MAX_PROTOFILE_SIZE);
 
 		info.ParseFromCodedStream(&code_input);
-
 		fp.close();
 	}
 

@@ -34,5 +34,8 @@ namespace emath {
 	DType quantile(const std::vector<DType> &x, double q);
 
 	std::vector<DType> histogram(const std::vector<DType> &x, int bins);
+	std::vector<DType> changeratio(const std::vector<DType> &w, const std::vector<DType> &g, 
+		std::vector<STNumScaleBin> bins);
+
 	
 }

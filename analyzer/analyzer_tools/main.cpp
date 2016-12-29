@@ -57,41 +57,6 @@ void print_info() {
 	info.print_conv_layer_info();
 }
 
-void analyzer_cluster() {
-	CHECK_FLAGS_SRC;
-	CHECK_FLAGS_TYPE;
-	Infos info(FLAGS_src);
-	auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
-	auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-	info.compute_cluster(type, content, FLAGS_maxlayer);
-	info.print_cluster_info(content);
-}
-
-void analyzer_cluster_batch() {
-	CHECK_FLAGS_SRC;
-	CHECK_FLAGS_TYPE;
-	CHECK_FLAGS_BATCHSIZE;
-	CHECK_FLAGS_INTERVAL;
-
-	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
-		throw("Error: Missing folder path!");
-	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
-
-	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
-		Infos info(files[i]);
-		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
-		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-		info.compute_cluster(type, content, FLAGS_maxlayer);
-
-		if (FLAGS_db) {
-			dbInstance->bindInfo(&info.get());
-			dbInstance->importClusterInfo(type, content, FLAGS_maxlayer, "");
-		}
-		COUT_SUCC << "Success to process: " << files[i] << std::endl;
-	}
-	
-}
-
 /**********************************************************************
 * COMMAND:
 * 1. print all type value: 
@@ -152,9 +117,6 @@ void analyzer_stat() {
 		info.compute_stat_all(Infos::TYPE_CONTENT::GRAD);
 		info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT);
 		info.print_total_info();
-		if (FLAGS_db) {
-			dbInstance->bindInfo(&info.get());
-		}
 	}
 	else {
 		CHECK_FLAGS_TYPE;
@@ -175,10 +137,8 @@ void analyzer_seq() {
 	if (FLAGS_all) {
 		info.compute_seq_all(Infos::TYPE_CONTENT::GRAD);
 		info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT);
-		// info.print_seq_info(Infos::TYPE_CONTENT::GRAD);
-		// info.print_seq_info(Infos::TYPE_CONTENT::WEIGHT);
 		if (FLAGS_db) {
-
+			dbInstance->bindInfo(&info.get());
 		}
 	}
 	else {
@@ -229,7 +189,7 @@ static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 			}
 			else if (FLAGS_hp == "seq") {
 				auto type = batch_infos[x].to_type<Infos::TYPE_SEQ>(FLAGS_type);
-				dbInstance->importStatSeq(type, content);
+				dbInstance->importSeq(type, content);
 			}
 		}
 	}
@@ -366,52 +326,108 @@ void adjacent_distance() {
 
 }
 
-void analyzer_index() {
-	dbInstance->createIndexes();
+void analyzer_cluster() {
+	CHECK_FLAGS_SRC;
+	CHECK_FLAGS_TYPE;
+	Infos info(FLAGS_src);
+	auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
+	auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+	info.compute_cluster(type, content, FLAGS_maxlayer);
+	info.print_cluster_info(content);
 }
 
-void analyzer_deleteDB() {
-	dbInstance->deleteDB();
+void analyzer_cluster_batch() {
+	CHECK_FLAGS_SRC;
+	CHECK_FLAGS_TYPE;
+	CHECK_FLAGS_BATCHSIZE;
+	CHECK_FLAGS_INTERVAL;
+
+	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
+		throw("Error: Missing folder path!");
+	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
+
+	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
+		Infos info(files[i]);
+		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
+		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+		info.compute_cluster(type, content, FLAGS_maxlayer);
+
+		if (FLAGS_db) {
+			dbInstance->bindInfo(&info.get());
+			dbInstance->importClusterInfo(type, content, FLAGS_maxlayer, "");
+		}
+		COUT_SUCC << "Success to process: " << files[i] << std::endl;
+	}
+}
+
+void analyzer_raw() {
+	CHECK_FLAGS_SRC;
+
+	Infos info(FLAGS_src);
+	if (FLAGS_db) {
+		dbInstance->bindInfo(&info.get());
+		dbInstance->importRaw();
+	}
+}
+
+void analyzer_raw_batch() {
+	CHECK_FLAGS_SRC;
+	CHECK_FLAGS_BATCHSIZE;
+	CHECK_FLAGS_INTERVAL;
+
+	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
+		throw("Error: Missing folder path!");
+	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
+	std::cout << files.size() << std::endl;
+
+	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
+		COUT_CHEK << "Raw - Filename: " << files[i+2] << ", ratio:" << 100 * i / float(files.size()) << std::endl;
+		/*Infos info(files[i]);
+		if (FLAGS_db) {
+			dbInstance->bindInfo(&info.get());
+			dbInstance->importRaw();
+		}*/
+	}
 }
 
 int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-	if (FLAGS_db) dbInstance = new db::DB(FLAGS_database, FLAGS_dbname);
+	// actions in this part are for testing 
+	if (!FLAGS_db) {
+		if (FLAGS_action == "single") 
+			print_info();
+		else if (FLAGS_action == "stat") 
+			analyzer_stat();
+		else if (FLAGS_action == "dist") 
+			adjacent_distance();
+		else if (FLAGS_action == "seq") 
+			analyzer_seq();
+		else if (FLAGS_action == "raw") 
+			analyzer_raw();
+		else if (FLAGS_action == "cluster") 
+			analyzer_cluster();
+	}
 
-	if (FLAGS_action == "info") {
-		print_info();
-	}
-	else if (FLAGS_action == "stat") {
-		analyzer_stat();
-	}
-	else if (FLAGS_action == "seq") {
-		analyzer_seq();
-	}
-	else if (FLAGS_action == "batch") {
-		analyzer_tools();
-	}
-	else if (FLAGS_action == "adjacent_distance") {
-		adjacent_distance();
-	}
-	else if (FLAGS_action == "recorder") {
-		analyzer_recorder();
-	}
-	else if (FLAGS_action == "layerinfo") {
-		analyzer_layerinfo();
-	}
-	else if (FLAGS_action == "cluster") {
-		analyzer_cluster();
-	}
-	else if (FLAGS_action == "cluster_batch") {
-		analyzer_cluster_batch();
-	}
-	else if (FLAGS_action == "index") {
-		analyzer_index();
-	}
-	else if (FLAGS_action == "delete") {
-		analyzer_deleteDB();
+
+	// actions in this part are for operations on database
+	if (FLAGS_db) { 
+		dbInstance = new db::DB(FLAGS_database, FLAGS_dbname); 
+		if (FLAGS_action == "raw_batch") 
+			analyzer_raw_batch();
+		else if (FLAGS_action == "batch") 
+			analyzer_tools();
+		else if (FLAGS_action == "recorder") 
+			analyzer_recorder();
+		else if (FLAGS_action == "layerinfo") 
+			analyzer_layerinfo();
+		else if (FLAGS_action == "cluster_batch") 
+			analyzer_cluster_batch();
+		else if (FLAGS_action == "index") 
+			dbInstance->createIndexes();
+		else if (FLAGS_action == "delete") 
+			dbInstance->deleteDB();
 	}
 
 	gflags::ShutDownCommandLineFlags();
