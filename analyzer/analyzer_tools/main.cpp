@@ -106,9 +106,6 @@ void analyzer_seq() {
 	}
 }
 
-/**********************************************************************
-* To Add
-***********************************************************************/
 void analyzer_dist() {
 	CHECK_FLAGS_SRC;
 
@@ -142,6 +139,27 @@ void analyzer_dist() {
 			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::GRAD, "GradDistAdjCosine");
 			dbInstance->importDist(Infos::TYPE_DISTANCE::COSINE, Infos::TYPE_CONTENT::WEIGHT, "WeightDistAdjCosine");
 		}
+	}
+}
+
+void analyzer_cluster() {
+	CHECK_FLAGS_SRC;
+	CHECK_FLAGS_TYPE;
+	Infos info(FLAGS_src);
+	auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
+	auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+	info.compute_cluster(type, content, FLAGS_maxlayer);
+	info.print_cluster_info(content);
+}
+
+void analyzer_raw() {
+	CHECK_FLAGS_SRC;
+
+	Infos info(FLAGS_src);
+	// write into database to see the result
+	if (FLAGS_db) {
+		dbInstance->bindInfo(&info.get());
+		dbInstance->importRaw();
 	}
 }
 
@@ -199,9 +217,10 @@ void analyzer_recorder() {
 		// recorder.print_specify_type(FLAGS_type, FLAGS_interval);
 	}
 }
+
 static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 	int batch_size = batch_infos.size();
-	for (int x = 0; x <= batch_size - 1; x++) {
+	for (int x = 0; x < batch_size; x++) {
 		dbInstance->bindInfo(&batch_infos[x].get());
 		if (FLAGS_all) {
 			dbInstance->importAll();
@@ -256,7 +275,6 @@ static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 			if (idx == batch_size - 1) {
 				__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
 				__FUNC_TIME_CALL(info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with " + info.get().filename());
-				// copy weight statistic to all file?
 				// compute all distance
 				if (batch_size > 1)
 					analyzer_batch_distance(batch_infos);
@@ -312,22 +330,10 @@ void analyzer_tools() {
 		
 		analyzer_batch(batch_infos);
 
-		if (FLAGS_db) {
-			analyzer_batch_db(batch_infos);
-		}
+		analyzer_batch_db(batch_infos);
 
 		batch_infos.clear();
 	}
-}
-
-void analyzer_cluster() {
-	CHECK_FLAGS_SRC;
-	CHECK_FLAGS_TYPE;
-	Infos info(FLAGS_src);
-	auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
-	auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-	info.compute_cluster(type, content, FLAGS_maxlayer);
-	info.print_cluster_info(content);
 }
 
 void analyzer_cluster_batch() {
@@ -354,15 +360,6 @@ void analyzer_cluster_batch() {
 	}
 }
 
-void analyzer_raw() {
-	CHECK_FLAGS_SRC;
-
-	Infos info(FLAGS_src);
-	if (FLAGS_db) {
-		dbInstance->bindInfo(&info.get());
-		dbInstance->importRaw();
-	}
-}
 
 void analyzer_raw_batch() {
 	CHECK_FLAGS_SRC;
@@ -394,7 +391,6 @@ int main(int argc, char *argv[]) {
 			print_info();
 		else if (FLAGS_action == "stat") 
 			analyzer_stat();
-		
 		else if (FLAGS_action == "seq") 
 			analyzer_seq();
 		else if (FLAGS_action == "raw")
@@ -409,19 +405,19 @@ int main(int argc, char *argv[]) {
 	// actions in this part are for operations on database
 	if (FLAGS_db) { 
 		dbInstance = new db::DB(FLAGS_database, FLAGS_dbname); 
-		if (FLAGS_action == "raw_batch") 
-			analyzer_raw_batch();
-		else if (FLAGS_action == "batch") 
-			analyzer_tools();
-		else if (FLAGS_action == "recorder") 
+		if (FLAGS_action == "recorder")
 			analyzer_recorder();
-		else if (FLAGS_action == "layerinfo") 
+		else if (FLAGS_action == "layerinfo")
 			analyzer_layerinfo();
+		else if (FLAGS_action == "batch")	// import stat & dist & seq
+			analyzer_tools();
+		else if (FLAGS_action == "raw_batch") 
+			analyzer_raw_batch();
 		else if (FLAGS_action == "cluster_batch") 
 			analyzer_cluster_batch();
-		else if (FLAGS_action == "index") 
+		else if (FLAGS_action == "index")   // create index for each cols
 			dbInstance->createIndexes();
-		else if (FLAGS_action == "delete") 
+		else if (FLAGS_action == "delete")  // delete specified cols
 			dbInstance->deleteDB();
 	}
 

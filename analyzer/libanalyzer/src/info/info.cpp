@@ -16,7 +16,6 @@ namespace analyzer {
 			THROW("Error: Missing input file!");
 		
 		load_from_file(path);
-
 		init_type_name();
 		init_stat();
 	}
@@ -26,15 +25,16 @@ namespace analyzer {
 			THROW("Error: Missing input file!");
 
 		load_from_file(path);
-
 		init_type_name();
 		init_stat();
-
-		if (info.has_worker_id() && info.has_sim_id())
-			info.set_worker_id(info.worker_id() * rank_size + info.sim_id());
 	}
 
 	void Infos::init_type_name() {
+		name_content_type = std::map<TYPE_CONTENT, std::string> {
+			{ TYPE_CONTENT::GRAD, "grad" },
+			{ TYPE_CONTENT::WEIGHT, "weight" }
+		};
+
 		name_distance_type = std::map<TYPE_DISTANCE, std::string> {
 			{ TYPE_DISTANCE::EUCLIDEAN,			"Euclidean" },
 			{ TYPE_DISTANCE::COSINE,			"Cosine" },
@@ -57,11 +57,6 @@ namespace analyzer {
 			{ TYPE_STAT::QUANTILE_1_2, "mid" },
 			{ TYPE_STAT::QUANTILE_1_4, "quarter1" },
 			{ TYPE_STAT::QUANTILE_3_4, "quarter3" }
-		};
-
-		name_content_type = std::map<TYPE_CONTENT, std::string> {
-			{ TYPE_CONTENT::GRAD,	"grad" },
-			{ TYPE_CONTENT::WEIGHT, "weight" }
 		};
 
 		name_seq_type = std::map<TYPE_SEQ, std::string> {
