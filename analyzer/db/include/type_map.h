@@ -21,7 +21,7 @@
 namespace db {
 
 	using TYPE_SEQ = analyzer::Infos::TYPE_SEQ;
-	MAP_TYPE_STATSEQ mapTypeStatSeq = {
+	MAP_TYPE_STATSEQ mapTypeSeq = {
 		{ TYPE_SEQ::HISTOGRAM, "SeqHistogram" },
 		{ TYPE_SEQ::CHANGERATIO, "SeqChangeRatio" }
 	};

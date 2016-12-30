@@ -1,6 +1,8 @@
 #include "type_map.h"
 #include "entry.h"
 
+#define CHECK_HAVE_WEIGHT {if (this->iData->worker_id() != 0) continue;}
+
 using mongo::BSONArrayBuilder;
 using mongo::BSONArray;
 using mongo::BSONElement;
@@ -129,8 +131,9 @@ namespace db {
 	}
 
 	void DB::importRaw() {
-		this->importWeight();
 		this->importGradient();
+		if (this->iData->worker_id() == 0)
+			this->importWeight();
 	}
 
 	void DB::importStat(TYPE_STAT statName, TYPE_CONTENT contentName, std::string colName) {
@@ -173,25 +176,10 @@ namespace db {
 		this->connection.insert(col, o);
 	}
 
-	void DB::importAllStats() {
-		//std::cout << "Importing all stats" << std::endl;
-
-		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
-			this->importStat(it->first, TYPE_CONTENT::GRAD);
-		}
-
-		Info *data = this->iData;
-		if (data->worker_id() == 0) {
-			for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
-				this->importStat(it->first, TYPE_CONTENT::WEIGHT);
-			}
-		}
-	}
-
 	void DB::importSeq(TYPE_SEQ seqName, TYPE_CONTENT contentName, std::string colName) {
 		MAP_TYPE_STATSEQ::iterator iterStatSeq;
-		iterStatSeq = mapTypeStatSeq.find(seqName);
-		if (iterStatSeq == mapTypeStatSeq.end()) {
+		iterStatSeq = mapTypeSeq.find(seqName);
+		if (iterStatSeq == mapTypeSeq.end()) {
 			std::cout << "Wrong TYPE_STAT" << std::endl;
 			return;
 		}
@@ -227,21 +215,6 @@ namespace db {
 		bObj.append("value", valueObj.obj());
 		BSONObj o = bObj.obj();
 		this->connection.insert(col, o);
-	}
-
-	void DB::importAllSeqs() {
-		//std::cout << "Importing all stats" << std::endl;
-
-		for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
-			this->importSeq(it->first, TYPE_CONTENT::GRAD);
-		}
-
-		Info *data = this->iData;
-		if (data->worker_id() == 0) {
-			for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
-				this->importSeq(it->first, TYPE_CONTENT::WEIGHT);
-			}
-		}
 	}
 
 	void DB::importDist(TYPE_DISTANCE distName, TYPE_CONTENT contentName, std::string colName) {
@@ -284,18 +257,33 @@ namespace db {
 		this->connection.insert(col, o);
 	}
 
-	void DB::importAllDists() {
-		//std::cout << "Importing all Dists" << std::endl;
+	void DB::importAllStats() {
+		for (auto it = mapTypeStat.begin(); it != mapTypeStat.end(); ++it) {
+			this->importStat(it->first, TYPE_CONTENT::GRAD);
+			CHECK_HAVE_WEIGHT
+			this->importStat(it->first, TYPE_CONTENT::WEIGHT);
+		}
+	}
 
+	void DB::importAllDists() {
 		for (auto it = mapTypeDist.begin(); it != mapTypeDist.end(); ++it) {
-			this->importDist(it->first, TYPE_CONTENT::GRAD);
-			this->importDist(it->first, TYPE_CONTENT::WEIGHT);
+			if (this->iData->worker_id() != 0) 
+				this->importDist(it->first, TYPE_CONTENT::GRAD);
+			// CHECK_HAVE_WEIGHT
+			// this->importDist(it->first, TYPE_CONTENT::WEIGHT);
+		}
+	}
+
+	void DB::importAllSeqs() {
+		for (auto it = mapTypeSeq.begin(); it != mapTypeSeq.end(); ++it) {
+			if (it->first != TYPE_SEQ::CHANGERATIO)
+				this->importSeq(it->first, TYPE_CONTENT::GRAD);
+			CHECK_HAVE_WEIGHT
+			this->importSeq(it->first, TYPE_CONTENT::WEIGHT);
 		}
 	}
 
 	void DB::importAll() {
-		//std::cout << "Begin to import all data to " << this->dbName << std::endl;
-		//this->importLayerAttrs();
 		this->importAllStats();
 		this->importAllSeqs();
 		this->importAllDists();
@@ -454,7 +442,7 @@ namespace db {
 			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 		}
 
-		for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
+		for (auto it = mapTypeSeq.begin(); it != mapTypeSeq.end(); ++it) {
 			col = this->database + "." + this->dbName + "_Grad" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
@@ -521,7 +509,7 @@ namespace db {
 			this->connection.dropCollection(col);
 		}
 
-		for (auto it = mapTypeStatSeq.begin(); it != mapTypeStatSeq.end(); ++it) {
+		for (auto it = mapTypeSeq.begin(); it != mapTypeSeq.end(); ++it) {
 			col = this->database + "." + this->dbName + "_Grad" + it->second;
 			std::cout << "Deleting collection " << col << std::endl;
 			this->connection.dropCollection(col);

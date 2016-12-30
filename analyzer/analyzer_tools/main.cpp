@@ -266,13 +266,13 @@ static inline void analyzer_batch_distance(std::vector<Infos> &batch_infos, Info
 
 static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 	int batch_size = batch_infos.size();
-	for (int idx = 0; idx < batch_size; idx++) {
+	for (int idx = batch_size - 1; idx >= 0; idx--) {
 		auto &info = batch_infos[idx];
 		if (FLAGS_all) {
 			__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::GRAD), "Process file with grad " + info.get().filename());
 			__FUNC_TIME_CALL(info.compute_seq_all(Infos::TYPE_CONTENT::GRAD), "Process file with " + info.get().filename());
 
-			if (idx == batch_size - 1) {
+			if (idx == 0) {
 				__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
 				__FUNC_TIME_CALL(info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with " + info.get().filename());
 				// compute all distance
@@ -321,7 +321,7 @@ void analyzer_tools() {
 //#pragma omp parallel for schedule(dynamic)
 	for (int i = 0; i < files.size(); i += batch_size) {
 		std::vector<Infos> batch_infos;
-		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100*i/float(files.size()) << std::endl;
+		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100.0*(i+1)/files.size() << std::endl;
 		
 		if (i + batch_size > files.size()) continue;
 
@@ -371,13 +371,17 @@ void analyzer_raw_batch() {
 	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
 	std::cout << files.size() << std::endl;
 
+	int batch_size = FLAGS_batchsize;
 	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
-		COUT_CHEK << "Raw - Filename: " << files[i+2] << ", ratio:" << 100 * i / float(files.size()) << std::endl;
-		/*Infos info(files[i]);
-		if (FLAGS_db) {
+		COUT_CHEK << "Raw - Filename: " << files[i] << ", ratio:" << 100 * i / float(files.size()) << std::endl;
+
+		if (i + batch_size > files.size()) continue;
+
+		for (int idx_batch = i; idx_batch < i + batch_size; idx_batch++) {
+			Infos info = Infos(files[idx_batch]);
 			dbInstance->bindInfo(&info.get());
 			dbInstance->importRaw();
-		}*/
+		}
 	}
 }
 
