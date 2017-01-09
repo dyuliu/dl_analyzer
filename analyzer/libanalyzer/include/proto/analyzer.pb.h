@@ -772,10 +772,17 @@ class Image : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 label_id() const;
   inline void set_label_id(::google::protobuf::int32 value);
   
-  // repeated float prob = 4 [packed = true];
+  // optional int32 answer = 4;
+  inline bool has_answer() const;
+  inline void clear_answer();
+  static const int kAnswerFieldNumber = 4;
+  inline ::google::protobuf::int32 answer() const;
+  inline void set_answer(::google::protobuf::int32 value);
+  
+  // repeated float prob = 5 [packed = true];
   inline int prob_size() const;
   inline void clear_prob();
-  static const int kProbFieldNumber = 4;
+  static const int kProbFieldNumber = 5;
   inline float prob(int index) const;
   inline void set_prob(int index, float value);
   inline void add_prob(float value);
@@ -792,17 +799,20 @@ class Image : public ::google::protobuf::Message {
   inline void clear_has_file_name();
   inline void set_has_label_id();
   inline void clear_has_label_id();
+  inline void set_has_answer();
+  inline void clear_has_answer();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* class_name_;
   ::std::string* file_name_;
+  ::google::protobuf::int32 label_id_;
+  ::google::protobuf::int32 answer_;
   ::google::protobuf::RepeatedField< float > prob_;
   mutable int _prob_cached_byte_size_;
-  ::google::protobuf::int32 label_id_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
   
   friend void  protobuf_AddDesc_analyzer_2eproto();
   friend void protobuf_AssignDesc_analyzer_2eproto();
@@ -2381,7 +2391,29 @@ inline void Image::set_label_id(::google::protobuf::int32 value) {
   label_id_ = value;
 }
 
-// repeated float prob = 4 [packed = true];
+// optional int32 answer = 4;
+inline bool Image::has_answer() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Image::set_has_answer() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Image::clear_has_answer() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Image::clear_answer() {
+  answer_ = 0;
+  clear_has_answer();
+}
+inline ::google::protobuf::int32 Image::answer() const {
+  return answer_;
+}
+inline void Image::set_answer(::google::protobuf::int32 value) {
+  set_has_answer();
+  answer_ = value;
+}
+
+// repeated float prob = 5 [packed = true];
 inline int Image::prob_size() const {
   return prob_.size();
 }

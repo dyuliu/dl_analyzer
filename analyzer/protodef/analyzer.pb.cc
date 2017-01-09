@@ -145,10 +145,11 @@ void protobuf_AssignDesc_analyzer_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Layer));
   Image_descriptor_ = file->message_type(4);
-  static const int Image_offsets_[4] = {
+  static const int Image_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, class_name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, file_name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, label_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, answer_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, prob_),
   };
   Image_reflection_ =
@@ -310,18 +311,19 @@ void protobuf_AddDesc_analyzer_2eproto() {
     "\n \003(\0132\030.analyzer.HyperParameter\022*\n\010dista"
     "nce\030\013 \003(\0132\030.analyzer.HyperParameter\022%\n\003s"
     "eq\030\014 \003(\0132\030.analyzer.HyperParameter\022\"\n\007cl"
-    "uster\030\r \003(\0132\021.analyzer.Cluster\"R\n\005Image\022"
+    "uster\030\r \003(\0132\021.analyzer.Cluster\"b\n\005Image\022"
     "\022\n\nclass_name\030\001 \001(\t\022\021\n\tfile_name\030\002 \001(\t\022\020"
-    "\n\010label_id\030\003 \001(\005\022\020\n\004prob\030\004 \003(\002B\002\020\001\"<\n\006Im"
-    "ages\022\021\n\titeration\030\001 \001(\005\022\037\n\006images\030\002 \003(\0132"
-    "\017.analyzer.Image\"\221\001\n\004Info\022\020\n\010filename\030\001 "
-    "\001(\t\022\021\n\titeration\030\002 \001(\005\022\021\n\tworker_id\030\003 \001("
-    "\005\022\016\n\006sim_id\030\004 \001(\005\022 \n\006images\030\005 \001(\0132\020.anal"
-    "yzer.Images\022\037\n\006layers\030\006 \003(\0132\017.analyzer.L"
-    "ayer\"K\n\013RecordTuple\022\021\n\titeration\030\001 \001(\005\022\r"
-    "\n\005value\030\002 \001(\002\022\014\n\004type\030\003 \001(\t\022\014\n\004data\030\004 \003("
-    "\002\">\n\010Recorder\022\014\n\004name\030\001 \001(\t\022$\n\005tuple\030\002 \003"
-    "(\0132\025.analyzer.RecordTuple", 1105);
+    "\n\010label_id\030\003 \001(\005\022\016\n\006answer\030\004 \001(\005\022\020\n\004prob"
+    "\030\005 \003(\002B\002\020\001\"<\n\006Images\022\021\n\titeration\030\001 \001(\005\022"
+    "\037\n\006images\030\002 \003(\0132\017.analyzer.Image\"\221\001\n\004Inf"
+    "o\022\020\n\010filename\030\001 \001(\t\022\021\n\titeration\030\002 \001(\005\022\021"
+    "\n\tworker_id\030\003 \001(\005\022\016\n\006sim_id\030\004 \001(\005\022 \n\006ima"
+    "ges\030\005 \001(\0132\020.analyzer.Images\022\037\n\006layers\030\006 "
+    "\003(\0132\017.analyzer.Layer\"K\n\013RecordTuple\022\021\n\ti"
+    "teration\030\001 \001(\005\022\r\n\005value\030\002 \001(\002\022\014\n\004type\030\003 "
+    "\001(\t\022\014\n\004data\030\004 \003(\002\">\n\010Recorder\022\014\n\004name\030\001 "
+    "\001(\t\022$\n\005tuple\030\002 \003(\0132\025.analyzer.RecordTupl"
+    "e", 1121);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "analyzer.proto", &protobuf_RegisterTypes);
   ClusterPoint::default_instance_ = new ClusterPoint();
@@ -2337,6 +2339,7 @@ void Layer::Swap(Layer* other) {
 const int Image::kClassNameFieldNumber;
 const int Image::kFileNameFieldNumber;
 const int Image::kLabelIdFieldNumber;
+const int Image::kAnswerFieldNumber;
 const int Image::kProbFieldNumber;
 #endif  // !_MSC_VER
 
@@ -2359,6 +2362,7 @@ void Image::SharedCtor() {
   class_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   label_id_ = 0;
+  answer_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2410,6 +2414,7 @@ void Image::Clear() {
       }
     }
     label_id_ = 0;
+    answer_ = 0;
   }
   prob_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -2467,12 +2472,28 @@ bool Image::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(34)) goto parse_prob;
+        if (input->ExpectTag(32)) goto parse_answer;
         break;
       }
       
-      // repeated float prob = 4 [packed = true];
+      // optional int32 answer = 4;
       case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_answer:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &answer_)));
+          set_has_answer();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(42)) goto parse_prob;
+        break;
+      }
+      
+      // repeated float prob = 5 [packed = true];
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_prob:
@@ -2484,7 +2505,7 @@ bool Image::MergePartialFromCodedStream(
                       WIRETYPE_FIXED32) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 34, input, this->mutable_prob())));
+                 1, 42, input, this->mutable_prob())));
         } else {
           goto handle_uninterpreted;
         }
@@ -2533,9 +2554,14 @@ void Image::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->label_id(), output);
   }
   
-  // repeated float prob = 4 [packed = true];
+  // optional int32 answer = 4;
+  if (has_answer()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->answer(), output);
+  }
+  
+  // repeated float prob = 5 [packed = true];
   if (this->prob_size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteTag(4, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    ::google::protobuf::internal::WireFormatLite::WriteTag(5, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
     output->WriteVarint32(_prob_cached_byte_size_);
   }
   for (int i = 0; i < this->prob_size(); i++) {
@@ -2576,10 +2602,15 @@ void Image::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->label_id(), target);
   }
   
-  // repeated float prob = 4 [packed = true];
+  // optional int32 answer = 4;
+  if (has_answer()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->answer(), target);
+  }
+  
+  // repeated float prob = 5 [packed = true];
   if (this->prob_size() > 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
-      4,
+      5,
       ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
       target);
     target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
@@ -2622,8 +2653,15 @@ int Image::ByteSize() const {
           this->label_id());
     }
     
+    // optional int32 answer = 4;
+    if (has_answer()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->answer());
+    }
+    
   }
-  // repeated float prob = 4 [packed = true];
+  // repeated float prob = 5 [packed = true];
   {
     int data_size = 0;
     data_size = 4 * this->prob_size();
@@ -2671,6 +2709,9 @@ void Image::MergeFrom(const Image& from) {
     if (from.has_label_id()) {
       set_label_id(from.label_id());
     }
+    if (from.has_answer()) {
+      set_answer(from.answer());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2697,6 +2738,7 @@ void Image::Swap(Image* other) {
     std::swap(class_name_, other->class_name_);
     std::swap(file_name_, other->file_name_);
     std::swap(label_id_, other->label_id_);
+    std::swap(answer_, other->answer_);
     prob_.Swap(&other->prob_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
