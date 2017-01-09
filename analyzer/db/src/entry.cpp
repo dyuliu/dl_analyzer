@@ -287,7 +287,7 @@ namespace db {
 
 		std::string col = this->database + "." + this->dbName + "_" + colName;
 		Info *data = this->iData;
-		analyzer::Image ig = data->images();
+		analyzer::Images imgs = data->images();
 
 		BSONObjBuilder bObj;
 		bObj.append("iter", data->iteration())
@@ -296,15 +296,21 @@ namespace db {
 		BSONArrayBuilder labels;
 		BSONArrayBuilder names;
 
-		for (int i = 0; i < ig.data_name_size(); i++) {
-			labels.append(ig.class_name(i));
-			names.append(ig.data_name(i));
+		for (int i = 0; i < imgs.images_size(); i++) {
+			labels.append(imgs.images(i).class_name());
+			names.append(imgs.images(i).file_name());
+			names.append(imgs.images(i).label_id());
 		}
-		bObj.append("names", labels.arr());
-		bObj.append("labels", names.arr());
-
+		bObj.append("class", labels.arr());
+		bObj.append("file", names.arr());
+		bObj.append("label", names.arr());
+		
 		BSONObj o = bObj.obj();
 		this->connection.insert(col, o);
+	}
+
+	void DB::importTestImgInfo(std::string colName) {
+		// do something
 	}
 
 	void DB::importAll() {
@@ -517,7 +523,7 @@ namespace db {
 		}
 		
 
-		col = this->database + "." + this->dbName + "_ImgInfo";
+		col = this->database + "." + this->dbName + "_TrainImgInfo";
 		std::cout << "Creating Index on " << col << std::endl;
 		this->connection.createIndex(col, fromjson("{iter:1}"));
 	}
@@ -574,7 +580,7 @@ namespace db {
 			this->connection.dropCollection(col);
 		}
 
-		col = this->database + "." + this->dbName = "_ImgInfo";
+		col = this->database + "." + this->dbName = "_TrainImgInfo";
 		this->connection.dropCollection(col);
 	}
 

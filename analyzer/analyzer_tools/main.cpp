@@ -372,16 +372,32 @@ void analyzer_raw_batch() {
 	std::cout << files.size() << std::endl;
 
 	int batch_size = FLAGS_batchsize;
+	for (int i = 0; i < files.size(); i++) {
+		COUT_CHEK << "test img info: " << files[i] << ", ratio:" << 100 * i / float(files.size()) << std::endl;
+		Infos info = Infos(files[i]);
+		dbInstance->bindInfo(&info.get());
+		dbInstance->importTestImgInfo();
+	}
+}
+
+void analyzer_test_recorder() {
+	CHECK_FLAGS_SRC;
+
+	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
+		throw("Error: Missing folder path!");
+	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
+
 	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
-		COUT_CHEK << "Raw - Filename: " << files[i] << ", ratio:" << 100 * i / float(files.size()) << std::endl;
+		Infos info(files[i]);
+		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
+		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
+		info.compute_cluster(type, content, FLAGS_maxlayer);
 
-		if (i + batch_size > files.size()) continue;
-
-		for (int idx_batch = i; idx_batch < i + batch_size; idx_batch++) {
-			Infos info = Infos(files[idx_batch]);
+		if (FLAGS_db) {
 			dbInstance->bindInfo(&info.get());
-			dbInstance->importRaw();
+			dbInstance->importClusterInfo(type, content, FLAGS_maxlayer, "");
 		}
+		COUT_SUCC << "Success to process: " << files[i] << std::endl;
 	}
 }
 
@@ -415,8 +431,10 @@ int main(int argc, char *argv[]) {
 			analyzer_layerinfo();
 		else if (FLAGS_action == "batch")	// import stat & dist & seq
 			analyzer_tools();
-		else if (FLAGS_action == "raw_batch") 
+		else if (FLAGS_action == "raw_batch")
 			analyzer_raw_batch();
+		else if (FLAGS_action == "test_records") // test image info, such as label, prob vec
+			analyzer_test_recorder();
 		else if (FLAGS_action == "cluster_batch") 
 			analyzer_cluster_batch();
 		else if (FLAGS_action == "index")   // create index for each cols
