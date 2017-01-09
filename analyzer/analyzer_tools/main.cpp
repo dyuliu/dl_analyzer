@@ -51,7 +51,7 @@ void print_info() {
 	CHECK_FLAGS_SRC;
 	Infos info(FLAGS_src);
 	info.print_file_info();
-	info.print_conv_layer_info();
+	// info.print_conv_layer_info();
 }
 
 /**********************************************************************

@@ -79,6 +79,11 @@ namespace db {
 		*/
 		void importLayerAttrs(std::string colName = "LayerInfo");
 
+		/*8
+		Import img info including class_name & data (file) name
+		*/
+		void importImgInfo(std::string colName = "ImgInfo");
+
 		/**
 		Import all stats and layer attrs
 		*/

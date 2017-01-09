@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='analyzer.proto',
   package='analyzer',
-  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"|\n\x0c\x43lusterPoint\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\r\n\x05index\x18\x03 \x01(\x05\x12\x10\n\x08group_id\x18\x04 \x01(\x05\x12\x12\n\nchannel_id\x18\x07 \x01(\x05\x12\r\n\x05value\x18\x05 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x06 \x03(\x02\"\x85\x01\n\x07\x43luster\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x02\x12&\n\x06points\x18\x04 \x03(\x0b\x32\x16.analyzer.ClusterPoint\x12&\n\x06\x63\x65ntre\x18\x05 \x03(\x0b\x32\x16.analyzer.ClusterPoint\"L\n\x0eHyperParameter\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\"\xad\x02\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12&\n\x04stat\x18\n \x03(\x0b\x32\x18.analyzer.HyperParameter\x12*\n\x08\x64istance\x18\x0b \x03(\x0b\x32\x18.analyzer.HyperParameter\x12%\n\x03seq\x18\x0c \x03(\x0b\x32\x18.analyzer.HyperParameter\x12\"\n\x07\x63luster\x18\r \x03(\x0b\x32\x11.analyzer.Cluster\"o\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06layers\x18\x05 \x03(\x0b\x32\x0f.analyzer.Layer\"K\n\x0bRecordTuple\x12\x11\n\titeration\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\">\n\x08Recorder\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x05tuple\x18\x02 \x03(\x0b\x32\x15.analyzer.RecordTuple')
+  serialized_pb='\n\x0e\x61nalyzer.proto\x12\x08\x61nalyzer\"|\n\x0c\x43lusterPoint\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\r\n\x05index\x18\x03 \x01(\x05\x12\x10\n\x08group_id\x18\x04 \x01(\x05\x12\x12\n\nchannel_id\x18\x07 \x01(\x05\x12\r\n\x05value\x18\x05 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x06 \x03(\x02\"\x85\x01\n\x07\x43luster\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x02\x12&\n\x06points\x18\x04 \x03(\x0b\x32\x16.analyzer.ClusterPoint\x12&\n\x06\x63\x65ntre\x18\x05 \x03(\x0b\x32\x16.analyzer.ClusterPoint\"L\n\x0eHyperParameter\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\"\xad\x02\n\x05Layer\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0b\n\x03num\x18\x03 \x01(\x05\x12\x10\n\x08\x63hannels\x18\x04 \x01(\x05\x12\x0e\n\x06height\x18\x05 \x01(\x05\x12\r\n\x05width\x18\x06 \x01(\x05\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0e\n\x06weight\x18\x08 \x03(\x02\x12\x0c\n\x04grad\x18\t \x03(\x02\x12&\n\x04stat\x18\n \x03(\x0b\x32\x18.analyzer.HyperParameter\x12*\n\x08\x64istance\x18\x0b \x03(\x0b\x32\x18.analyzer.HyperParameter\x12%\n\x03seq\x18\x0c \x03(\x0b\x32\x18.analyzer.HyperParameter\x12\"\n\x07\x63luster\x18\r \x03(\x0b\x32\x11.analyzer.Cluster\".\n\x05Image\x12\x12\n\nclass_name\x18\x01 \x03(\t\x12\x11\n\tdata_name\x18\x02 \x03(\t\"\x90\x01\n\x04Info\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\titeration\x18\x02 \x01(\x05\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x0e\n\x06sim_id\x18\x04 \x01(\x05\x12\x1f\n\x06images\x18\x05 \x01(\x0b\x32\x0f.analyzer.Image\x12\x1f\n\x06layers\x18\x06 \x03(\x0b\x32\x0f.analyzer.Layer\"K\n\x0bRecordTuple\x12\x11\n\titeration\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x03(\x02\">\n\x08Recorder\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x05tuple\x18\x02 \x03(\x0b\x32\x15.analyzer.RecordTuple')
 
 
 
@@ -303,6 +303,41 @@ _LAYER = descriptor.Descriptor(
 )
 
 
+_IMAGE = descriptor.Descriptor(
+  name='Image',
+  full_name='analyzer.Image',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='class_name', full_name='analyzer.Image.class_name', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='data_name', full_name='analyzer.Image.data_name', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=672,
+  serialized_end=718,
+)
+
+
 _INFO = descriptor.Descriptor(
   name='Info',
   full_name='analyzer.Info',
@@ -339,8 +374,15 @@ _INFO = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='layers', full_name='analyzer.Info.layers', index=4,
-      number=5, type=11, cpp_type=10, label=3,
+      name='images', full_name='analyzer.Info.images', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='layers', full_name='analyzer.Info.layers', index=5,
+      number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -354,8 +396,8 @@ _INFO = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=672,
-  serialized_end=783,
+  serialized_start=721,
+  serialized_end=865,
 )
 
 
@@ -403,8 +445,8 @@ _RECORDTUPLE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=785,
-  serialized_end=860,
+  serialized_start=867,
+  serialized_end=942,
 )
 
 
@@ -438,8 +480,8 @@ _RECORDER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=862,
-  serialized_end=924,
+  serialized_start=944,
+  serialized_end=1006,
 )
 
 _CLUSTER.fields_by_name['points'].message_type = _CLUSTERPOINT
@@ -448,12 +490,14 @@ _LAYER.fields_by_name['stat'].message_type = _HYPERPARAMETER
 _LAYER.fields_by_name['distance'].message_type = _HYPERPARAMETER
 _LAYER.fields_by_name['seq'].message_type = _HYPERPARAMETER
 _LAYER.fields_by_name['cluster'].message_type = _CLUSTER
+_INFO.fields_by_name['images'].message_type = _IMAGE
 _INFO.fields_by_name['layers'].message_type = _LAYER
 _RECORDER.fields_by_name['tuple'].message_type = _RECORDTUPLE
 DESCRIPTOR.message_types_by_name['ClusterPoint'] = _CLUSTERPOINT
 DESCRIPTOR.message_types_by_name['Cluster'] = _CLUSTER
 DESCRIPTOR.message_types_by_name['HyperParameter'] = _HYPERPARAMETER
 DESCRIPTOR.message_types_by_name['Layer'] = _LAYER
+DESCRIPTOR.message_types_by_name['Image'] = _IMAGE
 DESCRIPTOR.message_types_by_name['Info'] = _INFO
 DESCRIPTOR.message_types_by_name['RecordTuple'] = _RECORDTUPLE
 DESCRIPTOR.message_types_by_name['Recorder'] = _RECORDER
@@ -481,6 +525,12 @@ class Layer(message.Message):
   DESCRIPTOR = _LAYER
   
   # @@protoc_insertion_point(class_scope:analyzer.Layer)
+
+class Image(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _IMAGE
+  
+  # @@protoc_insertion_point(class_scope:analyzer.Image)
 
 class Info(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType

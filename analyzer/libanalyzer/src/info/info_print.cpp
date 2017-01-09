@@ -32,6 +32,13 @@ namespace analyzer{
 			std::cout << ", iteration: " << info.iteration();
 		if (info.has_worker_id())
 			std::cout << ", worker id: " << info.worker_id();
+		if (info.has_images()) {
+			std::cout << ", image_number: " << info.images().images_size() << std::endl;
+			for (int i = 0; i < info.images().images_size(); i++) {
+				std::cout << info.images().iteration() << ": " <<  info.images().images(i).class_name() << std::endl;
+			}
+		}
+
 
 		std::cout << std::endl;
 	}

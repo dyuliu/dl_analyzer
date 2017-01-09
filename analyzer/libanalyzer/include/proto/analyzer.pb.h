@@ -41,6 +41,8 @@ class ClusterPoint;
 class Cluster;
 class HyperParameter;
 class Layer;
+class Image;
+class Images;
 class Info;
 class RecordTuple;
 class Recorder;
@@ -687,6 +689,225 @@ class Layer : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class Image : public ::google::protobuf::Message {
+ public:
+  Image();
+  virtual ~Image();
+  
+  Image(const Image& from);
+  
+  inline Image& operator=(const Image& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Image& default_instance();
+  
+  void Swap(Image* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Image* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Image& from);
+  void MergeFrom(const Image& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional string class_name = 1;
+  inline bool has_class_name() const;
+  inline void clear_class_name();
+  static const int kClassNameFieldNumber = 1;
+  inline const ::std::string& class_name() const;
+  inline void set_class_name(const ::std::string& value);
+  inline void set_class_name(const char* value);
+  inline void set_class_name(const char* value, size_t size);
+  inline ::std::string* mutable_class_name();
+  inline ::std::string* release_class_name();
+  
+  // optional string file_name = 2;
+  inline bool has_file_name() const;
+  inline void clear_file_name();
+  static const int kFileNameFieldNumber = 2;
+  inline const ::std::string& file_name() const;
+  inline void set_file_name(const ::std::string& value);
+  inline void set_file_name(const char* value);
+  inline void set_file_name(const char* value, size_t size);
+  inline ::std::string* mutable_file_name();
+  inline ::std::string* release_file_name();
+  
+  // optional int32 label_id = 3;
+  inline bool has_label_id() const;
+  inline void clear_label_id();
+  static const int kLabelIdFieldNumber = 3;
+  inline ::google::protobuf::int32 label_id() const;
+  inline void set_label_id(::google::protobuf::int32 value);
+  
+  // repeated float prob = 4 [packed = true];
+  inline int prob_size() const;
+  inline void clear_prob();
+  static const int kProbFieldNumber = 4;
+  inline float prob(int index) const;
+  inline void set_prob(int index, float value);
+  inline void add_prob(float value);
+  inline const ::google::protobuf::RepeatedField< float >&
+      prob() const;
+  inline ::google::protobuf::RepeatedField< float >*
+      mutable_prob();
+  
+  // @@protoc_insertion_point(class_scope:analyzer.Image)
+ private:
+  inline void set_has_class_name();
+  inline void clear_has_class_name();
+  inline void set_has_file_name();
+  inline void clear_has_file_name();
+  inline void set_has_label_id();
+  inline void clear_has_label_id();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* class_name_;
+  ::std::string* file_name_;
+  ::google::protobuf::RepeatedField< float > prob_;
+  mutable int _prob_cached_byte_size_;
+  ::google::protobuf::int32 label_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_analyzer_2eproto();
+  friend void protobuf_AssignDesc_analyzer_2eproto();
+  friend void protobuf_ShutdownFile_analyzer_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Image* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Images : public ::google::protobuf::Message {
+ public:
+  Images();
+  virtual ~Images();
+  
+  Images(const Images& from);
+  
+  inline Images& operator=(const Images& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Images& default_instance();
+  
+  void Swap(Images* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Images* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Images& from);
+  void MergeFrom(const Images& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // optional int32 iteration = 1;
+  inline bool has_iteration() const;
+  inline void clear_iteration();
+  static const int kIterationFieldNumber = 1;
+  inline ::google::protobuf::int32 iteration() const;
+  inline void set_iteration(::google::protobuf::int32 value);
+  
+  // repeated .analyzer.Image images = 2;
+  inline int images_size() const;
+  inline void clear_images();
+  static const int kImagesFieldNumber = 2;
+  inline const ::analyzer::Image& images(int index) const;
+  inline ::analyzer::Image* mutable_images(int index);
+  inline ::analyzer::Image* add_images();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::Image >&
+      images() const;
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::Image >*
+      mutable_images();
+  
+  // @@protoc_insertion_point(class_scope:analyzer.Images)
+ private:
+  inline void set_has_iteration();
+  inline void clear_has_iteration();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedPtrField< ::analyzer::Image > images_;
+  ::google::protobuf::int32 iteration_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_analyzer_2eproto();
+  friend void protobuf_AssignDesc_analyzer_2eproto();
+  friend void protobuf_ShutdownFile_analyzer_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Images* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class Info : public ::google::protobuf::Message {
  public:
   Info();
@@ -773,10 +994,18 @@ class Info : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 sim_id() const;
   inline void set_sim_id(::google::protobuf::int32 value);
   
-  // repeated .analyzer.Layer layers = 5;
+  // optional .analyzer.Images images = 5;
+  inline bool has_images() const;
+  inline void clear_images();
+  static const int kImagesFieldNumber = 5;
+  inline const ::analyzer::Images& images() const;
+  inline ::analyzer::Images* mutable_images();
+  inline ::analyzer::Images* release_images();
+  
+  // repeated .analyzer.Layer layers = 6;
   inline int layers_size() const;
   inline void clear_layers();
-  static const int kLayersFieldNumber = 5;
+  static const int kLayersFieldNumber = 6;
   inline const ::analyzer::Layer& layers(int index) const;
   inline ::analyzer::Layer* mutable_layers(int index);
   inline ::analyzer::Layer* add_layers();
@@ -795,17 +1024,20 @@ class Info : public ::google::protobuf::Message {
   inline void clear_has_worker_id();
   inline void set_has_sim_id();
   inline void clear_has_sim_id();
+  inline void set_has_images();
+  inline void clear_has_images();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* filename_;
   ::google::protobuf::int32 iteration_;
   ::google::protobuf::int32 worker_id_;
+  ::analyzer::Images* images_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::Layer > layers_;
   ::google::protobuf::int32 sim_id_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_analyzer_2eproto();
   friend void protobuf_AssignDesc_analyzer_2eproto();
@@ -2009,6 +2241,224 @@ Layer::mutable_cluster() {
 
 // -------------------------------------------------------------------
 
+// Image
+
+// optional string class_name = 1;
+inline bool Image::has_class_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Image::set_has_class_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Image::clear_has_class_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Image::clear_class_name() {
+  if (class_name_ != &::google::protobuf::internal::kEmptyString) {
+    class_name_->clear();
+  }
+  clear_has_class_name();
+}
+inline const ::std::string& Image::class_name() const {
+  return *class_name_;
+}
+inline void Image::set_class_name(const ::std::string& value) {
+  set_has_class_name();
+  if (class_name_ == &::google::protobuf::internal::kEmptyString) {
+    class_name_ = new ::std::string;
+  }
+  class_name_->assign(value);
+}
+inline void Image::set_class_name(const char* value) {
+  set_has_class_name();
+  if (class_name_ == &::google::protobuf::internal::kEmptyString) {
+    class_name_ = new ::std::string;
+  }
+  class_name_->assign(value);
+}
+inline void Image::set_class_name(const char* value, size_t size) {
+  set_has_class_name();
+  if (class_name_ == &::google::protobuf::internal::kEmptyString) {
+    class_name_ = new ::std::string;
+  }
+  class_name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Image::mutable_class_name() {
+  set_has_class_name();
+  if (class_name_ == &::google::protobuf::internal::kEmptyString) {
+    class_name_ = new ::std::string;
+  }
+  return class_name_;
+}
+inline ::std::string* Image::release_class_name() {
+  clear_has_class_name();
+  if (class_name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = class_name_;
+    class_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string file_name = 2;
+inline bool Image::has_file_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Image::set_has_file_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Image::clear_has_file_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Image::clear_file_name() {
+  if (file_name_ != &::google::protobuf::internal::kEmptyString) {
+    file_name_->clear();
+  }
+  clear_has_file_name();
+}
+inline const ::std::string& Image::file_name() const {
+  return *file_name_;
+}
+inline void Image::set_file_name(const ::std::string& value) {
+  set_has_file_name();
+  if (file_name_ == &::google::protobuf::internal::kEmptyString) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(value);
+}
+inline void Image::set_file_name(const char* value) {
+  set_has_file_name();
+  if (file_name_ == &::google::protobuf::internal::kEmptyString) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(value);
+}
+inline void Image::set_file_name(const char* value, size_t size) {
+  set_has_file_name();
+  if (file_name_ == &::google::protobuf::internal::kEmptyString) {
+    file_name_ = new ::std::string;
+  }
+  file_name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Image::mutable_file_name() {
+  set_has_file_name();
+  if (file_name_ == &::google::protobuf::internal::kEmptyString) {
+    file_name_ = new ::std::string;
+  }
+  return file_name_;
+}
+inline ::std::string* Image::release_file_name() {
+  clear_has_file_name();
+  if (file_name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = file_name_;
+    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional int32 label_id = 3;
+inline bool Image::has_label_id() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Image::set_has_label_id() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Image::clear_has_label_id() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Image::clear_label_id() {
+  label_id_ = 0;
+  clear_has_label_id();
+}
+inline ::google::protobuf::int32 Image::label_id() const {
+  return label_id_;
+}
+inline void Image::set_label_id(::google::protobuf::int32 value) {
+  set_has_label_id();
+  label_id_ = value;
+}
+
+// repeated float prob = 4 [packed = true];
+inline int Image::prob_size() const {
+  return prob_.size();
+}
+inline void Image::clear_prob() {
+  prob_.Clear();
+}
+inline float Image::prob(int index) const {
+  return prob_.Get(index);
+}
+inline void Image::set_prob(int index, float value) {
+  prob_.Set(index, value);
+}
+inline void Image::add_prob(float value) {
+  prob_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< float >&
+Image::prob() const {
+  return prob_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+Image::mutable_prob() {
+  return &prob_;
+}
+
+// -------------------------------------------------------------------
+
+// Images
+
+// optional int32 iteration = 1;
+inline bool Images::has_iteration() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Images::set_has_iteration() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Images::clear_has_iteration() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Images::clear_iteration() {
+  iteration_ = 0;
+  clear_has_iteration();
+}
+inline ::google::protobuf::int32 Images::iteration() const {
+  return iteration_;
+}
+inline void Images::set_iteration(::google::protobuf::int32 value) {
+  set_has_iteration();
+  iteration_ = value;
+}
+
+// repeated .analyzer.Image images = 2;
+inline int Images::images_size() const {
+  return images_.size();
+}
+inline void Images::clear_images() {
+  images_.Clear();
+}
+inline const ::analyzer::Image& Images::images(int index) const {
+  return images_.Get(index);
+}
+inline ::analyzer::Image* Images::mutable_images(int index) {
+  return images_.Mutable(index);
+}
+inline ::analyzer::Image* Images::add_images() {
+  return images_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::Image >&
+Images::images() const {
+  return images_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::Image >*
+Images::mutable_images() {
+  return &images_;
+}
+
+// -------------------------------------------------------------------
+
 // Info
 
 // optional string filename = 1;
@@ -2135,7 +2585,36 @@ inline void Info::set_sim_id(::google::protobuf::int32 value) {
   sim_id_ = value;
 }
 
-// repeated .analyzer.Layer layers = 5;
+// optional .analyzer.Images images = 5;
+inline bool Info::has_images() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Info::set_has_images() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Info::clear_has_images() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Info::clear_images() {
+  if (images_ != NULL) images_->::analyzer::Images::Clear();
+  clear_has_images();
+}
+inline const ::analyzer::Images& Info::images() const {
+  return images_ != NULL ? *images_ : *default_instance_->images_;
+}
+inline ::analyzer::Images* Info::mutable_images() {
+  set_has_images();
+  if (images_ == NULL) images_ = new ::analyzer::Images;
+  return images_;
+}
+inline ::analyzer::Images* Info::release_images() {
+  clear_has_images();
+  ::analyzer::Images* temp = images_;
+  images_ = NULL;
+  return temp;
+}
+
+// repeated .analyzer.Layer layers = 6;
 inline int Info::layers_size() const {
   return layers_.size();
 }
