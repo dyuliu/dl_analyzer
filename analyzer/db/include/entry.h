@@ -16,6 +16,7 @@ namespace db {
 
 	using Info = analyzer::Info;
 	using Recorder = analyzer::Recorder;
+	using Images = analyzer::Images;
 
 	class DB {
 
@@ -27,7 +28,7 @@ namespace db {
 		@param serverAddress e.g., "192.168.1.10", 
 		the default value is "localhost".
 		*/
-		DB(std::string database = "cnnvis", std::string dbName = "DeepLearning", std::string serverAddress = "localhost");
+		DB(std::string database = "cnnvis", std::string dbName = "DeepLearning", std::string serverAddress = "localhost:5000");
 
 		/**
 		Deconstruction Function 
@@ -35,13 +36,12 @@ namespace db {
 		~DB();
 
 		/**
-		Bind info to private variable iData for further operation
+		Bind data to private members
 		*/
 		void bindInfo(Info *d);
 
-		/**
-		Bind recorder to private variable rData for further operation
-		*/
+		void bindImgInfo(Images *d);
+
 		void bindRecorder(Recorder *d);
 
 		/**
@@ -84,7 +84,7 @@ namespace db {
 		*/
 		void importImgInfo(std::string colName = "TrainImgInfo");
 
-		void importTestImgInfo(std::string colName = "TestImgInfo");
+		void importTestImgInfo(int batchsize = 1000, std::string colName = "TestImgInfo");
 
 		/**
 		Import all stats and layer attrs
@@ -129,6 +129,7 @@ namespace db {
 		std::string dbName;
 		std::string database;
 		Info *iData;
+		Images *imgData;
 		Recorder *rData;
 	};
 

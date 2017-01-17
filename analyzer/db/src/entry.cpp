@@ -34,6 +34,10 @@ namespace db {
 		this->iData = data;
 	}
 
+	void DB::bindImgInfo(Images *data) {
+		this->imgData = data;
+	};
+
 	void DB::bindRecorder(Recorder *data) {
 		this->rData = data;
 	}
@@ -290,33 +294,65 @@ namespace db {
 		analyzer::Images imgs = data->images();
 
 		BSONObjBuilder bObj;
-		bObj.append("iter", data->iteration())
-			.append("wid", data->worker_id());
+		bObj.append("iter", data->iteration());
+			//.append("wid", data->worker_id());
 		
-		BSONArrayBuilder labels;
-		BSONArrayBuilder names;
+		BSONArrayBuilder cls;
+		BSONArrayBuilder file;
+		BSONArrayBuilder label;
 
 		for (int i = 0; i < imgs.images_size(); i++) {
-			labels.append(imgs.images(i).class_name());
-			names.append(imgs.images(i).file_name());
-			names.append(imgs.images(i).label_id());
+			cls.append(imgs.images(i).class_name());
+			file.append(imgs.images(i).file_name());
+			label.append(imgs.images(i).label_id());
 		}
-		bObj.append("class", labels.arr());
-		bObj.append("file", names.arr());
-		bObj.append("label", names.arr());
+		bObj.append("cls", cls.arr());
+		bObj.append("file", file.arr());
+		bObj.append("label", label.arr());
 		
 		BSONObj o = bObj.obj();
 		this->connection.insert(col, o);
 	}
 
-	void DB::importTestImgInfo(std::string colName) {
+	void DB::importTestImgInfo(int batchsize, std::string colName) {
 		// do something
+		std::string col = this->database + "." + this->dbName + "_" + colName;
+		Images *data = this->imgData;
+		for (int bs = 0, i = 0; i < data->images_size(); i+=batchsize) {
+			BSONObjBuilder bObj;
+			bObj.append("iter", data->iteration())
+				.append("batch", bs);
+			BSONArrayBuilder cls;
+			BSONArrayBuilder file;
+			BSONArrayBuilder label;
+			BSONArrayBuilder answer;
+			BSONArrayBuilder prob;
+
+			for (int j = i; j < i + batchsize; j++) {
+				cls.append(data->images(j).class_name());
+				label.append(data->images(j).label_id());
+				file.append(data->images(j).file_name());
+				answer.append(data->images(j).answer());
+				BSONArrayBuilder probArr;
+				for (int k = 0; k < data->images(j).prob_size(); k++) { probArr.append(data->images(j).prob(k)); }
+				prob.append(probArr.arr());
+			}
+			bObj.append("cls", cls.arr());
+			bObj.append("file", file.arr());
+			bObj.append("label", label.arr());
+			bObj.append("answer", answer.arr());
+			bObj.append("prob", prob.arr());
+			bs++;
+
+			BSONObj o = bObj.obj();
+			this->connection.insert(col, o);
+		}
 	}
 
 	void DB::importAll() {
 		this->importAllStats();
 		this->importAllSeqs();
-		this->importAllDists();
+		// this->importAllDists();
 		this->importImgInfo();
 	}
 
@@ -486,7 +522,7 @@ namespace db {
 			this->connection.createIndex(col, fromjson("{wid:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 		}
-
+		/*
 		for (auto it = mapTypeDist.begin(); it != mapTypeDist.end(); ++it) {
 			col = this->database + "." + this->dbName + "_Grad" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
@@ -501,14 +537,15 @@ namespace db {
 			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 		}
 		
-		/*for (auto it = mapTypeCluster.begin(); it != mapTypeCluster.end(); ++it) {
+		for (auto it = mapTypeCluster.begin(); it != mapTypeCluster.end(); ++it) {
 			col = this->database + "." + this->dbName + "_Weight" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
 			this->connection.createIndex(col, fromjson("{wid:1}"));
 			this->connection.createIndex(col, fromjson("{lid:1}"));
 			this->connection.createIndex(col, fromjson("{wid: 1, lid: 1, iter:1}"));
-		}*/
+		}
+		*/
 
 		
 		std::vector<std::string> names = { "WeightRaw", "GradRaw" };
@@ -526,6 +563,11 @@ namespace db {
 		col = this->database + "." + this->dbName + "_TrainImgInfo";
 		std::cout << "Creating Index on " << col << std::endl;
 		this->connection.createIndex(col, fromjson("{iter:1}"));
+
+		col = this->database + "." + this->dbName + "_TestImgInfo";
+		std::cout << "Creating Index on " << col << std::endl;
+		this->connection.createIndex(col, fromjson("{iter:1}"));
+		this->connection.createIndex(col, fromjson("{iter:1, batch:1}"));
 	}
 
 	void DB::deleteDB() {
@@ -581,6 +623,8 @@ namespace db {
 		}
 
 		col = this->database + "." + this->dbName = "_TrainImgInfo";
+		this->connection.dropCollection(col);
+		col = this->database + "." + this->dbName = "_TestImgInfo";
 		this->connection.dropCollection(col);
 	}
 

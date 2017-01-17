@@ -11,6 +11,7 @@ DEFINE_string(content, "weight", "grad or weight");
 DEFINE_string(framework, "caffepro", "caffepro, caffe, torch, cntk");
 
 DEFINE_uint64(batchsize, 1, "batch size of records");
+DEFINE_uint64(imgbatch, 1000, "batch size of test images");
 DEFINE_uint64(interval, 1, "specify output interval");
 DEFINE_uint64(maxlayer, 2, "specify max layers to calculate");
 
@@ -22,6 +23,7 @@ DEFINE_string(dbname, "", "sub-database name");
 DEFINE_string(database, "", "database name");
 
 #define CHECK_FLAGS_SRC {if (!FLAGS_src.size()) assert(!"Missing src path!");}
+#define CHECK_FLAGS_IMGBATCH {if (!FLAGS_imgbatch) assert(!"Error input of test image batchsize!");}
 #define CHECK_FLAGS_TYPE {if (!FLAGS_type.size()) assert(!"Missing specify output type!");}
 #define CHECK_FLAGS_HP {if (!FLAGS_hp.size()) assert(!"Missing specify hyperparameter type!");}
 #define CHECK_FLAGS_BATCHSIZE {if (!FLAGS_batchsize) assert(!"Error input of batchsize!");}
@@ -33,6 +35,10 @@ DEFINE_string(database, "", "database name");
 #include <string>
 #include <config.h>
 
+#include <fstream>
+#include <proto/analyzer.pb.h>
+
+#include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <info/info.h>
 #include <recorder/recorder.h>
 #include <db/include/entry.h>
@@ -41,6 +47,8 @@ DEFINE_string(database, "", "database name");
 
 #include <emath\include\config.h>
 #include <emath\include\distance.h>
+
+
 
 db::DB *dbInstance;
 
@@ -372,32 +380,52 @@ void analyzer_raw_batch() {
 	std::cout << files.size() << std::endl;
 
 	int batch_size = FLAGS_batchsize;
-	for (int i = 0; i < files.size(); i++) {
-		COUT_CHEK << "test img info: " << files[i] << ", ratio:" << 100 * i / float(files.size()) << std::endl;
-		Infos info = Infos(files[i]);
-		dbInstance->bindInfo(&info.get());
-		dbInstance->importTestImgInfo();
+	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
+		COUT_CHEK << "Raw - Filename: " << files[i] << ", ratio:" << 100 * (i+1) / float(files.size()) << std::endl;
+
+		if (i + batch_size > files.size()) continue;
+
+		for (int idx_batch = i; idx_batch < i + batch_size; idx_batch++) {
+			Infos info = Infos(files[idx_batch]);
+			dbInstance->bindInfo(&info.get());
+			dbInstance->importRaw();
+		}
 	}
 }
 
 void analyzer_test_recorder() {
 	CHECK_FLAGS_SRC;
+	CHECK_FLAGS_IMGBATCH;
 
 	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
 		throw("Error: Missing folder path!");
 	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
 
-	for (int i = 0; i < files.size(); i += FLAGS_interval*FLAGS_batchsize) {
-		Infos info(files[i]);
-		auto type = info.to_type<Infos::TYPE_CLUSTER>(FLAGS_type);
-		auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
-		info.compute_cluster(type, content, FLAGS_maxlayer);
+	for (int i = 0; i < files.size(); i++) {
+		COUT_CHEK << "Test img info: " << files[i] << ", ratio:" << 100 * (i+1) / float(files.size()) << std::endl;
+
+		analyzer::Images img_info;
+
+		std::string filename = files[i];
+		std::ifstream fp(filename.c_str(), std::ios::binary);
+		google::protobuf::io::IstreamInputStream fstr(&fp);
+		google::protobuf::io::CodedInputStream code_input(&fstr);
+		code_input.SetTotalBytesLimit((int)MAX_PROTOFILE_SIZE, (int)MAX_PROTOFILE_SIZE);
+		img_info.ParseFromCodedStream(&code_input);
+		fp.close();
 
 		if (FLAGS_db) {
-			dbInstance->bindInfo(&info.get());
-			dbInstance->importClusterInfo(type, content, FLAGS_maxlayer, "");
+			dbInstance->bindImgInfo(&img_info);
+			dbInstance->importTestImgInfo(FLAGS_imgbatch);
 		}
-		COUT_SUCC << "Success to process: " << files[i] << std::endl;
+		else {
+			std::cout << "iteration: " << img_info.iteration() << ";  img_num: "
+				<< img_info.images_size() << std::endl;
+			for (int j = 0; j < img_info.images_size(); j++)
+				std::cout << img_info.images(j).file_name() << " " << img_info.images(j).class_name() << " " << img_info.images(j).label_id() 
+						<< " " << img_info.images(j).answer() << std::endl;
+			system("pause");
+		}
 	}
 }
 
@@ -419,6 +447,8 @@ int main(int argc, char *argv[]) {
 			analyzer_cluster();
 		else if (FLAGS_action == "dist") // batchsize required
 			analyzer_dist();
+		else if (FLAGS_action == "test_records")
+			analyzer_test_recorder();
 	}
 
 
