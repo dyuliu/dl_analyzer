@@ -81,6 +81,7 @@ namespace analyzer {
 		unsigned int index(TYPE_DISTANCE distance_type, TYPE_CONTENT data_content);
 		unsigned int index(TYPE_SEQ seq_type, TYPE_CONTENT data_content);
 		unsigned int index(TYPE_CLUSTER cluster_type, TYPE_CONTENT data_content);
+		unsigned int index(TYPE_STAT_KERNEL stat_kernel_type, TYPE_CONTENT data_content);
 
 		// string to type
 		template <typename Tout>
@@ -100,6 +101,11 @@ namespace analyzer {
 		void compute_seq(TYPE_SEQ seq_type, TYPE_CONTENT data_content);
 	    void compute_seq_list(std::vector<TYPE_SEQ> stat_list, TYPE_CONTENT data_content);
 		void compute_seq_all(TYPE_CONTENT data_content);
+
+		// stat_kernel
+		void compute_stat_kernel(TYPE_STAT_KERNEL seq_type, TYPE_CONTENT data_content);
+		void compute_stat_kernel_list(std::vector<TYPE_STAT_KERNEL> stat_list, TYPE_CONTENT data_content);
+		void compute_stat_kernel_all(TYPE_CONTENT data_content);
 
 		// data transfer
 
@@ -149,6 +155,8 @@ namespace analyzer {
 		std::map<TYPE_CONTENT, std::string> name_content_type;
 		std::map<TYPE_SEQ, std::string> name_seq_type;
 		std::map<TYPE_CLUSTER, std::string> name_cluster_type;
+		std::map<TYPE_STAT_KERNEL, std::string> name_stat_kernel_type;
+
 
 	};
 }

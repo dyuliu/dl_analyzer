@@ -252,6 +252,10 @@ static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 				auto type = batch_infos[x].to_type<Infos::TYPE_SEQ>(FLAGS_type);
 				dbInstance->importSeq(type, content);
 			}
+			else if (FLAGS_hp == "stat_kernel") {
+				auto type = batch_infos[x].to_type<Infos::TYPE_STAT_KERNEL>(FLAGS_type);
+				dbInstance->importStatKernel(type, content);
+			}
 		}
 	}
 	
@@ -282,7 +286,9 @@ static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 
 			if (idx == 0) {
 				__FUNC_TIME_CALL(info.compute_stat_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
-				__FUNC_TIME_CALL(info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with " + info.get().filename());
+				__FUNC_TIME_CALL(info.compute_seq_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
+				__FUNC_TIME_CALL(info.compute_stat_kernel_all(Infos::TYPE_CONTENT::WEIGHT), "Process file with weight " + info.get().filename());
+
 				// compute all distance
 				if (batch_size > 1)
 					analyzer_batch_distance(batch_infos);
@@ -308,6 +314,10 @@ static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 			else if (FLAGS_hp == "seq") {
 				auto type = info.to_type<Infos::TYPE_SEQ>(FLAGS_type);
 				__FUNC_TIME_CALL(info.compute_seq(type, content), "Process file with " + info.get().filename() + ", type: " + FLAGS_type + ", content: " + FLAGS_content);
+			}
+			else if (FLAGS_hp == "stat_kernel") {
+				auto type = info.to_type<Infos::TYPE_STAT_KERNEL>(FLAGS_type);
+				__FUNC_TIME_CALL(info.compute_stat_kernel(type, content), "Process file with " + info.get().filename() + ", type: " + FLAGS_type + ", content: " + FLAGS_content);
 			}
 		}
 	}
@@ -454,12 +464,12 @@ int main(int argc, char *argv[]) {
 
 	// actions in this part are for operations on database
 	if (FLAGS_db) { 
-		dbInstance = new db::DB(FLAGS_database, FLAGS_dbname); 
+		dbInstance = new db::DB(FLAGS_database, FLAGS_dbname, "localhost:27017"); 
 		if (FLAGS_action == "recorder")
 			analyzer_recorder();
 		else if (FLAGS_action == "layerinfo")
 			analyzer_layerinfo();
-		else if (FLAGS_action == "batch")	// import stat & dist & seq
+		else if (FLAGS_action == "batch")	// import stat & dist & seq && kernel
 			analyzer_tools();
 		else if (FLAGS_action == "raw_batch")
 			analyzer_raw_batch();

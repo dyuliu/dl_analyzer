@@ -44,7 +44,8 @@ message Layer {
   repeated HyperParameter stat = 10;
   repeated HyperParameter distance = 11;
   repeated HyperParameter seq = 12;
-  repeated Cluster cluster = 13;
+  repeated HyperParameter stat_kernel = 13;
+  repeated Cluster cluster = 14;
 }
 
 

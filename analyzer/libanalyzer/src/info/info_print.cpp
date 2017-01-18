@@ -34,11 +34,20 @@ namespace analyzer{
 			std::cout << ", worker id: " << info.worker_id();
 		if (info.has_images()) {
 			std::cout << ", image_number: " << info.images().images_size() << std::endl;
-			for (int i = 0; i < info.images().images_size(); i++) {
+			/*for (int i = 0; i < info.images().images_size(); i++) {
 				std::cout << info.images().iteration() << ": " <<  info.images().images(i).class_name() << std::endl;
-			}
+			}*/
 		}
 
+		// for test 
+		/*for (int i = 0; i < info.layers_size(); i++) {
+			if (info.layers(i).type() == "batch_norm") continue;
+			std::cout << info.layers(i).name() << " " << info.layers(i).stat_kernel(3).data_size() << ": ";
+			for (int j = 0; j < info.layers(i).stat_kernel(3).data_size(); j++) {
+				std::cout << info.layers(i).stat_kernel(3).data(j) << " ";
+			}
+			system("pause");
+		}*/
 
 		std::cout << std::endl;
 	}

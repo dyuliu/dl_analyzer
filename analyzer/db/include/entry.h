@@ -28,7 +28,7 @@ namespace db {
 		@param serverAddress e.g., "192.168.1.10", 
 		the default value is "localhost".
 		*/
-		DB(std::string database = "cnnvis", std::string dbName = "DeepLearning", std::string serverAddress = "localhost:5000");
+		DB(std::string database = "cnnvis", std::string dbName = "DeepLearning", std::string serverAddress = "localhost:27017");
 
 		/**
 		Deconstruction Function 

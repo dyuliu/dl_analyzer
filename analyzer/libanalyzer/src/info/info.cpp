@@ -67,6 +67,11 @@ namespace analyzer {
 		name_cluster_type = std::map<TYPE_CLUSTER, std::string> {
 			{ TYPE_CLUSTER::KMEANS, "kmeans"}
 		};
+
+		name_stat_kernel_type = std::map<TYPE_STAT_KERNEL, std::string> {
+			{ TYPE_STAT_KERNEL::CR_NORM_1, "cr_norm1"},
+			{ TYPE_STAT_KERNEL::CR_NORM_2, "cr_norm2"}
+		};
 	}
 
 	void Infos::init_stat() {
@@ -95,6 +100,12 @@ namespace analyzer {
 					auto ptr = info.mutable_layers(i)->add_cluster();
 					ptr->set_type(name_cluster_type[(TYPE_CLUSTER)j].c_str());
 					ptr->set_num(0);
+					ptr->set_content(name_content_type[(TYPE_CONTENT)idx].c_str());
+				}
+				for (int j = (int)TYPE_STAT_KERNEL::CR_NORM_1; j < (int)TYPE_STAT_KERNEL::END; j++) {
+					auto ptr = info.mutable_layers(i)->add_stat_kernel();
+					ptr->set_value(0.0);
+					ptr->set_type(name_stat_kernel_type[(TYPE_STAT_KERNEL)j].c_str());
 					ptr->set_content(name_content_type[(TYPE_CONTENT)idx].c_str());
 				}
 			}
@@ -185,5 +196,10 @@ namespace analyzer {
 	template<>
 	Infos::TYPE_CLUSTER Infos::to_type<Infos::TYPE_CLUSTER>(std::string in) {
 		return type_search<TYPE_CLUSTER>(in, name_cluster_type);
+	}
+
+	template<>
+	Infos::TYPE_STAT_KERNEL Infos::to_type<Infos::TYPE_STAT_KERNEL>(std::string in) {
+		return type_search<TYPE_STAT_KERNEL>(in, name_stat_kernel_type);
 	}
 }

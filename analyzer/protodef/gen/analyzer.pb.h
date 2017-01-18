@@ -632,10 +632,22 @@ class Layer : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
       mutable_seq();
   
-  // repeated .analyzer.Cluster cluster = 13;
+  // repeated .analyzer.HyperParameter stat_kernel = 13;
+  inline int stat_kernel_size() const;
+  inline void clear_stat_kernel();
+  static const int kStatKernelFieldNumber = 13;
+  inline const ::analyzer::HyperParameter& stat_kernel(int index) const;
+  inline ::analyzer::HyperParameter* mutable_stat_kernel(int index);
+  inline ::analyzer::HyperParameter* add_stat_kernel();
+  inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
+      stat_kernel() const;
+  inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
+      mutable_stat_kernel();
+  
+  // repeated .analyzer.Cluster cluster = 14;
   inline int cluster_size() const;
   inline void clear_cluster();
-  static const int kClusterFieldNumber = 13;
+  static const int kClusterFieldNumber = 14;
   inline const ::analyzer::Cluster& cluster(int index) const;
   inline ::analyzer::Cluster* mutable_cluster(int index);
   inline ::analyzer::Cluster* add_cluster();
@@ -674,11 +686,12 @@ class Layer : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > stat_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > distance_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > seq_;
+  ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter > stat_kernel_;
   ::google::protobuf::RepeatedPtrField< ::analyzer::Cluster > cluster_;
   ::google::protobuf::int32 width_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(14 + 31) / 32];
   
   friend void  protobuf_AddDesc_analyzer_2eproto();
   friend void protobuf_AssignDesc_analyzer_2eproto();
@@ -2224,7 +2237,32 @@ Layer::mutable_seq() {
   return &seq_;
 }
 
-// repeated .analyzer.Cluster cluster = 13;
+// repeated .analyzer.HyperParameter stat_kernel = 13;
+inline int Layer::stat_kernel_size() const {
+  return stat_kernel_.size();
+}
+inline void Layer::clear_stat_kernel() {
+  stat_kernel_.Clear();
+}
+inline const ::analyzer::HyperParameter& Layer::stat_kernel(int index) const {
+  return stat_kernel_.Get(index);
+}
+inline ::analyzer::HyperParameter* Layer::mutable_stat_kernel(int index) {
+  return stat_kernel_.Mutable(index);
+}
+inline ::analyzer::HyperParameter* Layer::add_stat_kernel() {
+  return stat_kernel_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >&
+Layer::stat_kernel() const {
+  return stat_kernel_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::analyzer::HyperParameter >*
+Layer::mutable_stat_kernel() {
+  return &stat_kernel_;
+}
+
+// repeated .analyzer.Cluster cluster = 14;
 inline int Layer::cluster_size() const {
   return cluster_.size();
 }
