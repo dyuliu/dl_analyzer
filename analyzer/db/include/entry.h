@@ -75,6 +75,13 @@ namespace db {
 		void importAllDists();
 
 		/**
+		Import all kernel ralted stats
+		*/
+		void importStatKernel(analyzer::Infos::TYPE_STAT_KERNEL statName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName = "");
+
+		void importAllStatsKernel();
+
+		/**
 		Import layer attrs
 		*/
 		void importLayerAttrs(std::string colName = "LayerInfo");

@@ -349,11 +349,75 @@ namespace db {
 		}
 	}
 
+	void DB::importStatKernel(analyzer::Infos::TYPE_STAT_KERNEL statName, analyzer::Infos::TYPE_CONTENT contentName, std::string colName) {
+		MAP_TYPE_STAT_KERNEL::iterator iterStat;
+		iterStat = mapTypeStatKernel.find(statName);
+		if (iterStat == mapTypeStatKernel.end()) {
+			std::cout << "Wrong TYPE_STAT" << std::endl;
+			return;
+		}
+		MAP_TYPE_CONTENT::iterator iterContent;
+		iterContent = mapTypeContent.find(contentName);
+		if (iterContent == mapTypeContent.end()) {
+			std::cout << "Wrong TYPE_CONTENT" << std::endl;
+			return;
+		}
+		if (colName == "") {
+			colName = iterContent->second + iterStat->second;
+		}
+		std::string col = this->database + "." + this->dbName + "_" + colName;
+		std::cout << "Importing data to \""<< col << "\"." << std::endl;
+
+		// todo
+		Info *data = this->iData;
+		// const float *dt = NULL;
+		int kernelSize = 0, kernelNum = 0, layerLength = 0, channelNum = 0, offset = 0;
+		BulkOperationBuilder bulk = this->connection.initializeUnorderedBulkOp(col);
+		for (int i = 0; i < data->layers_size(); i++) {
+			if (data->layers(i).type() == "batch_norm") continue;
+			// dt = data->layers(i).weight().data();
+			kernelSize = data->layers(i).width() * data->layers(i).height();
+			layerLength = data->layers(i).weight().size();
+			channelNum = data->layers(i).channels();
+			kernelNum = data->layers(i).num();
+			offset = channelNum * kernelSize;
+			// save mongo document by cid
+			for (int cid = 0; cid < channelNum; cid++) {
+				// fetch kernels with cid j
+				BSONObjBuilder bObj;
+				bObj
+					.append("iter", data->iteration())
+					.append("lid", i);
+				BSONArrayBuilder floatArrValue;
+				int kcount = 0;
+				for (int k = cid * kernelSize; k < layerLength; k += offset) {
+					// append kernel stat floatArrValue.append(d);
+					// kcount * channelNum + cid
+					kcount++;
+				}
+				bObj.append("value", floatArrValue.arr());
+				bulk.insert(bObj.obj());
+			}
+
+			
+		}
+		mongo::WriteResult rs;
+		bulk.execute(0, &rs);
+
+	}
+
+	void DB::importAllStatsKernel() {
+		for (auto it = mapTypeStatKernel.begin(); it != mapTypeStatKernel.end(); ++it) {
+			this->importStatKernel(it->first, TYPE_CONTENT::WEIGHT);
+		}
+	}
+
 	void DB::importAll() {
 		this->importAllStats();
 		this->importAllSeqs();
 		// this->importAllDists();
 		this->importImgInfo();
+		this->importAllStatsKernel();
 	}
 
 	void DB::importLayerAttrs(std::string colName) {

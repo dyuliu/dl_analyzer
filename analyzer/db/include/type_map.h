@@ -7,6 +7,9 @@
 #define MAP_TYPE_STAT std::map<analyzer::Infos::TYPE_STAT, std::string>
 #define STAT_INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_STAT::END + (int)x
 
+#define MAP_TYPE_STAT_KERNEL std::map<analyzer::Infos::TYPE_STAT_KERNEL, std::string>
+#define STAT_KERNEL_INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_STAT_KERNEL::END + (int)x
+
 #define MAP_TYPE_DIST std::map<analyzer::Infos::TYPE_DISTANCE, std::string>
 #define DIST_INDEX(x, y) (int)y * (int)analyzer::Infos::TYPE_DISTANCE::END + (int)x
 
@@ -40,6 +43,12 @@ namespace db {
 		{ TYPE_STAT::QUANTILE_1_2, "StatMid" },
 		{ TYPE_STAT::QUANTILE_1_4, "StatQuarter1" },
 		{ TYPE_STAT::QUANTILE_3_4, "StatQuarter3" }
+	};
+
+	using TYPE_STAT_KERNEL = analyzer::Infos::TYPE_STAT_KERNEL;
+	MAP_TYPE_STAT_KERNEL mapTypeStatKernel = {
+		{ TYPE_STAT_KERNEL::CR_NORM_1, "KernelStatCRNorm1" },
+		{ TYPE_STAT_KERNEL::CR_NORM_2, "KernelStatCRNorm2" }
 	};
 
 	using TYPE_DISTANCE = analyzer::Infos::TYPE_DISTANCE;

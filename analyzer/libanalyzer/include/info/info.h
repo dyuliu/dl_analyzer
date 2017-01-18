@@ -27,6 +27,12 @@ namespace analyzer {
 			END
 		};
 
+		enum class TYPE_STAT_KERNEL : unsigned int {
+			CR_NORM_1 = 0U,
+			CR_NORM_2 = 1U,
+			END
+		};
+
 		enum class TYPE_SEQ : unsigned int {
 			HISTOGRAM = 0U,
 			CHANGERATIO = 1U,
