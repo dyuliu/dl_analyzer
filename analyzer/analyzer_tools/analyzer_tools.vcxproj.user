@@ -4,8 +4,8 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>-action=batch -src=records -batchsize=1 -type=cr_norm2 -content=weight -hp=stat_kernel -db -database=crnormdump -dbname=crnormdump</LocalDebuggerCommandArguments>
-    <LocalDebuggerWorkingDirectory>\\msraig-file01\cnnvis2\train\cifar-resnet164-sgd-1P2G-1x-1</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArguments>-action=index -database=cifar-resnet164 -dbname=sgd-1P4G-1x-1 -db</LocalDebuggerCommandArguments>
+    <LocalDebuggerWorkingDirectory>E:\sharing\caffepro_test</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

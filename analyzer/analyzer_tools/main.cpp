@@ -258,7 +258,7 @@ static inline void analyzer_batch_db(std::vector<Infos> &batch_infos) {
 			}
 		}
 	}
-	
+
 	//COUT_CHEK << "work_id: " << (batch_infos[batch_size - 1].get().worker_id()) << std::endl;
 }
 
@@ -298,7 +298,7 @@ static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 			CHECK_FLAGS_HP;
 			CHECK_FLAGS_CONTENT;
 			CHECK_FLAGS_TYPE;
-			
+
 			auto content = info.to_type<Infos::TYPE_CONTENT>(FLAGS_content);
 
 			if (FLAGS_hp == "stat") {
@@ -328,7 +328,7 @@ static inline void analyzer_batch(std::vector<Infos> &batch_infos) {
 ***********************************************************************/
 void analyzer_tools() {
 	CHECK_FLAGS_SRC;
-	
+
 	if (!analyzer::filesystem::exist(FLAGS_src.c_str()))
 		throw("Error: Missing folder path!");
 	auto files = analyzer::filesystem::get_files(FLAGS_src.c_str(), "*.info", false);
@@ -340,12 +340,12 @@ void analyzer_tools() {
 	for (int i = 0; i < files.size(); i += batch_size) {
 		std::vector<Infos> batch_infos;
 		COUT_CHEK << "Filename: " << files[i] << ", ratio:" << 100.0*(i+1)/files.size() << std::endl;
-		
+
 		if (i + batch_size > files.size()) continue;
 
 		for (int idx_batch = i; idx_batch < i + batch_size; idx_batch++)
 			batch_infos.push_back(Infos(files[idx_batch], batch_size));
-		
+
 		analyzer_batch(batch_infos);
 
 		analyzer_batch_db(batch_infos);
@@ -432,9 +432,8 @@ void analyzer_test_recorder() {
 			std::cout << "iteration: " << img_info.iteration() << ";  img_num: "
 				<< img_info.images_size() << std::endl;
 			for (int j = 0; j < img_info.images_size(); j++)
-				std::cout << img_info.images(j).file_name() << " " << img_info.images(j).class_name() << " " << img_info.images(j).label_id() 
+				std::cout << img_info.images(j).file_name() << " " << img_info.images(j).class_name() << " " << img_info.images(j).label_id()
 						<< " " << img_info.images(j).answer() << std::endl;
-			system("pause");
 		}
 	}
 }
@@ -443,13 +442,13 @@ int main(int argc, char *argv[]) {
 
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-	// actions in this part are for testing 
+	// actions in this part are for testing
 	if (!FLAGS_db) {
-		if (FLAGS_action == "single") 
+		if (FLAGS_action == "single")
 			print_info();
-		else if (FLAGS_action == "stat") 
+		else if (FLAGS_action == "stat")
 			analyzer_stat();
-		else if (FLAGS_action == "seq") 
+		else if (FLAGS_action == "seq")
 			analyzer_seq();
 		else if (FLAGS_action == "raw")
 			analyzer_raw();
@@ -463,8 +462,8 @@ int main(int argc, char *argv[]) {
 
 
 	// actions in this part are for operations on database
-	if (FLAGS_db) { 
-		dbInstance = new db::DB(FLAGS_database, FLAGS_dbname, "localhost:27017"); 
+	if (FLAGS_db) {
+		dbInstance = new db::DB(FLAGS_database, FLAGS_dbname, "localhost:5000");
 		if (FLAGS_action == "recorder")
 			analyzer_recorder();
 		else if (FLAGS_action == "layerinfo")
@@ -475,7 +474,7 @@ int main(int argc, char *argv[]) {
 			analyzer_raw_batch();
 		else if (FLAGS_action == "test_records") // test image info, such as label, prob vec
 			analyzer_test_recorder();
-		else if (FLAGS_action == "cluster_batch") 
+		else if (FLAGS_action == "cluster_batch")
 			analyzer_cluster_batch();
 		else if (FLAGS_action == "index")   // create index for each cols
 			dbInstance->createIndexes();
