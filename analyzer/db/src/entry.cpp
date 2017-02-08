@@ -67,7 +67,7 @@ namespace db {
 				BSONObjBuilder bObj;
 				bObj
 					.append("iter", data->iteration())
-					.append("wid", data->worker_id())
+					//.append("wid", data->worker_id())
 					.append("lid", i)
 					.append("cid", cid);
 				BSONObjBuilder valueObj;
@@ -113,7 +113,7 @@ namespace db {
 				BSONObjBuilder bObj;
 				bObj
 					.append("iter", data->iteration())
-					.append("wid", data->worker_id())
+					//.append("wid", data->worker_id())
 					.append("lid", i)
 					.append("cid", cid);
 				BSONObjBuilder valueObj;
@@ -162,8 +162,8 @@ namespace db {
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
 
-		bObj.append("iter", data->iteration())
-			.append("wid", data->worker_id());
+		bObj.append("iter", data->iteration());
+			//.append("wid", data->worker_id());
 
 		BSONObjBuilder valueObj;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -203,8 +203,8 @@ namespace db {
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
 
-		bObj.append("iter", data->iteration())
-			.append("wid", data->worker_id());
+		bObj.append("iter", data->iteration());
+			//.append("wid", data->worker_id());
 
 		BSONObjBuilder valueObj;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -243,8 +243,8 @@ namespace db {
 		BSONObjBuilder bObj;
 		//BSONArrayBuilder floatArrValue, floatArrLayerId;
 
-		bObj.append("iter", data->iteration())
-			.append("wid", data->worker_id());
+		bObj.append("iter", data->iteration());
+			//.append("wid", data->worker_id());
 
 		BSONObjBuilder valueObj;
 		for (int i = 0; i < data->layers_size(); i++) {
@@ -326,7 +326,7 @@ namespace db {
 			BSONArrayBuilder file;
 			BSONArrayBuilder label;
 			BSONArrayBuilder answer;
-			BSONArrayBuilder prob;
+			// BSONArrayBuilder prob;
 
 			for (int j = i; j < i + batchsize; j++) {
 				cls.append(data->images(j).class_name());
@@ -334,14 +334,14 @@ namespace db {
 				file.append(data->images(j).file_name());
 				answer.append(data->images(j).answer());
 				BSONArrayBuilder probArr;
-				for (int k = 0; k < data->images(j).prob_size(); k++) { probArr.append(data->images(j).prob(k)); }
-				prob.append(probArr.arr());
+				// for (int k = 0; k < data->images(j).prob_size(); k++) { probArr.append(data->images(j).prob(k)); }
+				// prob.append(probArr.arr());
 			}
 			bObj.append("cls", cls.arr());
 			bObj.append("file", file.arr());
 			bObj.append("label", label.arr());
 			bObj.append("answer", answer.arr());
-			bObj.append("prob", prob.arr());
+			// bObj.append("prob", prob.arr());
 			bs++;
 
 			BSONObj o = bObj.obj();
@@ -521,7 +521,7 @@ namespace db {
 				BSONObjBuilder bObj;
 				bObj
 					.append("iter", data->iteration())
-					.append("wid", data->worker_id())
+					//.append("wid", data->worker_id())
 					.append("lid", i)
 					.append("cid", fc)
 					.append("clusterNumbers", ptr.num())
@@ -548,28 +548,28 @@ namespace db {
 			col = this->database + "." + this->dbName + "_Grad" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 
 			col = this->database + "." + this->dbName + "_Weight" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 		}
 
 		for (auto it = mapTypeSeq.begin(); it != mapTypeSeq.end(); ++it) {
 			col = this->database + "." + this->dbName + "_Grad" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 
 			col = this->database + "." + this->dbName + "_Weight" + it->second;
 			std::cout << "Creating Index on " << col << std::endl;
 			this->connection.createIndex(col, fromjson("{iter:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1}"));
+			//this->connection.createIndex(col, fromjson("{wid:1, iter:1}"));
 		}
 
 		for (auto it = mapTypeStatKernel.begin(); it != mapTypeStatKernel.end(); ++it) {
@@ -581,15 +581,15 @@ namespace db {
 		}
 
 
-		std::vector<std::string> names = { "WeightRaw", "GradRaw" };
-		for (auto &it : names) {
-			col = this->database + "." + this->dbName + "_" + it;
-			std::cout << "Creating Index on " << col << std::endl;
-			this->connection.createIndex(col, fromjson("{iter:1}"));
-			this->connection.createIndex(col, fromjson("{wid:1}"));
-			this->connection.createIndex(col, fromjson("{lid:1}"));
-			this->connection.createIndex(col, fromjson("{wid: 1, lid: 1, iter:1}"));
-		}
+		//std::vector<std::string> names = { "WeightRaw", "GradRaw" };
+		//for (auto &it : names) {
+		//	col = this->database + "." + this->dbName + "_" + it;
+		//	std::cout << "Creating Index on " << col << std::endl;
+		//	this->connection.createIndex(col, fromjson("{iter:1}"));
+		//	this->connection.createIndex(col, fromjson("{wid:1}"));
+		//	this->connection.createIndex(col, fromjson("{lid:1}"));
+		//	this->connection.createIndex(col, fromjson("{wid: 1, lid: 1, iter:1}"));
+		//}
 
 
 		col = this->database + "." + this->dbName + "_TrainImgInfo";
